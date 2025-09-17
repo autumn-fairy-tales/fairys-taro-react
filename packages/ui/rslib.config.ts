@@ -1,7 +1,6 @@
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { defineConfig, RslibConfig } from '@rslib/core';
-import tailwindcss from '@tailwindcss/postcss';
 export default defineConfig(() => {
   return {
     source: {
@@ -22,13 +21,8 @@ export default defineConfig(() => {
             root: './esm',
           },
         },
-      }
-    ],
-    tools: {
-      postcss: (_, { addPlugins }) => {
-        addPlugins([tailwindcss()]);
       },
-    },
+    ],
     output: {
       target: 'web',
     },
