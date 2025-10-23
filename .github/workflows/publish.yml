@@ -7,7 +7,8 @@ on:
 
 env:
   SKIP_PREFLIGHT_CHECK: true
-
+  TZ: Asia/Shanghai
+  
 jobs:
   build-deploy:
     runs-on: ubuntu-22.04
@@ -20,13 +21,11 @@ jobs:
     # - run: yarn install
     # - run: yarn run build:all
     # - run: yarn build:docs
-    # - run: yarn build:example
 
     # - name: Create Doc
     #   uses: peaceiris/actions-gh-pages@v4
     #   with:
     #     github_token: ${{ secrets.GITHUB_TOKEN }}
-    #     publish_dir: ./examples/base/dist
     #     # publish_dir: ./docs/doc_build
 
     # - name: Create Tag

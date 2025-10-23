@@ -6,7 +6,8 @@
     "----": "============================ui=============================",
     "watch": "npm run-script watch --workspace @fairys/taro-tools-react",
     "build": "npm run-script build --workspace @fairys/taro-tools-react",
-    "====": "==================================plugins=================================",
+    "docs:build": "npm run-script build --workspace docs",
+    "docs": "npm run-script dev --workspace docs",
     "build:all": "npm run build",
     "version": "lerna version --force-publish=* --no-changelog --no-git-tag-version --no-push",
     "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\""
@@ -18,16 +19,14 @@
     "prettier": "~2.7.0",
     "pretty-quick": "~4.2.2",
     "lint-staged": "~16.1.4",
-    "typescript": "~5.9.2",
-    "@iconify/tailwind4": "~1.0.6",
-    "@tailwindcss/postcss": "~4.1.11",
-    "tailwindcss": "~4.1.11"
+    "typescript": "~5.9.2"
   },
   "lint-staged": {
     "*.{js,jsx,tsx,ts,less,md,json}": "prettier --write"
   },
   "workspaces": [
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "docs"
   ]
 }
