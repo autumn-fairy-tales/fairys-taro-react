@@ -3,19 +3,16 @@ import { View, Text } from '@tarojs/components';
 import { ViewProps } from '@tarojs/components';
 import { forwardRef, Fragment, Ref, useMemo } from 'react';
 
-export interface EnterLoadingProps extends ViewProps {
+export interface FairysTaroEnterLoadingProps extends ViewProps {
   title?: string;
   tips?: string;
   loading?: boolean;
   className?: string;
 }
 
-export const EnterLoading = forwardRef((props: EnterLoadingProps, ref: Ref<HTMLDivElement>) => {
+export const FairysTaroEnterLoading = forwardRef((props: FairysTaroEnterLoadingProps, ref: Ref<HTMLDivElement>) => {
   const { title = '', tips = '载入中', className, loading = false, ...rest } = props;
-  const classNames = useMemo(
-    () => clsx('fairys_taro_enter_loading fairys:bg-white/75 fairys:dark:bg-black/75', className),
-    [className],
-  );
+  const classNames = useMemo(() => clsx('fairys_taro_enter_loading fairystaro--bg-white/75', className), [className]);
   return loading ? (
     <View {...rest} ref={ref} className={classNames}>
       <View className="fairys_taro_enter_loading-main">
@@ -35,4 +32,4 @@ export const EnterLoading = forwardRef((props: EnterLoadingProps, ref: Ref<HTMLD
   );
 });
 
-export default EnterLoading;
+export default FairysTaroEnterLoading;

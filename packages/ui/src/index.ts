@@ -1,1 +1,1 @@
-export { EnterLoading } from './EnterLoading';
+export { EnterLoading } from './components/EnterLoading';
