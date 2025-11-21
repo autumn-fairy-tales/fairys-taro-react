@@ -1,6 +1,7 @@
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { defineConfig, RslibConfig } from '@rslib/core';
+import { ReplacePlugin } from './plugins/replace';
 
 export default defineConfig(() => {
   return {
@@ -24,13 +25,13 @@ export default defineConfig(() => {
         },
       },
     ],
+    tools: {
+      rspack: (config) => {
+        config.plugins.push(new ReplacePlugin());
+      },
+    },
     output: {
       target: 'web',
-    },
-    tools: {
-      // rspack: (config) => {
-      //   config.plugins.push(new ReplacePlugin());
-      // },
     },
     plugins: [
       pluginReact(),

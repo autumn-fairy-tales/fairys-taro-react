@@ -4,8 +4,8 @@
   "description": "框架组件库",
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
   "version": "0.0.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "esm/index.js",
+  "types": "esm/index.d.ts",
   "module": "esm/index.js",
   "license": "ISC",
   "scripts": {
@@ -17,7 +17,6 @@
   },
   "files": [
     "src",
-    "lib",
     "esm"
   ],
   "dependencies": {
@@ -25,6 +24,7 @@
     "valtio": "~2.1.5"
   },
   "devDependencies": {
+    "react-dom": "^18.0.0",
     "@types/react": "~18.2.21",
     "react": "^18.0.0",
     "@tarojs/components": "4.1.7",
