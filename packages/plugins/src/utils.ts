@@ -5,15 +5,15 @@ import { transformSelector, transformEscapESelector, defaultRules } from 'unplug
  */
 export const defaultReplaceRules = {
   ...defaultRules,
-  ':': '__mh__',
-  '/': '__xg__',
-  '[': '__zkh1__',
-  ']': '__zhk2__',
-  '(': '__xkh1__',
-  ')': '__xkh2__',
-  '!': '__gqh__',
-  '%': '__bfh__',
-  '*': '__x__',
+  ':': '_mh_',
+  '/': '_xg_',
+  '[': '_zkh1_',
+  ']': '_zhk2_',
+  '(': '_xkh1_',
+  ')': '_xkh2_',
+  '!': '_gqh_',
+  '%': '_bfh_',
+  '*': '_x_',
 } as const;
 
 export interface ReplaceOptions {
