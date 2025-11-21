@@ -5,7 +5,7 @@ export interface PostcssClassProcessorOptions extends Omit<ReplaceOptions, 'cont
   replace?: (str: string, isPostcss: boolean) => string;
 }
 export const postcssClassProcessor = (options: PostcssClassProcessorOptions = {}) => {
-  const { replace: parentReplace, ...rest } = options;
+  const { replace: parentReplace, ...rest } = options || {};
   return (root: postcss.Root) => {
     root.walkRules((rule: postcss.Rule) => {
       // 或处理选择器中的 class（如 .my-class → .prefix-my-class）

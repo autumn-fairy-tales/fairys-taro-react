@@ -14,7 +14,7 @@ export class ReplacePlugin implements RspackPluginInstance {
 
   // 替换内容
   _replace = (str: string) => {
-    const { replace: parentReplace, ...rest } = this.options;
+    const { replace: parentReplace, ...rest } = this.options || {};
     return parentReplace?.(str, false) || replace({ content: str, ...rest, isPostcss: false });
   };
 

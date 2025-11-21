@@ -1,8 +1,8 @@
 @unocss preflights;
 @unocss default;
 
-/* fairys_taro_enter_loading */
-@keyframes fairys_enter_loading_transform {
+/* fairys_taro_loading */
+@keyframes fairys_taro_loading_transform {
   0% {
     --fairys-enter-loading-transform-color: #00a98e;
   }
@@ -327,9 +327,9 @@
     --fairys-enter-loading-transform-color: #00a98e;
   }
 }
-.fairys_taro_enter_loading {
+.fairys_taro_loading {
   --fairys-enter-loading-transform-color: #00a98e;
-  animation: fairys_enter_loading_transform 20s linear infinite;
+  animation: fairys_taro_loading_transform 20s linear infinite;
   position: fixed;
   top: 0;
   left: 0;
@@ -343,11 +343,11 @@
   color: var(--fairys-enter-loading-transform-color);
   user-select: none;
 }
-.fairys_taro_enter_loading *::before,
-.fairys_taro_enter_loading *::after {
+.fairys_taro_loading *::before,
+.fairys_taro_loading *::after {
   box-sizing: content-box;
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main {
+.fairys_taro_loading .fairys_taro_loading-main {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -355,14 +355,14 @@
   width: 40px;
   height: 40px;
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square {
+.fairys_taro_loading .fairys_taro_loading-main .square {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 20px;
   height: 20px;
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square::before {
+.fairys_taro_loading .fairys_taro_loading-main .square::before {
   width: 10px;
   height: 10px;
   content: '';
@@ -370,16 +370,16 @@
   border-radius: 15%;
   animation: square-to-dot-animation 2s linear infinite;
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square:nth-child(1)::before {
+.fairys_taro_loading .fairys_taro_loading-main .square:nth-child(1)::before {
   animation-delay: calc(150ms * 1);
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square:nth-child(2)::before {
+.fairys_taro_loading .fairys_taro_loading-main .square:nth-child(2)::before {
   animation-delay: calc(150ms * 2);
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square:nth-child(3)::before {
+.fairys_taro_loading .fairys_taro_loading-main .square:nth-child(3)::before {
   animation-delay: calc(150ms * 3);
 }
-.fairys_taro_enter_loading .fairys_taro_enter_loading-main .square:nth-child(4)::before {
+.fairys_taro_loading .fairys_taro_loading-main .square:nth-child(4)::before {
   animation-delay: calc(150ms * 4);
 }
 @keyframes square-to-dot-animation {
@@ -399,29 +399,29 @@
     border-radius: 15%;
   }
 }
-.fairys_taro_enter_loading .name {
+.fairys_taro_loading .name {
   position: relative;
   margin-top: 20px;
   font-size: 24px;
   line-height: 1.5;
 }
-.fairys_taro_enter_loading .tips {
+.fairys_taro_loading .tips {
   position: relative;
   margin-top: 10px;
   font-size: 16px;
   opacity: 0.5;
   line-height: 1.5;
 }
-.fairys_taro_enter_loading .loading-dots {
+.fairys_taro_loading .loading-dots {
   display: inline-block;
   width: 20px;
   text-align: left;
 }
-.fairys_taro_enter_loading .loading-dots::after {
+.fairys_taro_loading .loading-dots::after {
   content: '';
-  animation: fairys_taro_enter_loading_dots 1.5s steps(4) infinite;
+  animation: fairys_taro_loading_dots 1.5s steps(4) infinite;
 }
-@keyframes fairys_taro_enter_loading_dots {
+@keyframes fairys_taro_loading_dots {
   0% {
     content: '';
   }
