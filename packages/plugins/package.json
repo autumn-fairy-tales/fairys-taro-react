@@ -1,0 +1,25 @@
+{
+  "name": "@fairys/taro-tools-plugins",
+  "private": true,
+  "type": "module",
+  "author": "SunLxy <1011771396@qq.com>",
+  "description": "框架组件库",
+  "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
+  "version": "0.0.0",
+  "main": "esm/index.js",
+  "types": "esm/index.d.ts",
+  "module": "esm/index.js",
+  "license": "ISC",
+  "scripts": {
+    "build": "carefrees-rslib build --esm",
+    "watch": "carefrees-rslib build --watch --esm"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "lib",
+    "esm"
+  ]
+}

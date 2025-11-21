@@ -1,7 +1,7 @@
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 import { defineConfig, RslibConfig } from '@rslib/core';
-import { ReplacePlugin } from './plugins/replace';
+import { ReplacePlugin } from '@fairys/taro-tools-plugins';
 
 export default defineConfig(() => {
   return {
@@ -27,7 +27,7 @@ export default defineConfig(() => {
     ],
     tools: {
       rspack: (config) => {
-        config.plugins.push(new ReplacePlugin());
+        config.plugins.push(new ReplacePlugin({}));
       },
     },
     output: {

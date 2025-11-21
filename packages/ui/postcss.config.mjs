@@ -1,5 +1,5 @@
 import UnoCSS from '@unocss/postcss';
-import postcssClassProcessor from './plugins/postcss.mjs';
+import { postcssClassProcessor } from "@fairys/taro-tools-plugins"
 
 export default {
   plugins: [
