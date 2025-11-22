@@ -41,7 +41,7 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
       clsx(
         'fairys_taro-ui-message-item',
         `fairys_taro-ui-message-icon-${type}`,
-        'fairystaro__box-border fairystaro__flex fairystaro__flex-row fairystaro__gap-[0.4rem] fairystaro__p-y-[0.2rem] fairystaro__p-x-[0.4rem]  fairystaro__rounded-md fairystaro__text-[0.8rem]',
+        'fairystaro__box-border fairystaro__flex fairystaro__flex-row fairystaro__gap-[0.4rem] fairystaro__p-y-[0.4rem] fairystaro__p-x-[0.4rem]  fairystaro__rounded-md fairystaro__text-[0.8rem]',
         {
           'fairystaro__border fairystaro__border-solid': bordered,
         },
