@@ -5,7 +5,8 @@ import React, { Fragment } from 'react';
 export interface ConnectToastMessageOptions {
   /**
    * 是否是根页面,
-   * 在 h5 中，只有根页面才需要展示 message 组件 和 toast 组件
+   * 在 h5 中，只有入口文件才需要展示 message 组件 和 toast 组件
+   * 在微信中，所有页面都需要展示 message 组件 和 toast 组件, 入口文件不展示
    */
   isRoot?: boolean;
 }
