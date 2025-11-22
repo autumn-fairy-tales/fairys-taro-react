@@ -1,4 +1,5 @@
 import { Toast } from '@nutui/nutui-react-taro';
+import { FairysTaroPortal } from 'components/Portal';
 import { useGlobalData } from 'context/global.data.instance';
 
 export const FairysTaroToast = () => {
@@ -6,13 +7,16 @@ export const FairysTaroToast = () => {
   const toastConfig = state.toastData as any;
 
   return (
-    <Toast
-      {...toastConfig}
-      visible={toastConfig?.visible || false}
-      onClose={() => {
-        toastConfig?.onClose?.();
-        proxyInstance.hideToast();
-      }}
-    />
+    <FairysTaroPortal>
+      <Toast
+        type="text"
+        {...toastConfig}
+        visible={toastConfig?.visible || false}
+        onClose={() => {
+          toastConfig?.onClose?.();
+          proxyInstance.hideToast();
+        }}
+      />
+    </FairysTaroPortal>
   );
 };

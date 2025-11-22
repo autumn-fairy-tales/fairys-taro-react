@@ -19,7 +19,6 @@ export const FairysTaroLoadingMain = forwardRef(
   (props: Omit<FairysTaroLoadingProps, 'loading' | 'isPortal'>, ref: Ref<ViewProps>) => {
     const { title = '', tips = '载入中', className, ...rest } = props;
     const classNames = useMemo(() => clsx('fairys_taro_loading fairystaro__bg-white/75', className), [className]);
-
     return (
       <Fragment>
         <View {...rest} ref={ref} className={classNames}>

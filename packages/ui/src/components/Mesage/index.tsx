@@ -1,8 +1,9 @@
 import { View, ViewProps } from '@tarojs/components';
 import { MessageDataType } from 'context/global.data.instance';
 import { Fragment, useMemo } from 'react';
-import clsx from 'clsx';
 import { useGlobalData } from 'context/global.data.instance';
+import { FairysTaroPortal } from 'components/Portal';
+import clsx from 'clsx';
 
 export interface FairysTaroMessageItemProps extends Omit<MessageDataType, 'visible' | 'content' | '__id'>, ViewProps {
   /**消息项是否显示边框*/
@@ -104,33 +105,47 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
 export interface FairysTaroMessageProps extends ViewProps {}
 
 export const FairysTaroMessage = (props: FairysTaroMessageProps) => {
+  const { className: messageClassName, ...rest } = props;
   const classNames = useMemo(
     () =>
       clsx(
         'fairys_taro-ui-message fairystaro__box-border fairystaro__p-2 fairystaro__flex fairystaro__flex-col fairystaro__items-center fairystaro__gap-2 fairystaro__max-w-full fairystaro__max-h-full',
+        messageClassName,
       ),
-    [],
+    [messageClassName],
   );
-  return <View {...props} className={classNames} />;
+  return <View {...rest} className={classNames} />;
 };
 
 /**消息组件(用于全局消息提示)*/
 export const FairysTaroPortalMessage = (props: FairysTaroMessageProps) => {
+  const { className: messageClassName, ...rest } = props;
+
   const [state] = useGlobalData();
   const messageData = state.messageData;
+  const classNames = useMemo(
+    () =>
+      clsx(
+        'fairys_taro-ui-portal-message fairystaro__pointer-events-none fairystaro__position-fixed  fairystaro__top-0  fairystaro__right-0  fairystaro__bottom-0  fairystaro__left-0',
+        messageClassName,
+      ),
+    [messageClassName],
+  );
 
   return (
-    <FairysTaroMessage {...props}>
-      {messageData.map((item) => {
-        const { content, visible, ...rest } = item as any;
-        if (item.visible)
-          return (
-            <FairysTaroMessageItem {...rest} key={item.__id}>
-              {content}
-            </FairysTaroMessageItem>
-          );
-        return <Fragment key={`${item.__id}_hidden`} />;
-      })}
-    </FairysTaroMessage>
+    <FairysTaroPortal>
+      <FairysTaroMessage {...rest} className={classNames}>
+        {messageData.map((item) => {
+          const { content, visible, ...rest } = item as any;
+          if (item.visible)
+            return (
+              <FairysTaroMessageItem {...rest} key={item.__id}>
+                {content}
+              </FairysTaroMessageItem>
+            );
+          return <Fragment key={`${item.__id}_hidden`} />;
+        })}
+      </FairysTaroMessage>
+    </FairysTaroPortal>
   );
 };
