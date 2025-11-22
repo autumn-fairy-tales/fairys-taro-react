@@ -1,6 +1,32 @@
 import Taro from '@tarojs/taro';
 
 class NavigateInstance {
+  /**判断是否已登录(方法需要在项目入口文件中进行挂载)*/
+  public isAuth: (url: string) => Promise<boolean> | boolean;
+
+  private _isAuth = async (url?: string) => {
+    let isAuthTo = true;
+    if (url && typeof this.isAuth === 'function') {
+      isAuthTo = await this.isAuth(url);
+    }
+    if (isAuthTo === false) {
+      // 无权访问页面
+      Taro.showToast({ title: '无权访问', icon: 'none' });
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * 判断是否当前页面
+   */
+  isCurrentPage = (route: string) => {
+    /**处理路由前缀*/
+    const _route = route.replace(/^\//, '');
+    const currentPath = (Taro.getCurrentInstance().router?.path || '').replace(/^\//, '');
+    return currentPath === _route;
+  };
+
   /** 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
    * @supported weapp, h5, rn, tt, harmony, harmony_hybrid
    * @example
@@ -25,7 +51,11 @@ class NavigateInstance {
    * ```
    * @see https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.switchTab.html
    */
-  switchTab = (options: Taro.switchTab.Option) => {
+  switchTab = async (options: Taro.switchTab.Option) => {
+    const isAuthTo = await this._isAuth(options.url);
+    if (isAuthTo === false) {
+      return undefined;
+    }
     return Taro.switchTab(options);
   };
   /** 关闭所有页面，打开到应用内的某个页面
@@ -38,7 +68,11 @@ class NavigateInstance {
    * ```
    * @see https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.reLaunch.html
    */
-  reLaunch = (options: Taro.reLaunch.Option) => {
+  reLaunch = async (options: Taro.reLaunch.Option) => {
+    const isAuthTo = await this._isAuth(options.url);
+    if (isAuthTo === false) {
+      return undefined;
+    }
     return Taro.reLaunch(options);
   };
 
@@ -53,7 +87,11 @@ class NavigateInstance {
    * ```
    * @see https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.redirectTo.html
    */
-  redirectTo = (options: Taro.redirectTo.Option) => {
+  redirectTo = async (options: Taro.redirectTo.Option) => {
+    const isAuthTo = await this._isAuth(options.url);
+    if (isAuthTo === false) {
+      return undefined;
+    }
     return Taro.redirectTo(options);
   };
 
@@ -82,7 +120,11 @@ class NavigateInstance {
    * ```
    * @see https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateTo.html
    */
-  navigateTo = (options: Taro.navigateTo.Option) => {
+  navigateTo = async (options: Taro.navigateTo.Option) => {
+    const isAuthTo = await this._isAuth(options.url);
+    if (isAuthTo === false) {
+      return undefined;
+    }
     return Taro.navigateTo(options);
   };
 

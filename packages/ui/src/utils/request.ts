@@ -17,9 +17,11 @@ const codeMessage = {
   504: 'nginx超时',
 } as const;
 
-export interface RequestInstanceOptions extends Omit<Taro.request.Option<any, any>, 'url'> {
+export interface RequestInstanceOptions extends Taro.request.Option<any, any> {
   /**模块名称*/
   module?: string;
+  /**是否忽略token*/
+  isIgnoreToken?: boolean;
 }
 
 /**处理提示信息*/
@@ -54,7 +56,31 @@ const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>) 
 };
 
 export interface RequestInstanceCreateOptions {
+  /**
+   * 本地存储token字段名
+   * @default token
+   */
+  tokenFieldName?: string;
+  /**
+   * 请求头token字段名
+   * @default token
+   */
+  headerTokenName?: string;
+  /**
+   * 公共请求配置
+   * @default {}
+   */
+  commonOptions?: Omit<Taro.request.Option<any, any>, 'url'>;
+
+  /**
+   * 请求IP地址
+   * @default ''
+   */
   IP?: string | ((url: string, module?: string, env?: string) => string);
+  /**
+   * 简单的代理配置
+   * @default {}
+   */
   proxy?: {
     dev: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
     pro: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
@@ -64,14 +90,40 @@ export interface RequestInstanceCreateOptions {
 export class RequestInstance {
   /**请求IP地址*/
   public IP?: string | ((url: string, module?: string, env?: string) => string);
-
   /**简单的代理配置*/
   public proxy?: RequestInstanceCreateOptions['proxy'];
+  /**
+   * 本地存储token字段名
+   * @default token
+   */
+  public tokenFieldName = 'token';
+  /**
+   * 请求头token字段名
+   * @default token
+   */
+  public headerTokenName = 'token';
+  /**公共请求配置*/
+  public commonOptions: Omit<Taro.request.Option<any, any>, 'url'> = {};
 
   constructor(options: RequestInstanceCreateOptions = {}) {
-    this.IP = options.IP;
-    this.proxy = options.proxy;
+    this.extends(options);
   }
+
+  /**创建实例*/
+  static create(options: RequestInstanceCreateOptions = {}) {
+    const request = new RequestInstance(options);
+    return request;
+  }
+
+  /**扩展请求配置*/
+  extends = (options: RequestInstanceCreateOptions = {}) => {
+    this.IP = options.IP || this.IP;
+    this.proxy = options.proxy || this.proxy;
+    this.tokenFieldName = options.tokenFieldName || this.tokenFieldName;
+    this.headerTokenName = options.headerTokenName || this.headerTokenName;
+    this.commonOptions = { ...this.commonOptions, ...options.commonOptions };
+    return this;
+  };
 
   /**获取请求地址*/
   public getHttpPath = (url: string, module?: string) => {
@@ -123,11 +175,6 @@ export class RequestInstance {
     };
   };
 
-  static create(options: RequestInstanceCreateOptions) {
-    const request = new RequestInstance(options);
-    return request;
-  }
-
   /**格式化地址*/
   formatUrl = (url: string, module?: string) => {
     let { host, url: _url } = this.getProxyHost(url, module);
@@ -142,52 +189,113 @@ export class RequestInstance {
     return `${host}/${newUrl}`;
   };
 
-  request = (
-    url: string,
-    options: RequestInstanceOptions = {},
-  ): Promise<{ code?: number; data?: any; message?: string }> => {
+  /**发送请求，返回 Taro.RequestTask */
+  requestBase = (options: RequestInstanceOptions) => {
+    const { data, header = {}, module, isIgnoreToken, ...restOptions } = options;
+    const token = Taro.getStorageSync(this.tokenFieldName || 'token');
+    const newHeader = { ...header };
+    if (token) {
+      newHeader[this.headerTokenName || 'token'] = token;
+    } else {
+      if (isIgnoreToken !== true) {
+        // 这种情况下没有token，也不跳转登录页
+        // 跳转登录页
+        globalDataInstance.toLoginPage();
+      }
+    }
+    return Taro.request({
+      ...this.commonOptions,
+      ...restOptions,
+      header: {
+        ...newHeader,
+        ...(options?.header || {}),
+      },
+      url: this.formatUrl(options.url, module),
+      success: (result) => {
+        /**处理提示
+         * 使用 global 状态管理
+         * */
+        requestResponseHandle(result);
+        options?.success?.(result);
+      },
+      fail: (result) => {
+        globalDataInstance.showMessage({
+          content: result.errMsg || '请求发生错误',
+          type: 'error',
+        });
+        options?.fail?.(result);
+      },
+    });
+  };
+
+  /**发送请求,返回 Promise */
+  request = (options: RequestInstanceOptions): Promise<{ code?: number; data?: any; message?: string }> => {
     return new Promise((resolve, reject) => {
-      Taro.request({
+      this.requestBase({
         ...options,
-        header: {
-          'Content-type': 'application/json',
-          accept: 'application/json,text/plain',
-          ...(options?.header || {}),
-        },
-        url: this.formatUrl(url, options.module),
         success: (result) => {
-          /**处理提示
-           * 使用 global 状态管理
-           * */
-          requestResponseHandle(result);
           options?.success?.(result);
           resolve(result?.data);
         },
         fail: (result) => {
-          globalDataInstance.showMessage({
-            content: result.errMsg || '请求发生错误',
-            type: 'error',
-          });
           options?.fail?.(result);
           reject(result);
         },
-      }).catch((result) => {
-        reject(result);
       });
     });
   };
 
-  GET = (url: string, options: RequestInstanceOptions = {}) => {
+  /**GET请求*/
+  GET = (options: RequestInstanceOptions) => {
     try {
-      return this.request(url, { ...options, method: 'GET' });
+      return this.request({
+        ...options,
+        method: 'GET',
+      });
     } catch (error) {
       throw error;
     }
   };
 
-  POST = (url: string, options: RequestInstanceOptions) => {
+  /**POST请求*/
+  POST = (options: RequestInstanceOptions) => {
     try {
-      return this.request(url, { ...options, method: 'POST' });
+      return this.request({
+        ...options,
+        method: 'POST',
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /**发送formData格式数据*/
+  formData = (options: RequestInstanceOptions) => {
+    try {
+      return this.request({
+        ...options,
+        method: 'POST',
+        header: {
+          'Content-Type': 'multipart/form-data',
+          ...(options.header || {}),
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /**发送x-www-form-urlencoded格式数据*/
+  xFormUrlEncoded = (options: RequestInstanceOptions) => {
+    try {
+      return this.request({
+        ...options,
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          ...(options.header || {}),
+        },
+      });
     } catch (error) {
       throw error;
     }

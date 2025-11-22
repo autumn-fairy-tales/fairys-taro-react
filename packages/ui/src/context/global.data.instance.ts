@@ -1,6 +1,7 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import { TaroToastProps } from '@nutui/nutui-react-taro';
-import Taro from '@tarojs/taro';
+import navigate from 'utils/navigate';
+import { createUseId } from 'utils/useId';
 
 export interface MessageDataType {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -57,7 +58,7 @@ export class GlobalDataInstance {
     }
     newItem.visible = true;
     if (!newItem.__id) {
-      newItem.__id = `${new Date().valueOf()}__${_that.state.messageData.length + 1}`;
+      newItem.__id = `${new Date().valueOf()}__${_that.state.messageData.length + 1}` + '__' + createUseId('message');
     }
     _that.state.messageData = ref([..._that.state.messageData].concat([newItem]));
     if (timeout) {
@@ -87,17 +88,14 @@ export class GlobalDataInstance {
 
   /**跳转登录页面*/
   toLoginPage = () => {
+    const isLoginPage = navigate.isCurrentPage(this.loginPageRoute || '');
     const _loginPageRoute = `${this.loginPageRoute || ''}`.replace(/^\//, '');
-    // 获取当前页面
-    // 如果是登录页面不进行跳转
-    const pages = Taro.getCurrentPages();
-    const currentPage = pages[pages.length - 1];
-    if (currentPage.route === _loginPageRoute) {
+    if (isLoginPage) {
       // 如果是登录页面不进行跳转
       return;
     }
     // 跳转登录页面
-    Taro.navigateTo({ url: `/${_loginPageRoute}` });
+    navigate.navigateTo({ url: `/${_loginPageRoute}` });
   };
 }
 
