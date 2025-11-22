@@ -40,7 +40,7 @@ export interface GlobalDataInstanceState {
 export class GlobalDataInstance {
   /**
    * 设置登录页面路由(需要在入口文件中进行设置)
-   * @param loginPageRoute 登录页面路由
+   * @param loginPageRoute 登录页面路由(默认pages/login/index)
    */
   public loginPageRoute = 'pages/login/index';
 
