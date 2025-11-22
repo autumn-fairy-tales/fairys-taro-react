@@ -1,5 +1,6 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import { TaroToastProps } from '@nutui/nutui-react-taro';
+import Taro from '@tarojs/taro';
 
 export interface MessageDataType {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -36,6 +37,12 @@ export interface GlobalDataInstanceState {
 }
 
 export class GlobalDataInstance {
+  /**
+   * 设置登录页面路由(需要在入口文件中进行设置)
+   * @param loginPageRoute 登录页面路由
+   */
+  public loginPageRoute = 'pages/login/index';
+
   state = proxy<GlobalDataInstanceState>({
     messageData: ref([]),
     toastData: undefined,
@@ -76,6 +83,21 @@ export class GlobalDataInstance {
   /**隐藏Toast */
   hideToast = () => {
     this.state.toastData = ref({ ...this.state.toastData, visible: false });
+  };
+
+  /**跳转登录页面*/
+  toLoginPage = () => {
+    const _loginPageRoute = `${this.loginPageRoute || ''}`.replace(/^\//, '');
+    // 获取当前页面
+    // 如果是登录页面不进行跳转
+    const pages = Taro.getCurrentPages();
+    const currentPage = pages[pages.length - 1];
+    if (currentPage.route === _loginPageRoute) {
+      // 如果是登录页面不进行跳转
+      return;
+    }
+    // 跳转登录页面
+    Taro.navigateTo({ url: `/${_loginPageRoute}` });
   };
 }
 
