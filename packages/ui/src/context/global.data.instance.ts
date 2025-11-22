@@ -1,26 +1,30 @@
-import { ReactNode } from 'react';
 import { proxy, ref, useSnapshot } from 'valtio';
-import { ToastOptions } from '@nutui/nutui-react-taro';
+import { TaroToastProps } from '@nutui/nutui-react-taro';
 
-interface MessageDataType {
+export interface MessageDataType {
   /**用于唯一标识提示框(默认自动生成)*/
   __id: string | number;
   /**
    * 提示内容
    */
-  title?: ReactNode;
+  title?: React.ReactNode;
   /**
    * 提示内容
    */
-  content?: ReactNode;
+  content?: React.ReactNode;
   /**
    * 提示框是否可见
    * @default false
    */
   visible?: boolean;
+  /**
+   * 提示框类型
+   * @default none
+   */
+  type?: 'none' | 'success' | 'error' | 'warning' | 'info';
 }
 
-export interface ToastDataType extends ToastOptions {}
+export interface ToastDataType extends Partial<TaroToastProps> {}
 
 export interface GlobalDataInstanceState {
   /**弹框提示框*/
@@ -66,12 +70,12 @@ export class GlobalDataInstance {
 
   /**显示Toast */
   showToast = (config: Partial<ToastDataType> = {}) => {
-    this.state.toastData = ref({ ...config });
+    this.state.toastData = ref({ visible: true, ...config });
   };
 
   /**隐藏Toast */
   hideToast = () => {
-    this.state.toastData = undefined;
+    this.state.toastData = ref({ ...this.state.toastData, visible: false });
   };
 }
 

@@ -24,6 +24,19 @@ export default defineConfig(() => {
           },
         },
       },
+      {
+        bundle: false,
+        dts: true,
+        format: 'cjs',
+        output: {
+          filename: {
+            js: '[name].js',
+          },
+          distPath: {
+            root: './lib',
+          },
+        },
+      },
     ],
     tools: {
       rspack: (config) => {

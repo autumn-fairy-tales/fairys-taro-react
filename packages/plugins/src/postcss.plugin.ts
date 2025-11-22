@@ -9,7 +9,7 @@ export const postcssClassProcessor = (options: PostcssClassProcessorOptions = {}
   return (root: postcss.Root) => {
     root.walkRules((rule: postcss.Rule) => {
       // 或处理选择器中的 class（如 .my-class → .prefix-my-class）
-      const regx = new RegExp(`^\\.${rest.prefix || 'fairystaro--'}`);
+      const regx = new RegExp(`^\\.${rest.prefix || 'fairystaro__'}`);
       if (regx.test(rule.selector)) {
         rule.selector =
           parentReplace?.(rule.selector, true) ||

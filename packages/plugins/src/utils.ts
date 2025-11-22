@@ -28,8 +28,8 @@ export interface ReplaceOptions {
 }
 
 export const replace = (options: ReplaceOptions) => {
-  const { content, isPostcss = true, prefix = 'fairystaro--', replaceRules = defaultReplaceRules } = options;
-  // /fairystaro--(\S+?)(?=[\s'"]|$)/g
+  const { content, isPostcss = true, prefix = 'fairystaro__', replaceRules = defaultReplaceRules } = options;
+  // /fairystaro__(\S+?)(?=[\s'"]|$)/g
   return content.replace(new RegExp(`${prefix}(\\S+?)(?=[\\s'"]|$)`, 'g'), (match) => {
     let _newStr = match;
     if (isPostcss) {

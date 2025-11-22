@@ -5,9 +5,5 @@ export default defineConfig({
   content: {
     filesystem: ['./src/**/*.{js,ts,jsx,tsx}'],
   },
-  presets: [
-    presetWind3({
-      prefix: 'fairystaro--',
-    }),
-  ],
+  presets: [presetWind3({ prefix: 'fairystaro__' })],
 });
