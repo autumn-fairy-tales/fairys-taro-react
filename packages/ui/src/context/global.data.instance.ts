@@ -2,14 +2,12 @@ import { proxy, ref, useSnapshot } from 'valtio';
 import { TaroToastProps } from '@nutui/nutui-react-taro';
 import navigate from 'utils/navigate';
 import { createUseId } from 'utils/useId';
+import React from 'react';
+import { FairysTaroMessageItemProps } from 'components/Mesage';
 
-export interface MessageDataType {
+export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
   __id: string | number;
-  /**
-   * 提示内容
-   */
-  title?: React.ReactNode;
   /**
    * 提示内容
    */
@@ -19,11 +17,6 @@ export interface MessageDataType {
    * @default false
    */
   visible?: boolean;
-  /**
-   * 提示框类型
-   * @default none
-   */
-  type?: 'none' | 'success' | 'error' | 'warning' | 'info';
 }
 
 export interface ToastDataType extends Partial<TaroToastProps> {}

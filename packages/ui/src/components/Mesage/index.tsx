@@ -1,25 +1,50 @@
 import { View, ViewProps } from '@tarojs/components';
-import { MessageDataType } from 'context/global.data.instance';
 import { Fragment, useMemo } from 'react';
 import { useGlobalData } from 'context/global.data.instance';
 import { FairysTaroPortal } from 'components/Portal';
 import clsx from 'clsx';
+import type { MessageDataType } from 'context/global.data.instance';
 
-export interface FairysTaroMessageItemProps extends Omit<MessageDataType, 'visible' | 'content' | '__id'>, ViewProps {
+export interface FairysTaroMessageItemProps extends Omit<ViewProps, 'style'> {
+  /**
+   * 提示内容
+   */
+  title?: React.ReactNode;
+  /**
+   * 提示框类型
+   * @default none
+   */
+  type?: 'none' | 'success' | 'error' | 'warning' | 'info';
+  /**
+   * 自定义图标
+   */
+  icon?: React.ReactNode;
   /**消息项是否显示边框*/
   bordered?: boolean;
   /**图标 className*/
   iconClassName?: string;
   /**图标 style*/
-  iconStyle?: ViewProps['style'];
+  iconStyle?: React.CSSProperties;
   /**标题 className*/
   titleClassName?: string;
   /**标题 style*/
-  titleStyle?: ViewProps['style'];
+  titleStyle?: React.CSSProperties;
   /**内容 className*/
   bodyClassName?: string;
   /**内容 style*/
-  bodyStyle?: ViewProps['style'];
+  bodyStyle?: React.CSSProperties;
+  /**样式*/
+  style?: React.CSSProperties;
+  /**图标颜色*/
+  iconColor?: string;
+  /**边框颜色*/
+  borderColor?: string;
+  /**背景颜色*/
+  backgroundColor?: string;
+  /**文本颜色*/
+  color?: string;
+  /**是否显示图标*/
+  showIcon?: boolean;
 }
 
 export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
@@ -30,13 +55,23 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
     className: itemClassName,
     bordered = true,
     iconClassName,
-    iconStyle,
+    iconStyle = {},
     titleClassName,
     titleStyle,
     bodyClassName,
     bodyStyle,
+    icon,
+    iconColor,
+    borderColor,
+    backgroundColor,
+    style = {},
+    color,
+    showIcon = true,
     ...rest
   } = props;
+  const isIcon = !!icon;
+  const isIconString = typeof icon === 'string';
+
   const className = useMemo(
     () =>
       clsx(
@@ -54,16 +89,21 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
   const classIconName = useMemo(
     () =>
       clsx('fairys_taro-ui-message-icon fairystaro__box-border ', iconClassName, {
-        'ant-design--close-circle-outlined': type === 'error',
-        'ant-design--exclamation-circle-outlined': type === 'warning',
-        'ant-design--check-circle-outlined': type === 'success',
-        'ant-design--info-circle-outlined': type === 'info',
+        'ant-design--close-circle-outlined': type === 'error' && !isIcon,
+        'ant-design--exclamation-circle-outlined': type === 'warning' && !isIcon,
+        'ant-design--check-circle-outlined': type === 'success' && !isIcon,
+        'ant-design--info-circle-outlined': type === 'info' && !isIcon,
         'fairystaro__text-color-[red]': type === 'error',
         'fairystaro__text-color-[orange]': type === 'warning',
         'fairystaro__text-color-[green]': type === 'success',
         'fairystaro__text-color-[blue]': type === 'info',
       }),
-    [type, iconClassName],
+    [type, iconClassName, isIcon],
+  );
+
+  const lastIconClassName = useMemo(
+    () => clsx(classIconName, isIconString ? icon : ''),
+    [classIconName, isIconString, icon],
   );
 
   const titleClassNames = useMemo(
@@ -71,12 +111,38 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
     [titleClassName],
   );
 
+  // 图标颜色
+  const _iconStyle = { ...iconStyle };
+  if (iconColor) {
+    _iconStyle.color = iconColor;
+  }
+
+  const _style = { ...style };
+  if (borderColor) {
+    _style.borderColor = borderColor;
+  }
+
+  if (backgroundColor) {
+    _style.backgroundColor = backgroundColor;
+  }
+  if (color) {
+    _style.color = color;
+  }
+
   return (
-    <View className={className} {...rest}>
-      {type ? (
+    <View className={className} {...rest} style={_style}>
+      {showIcon ? (
         <View className="fairystaro__flex fairystaro__flex-row fairystaro__justify-center fairystaro__p-t-[0.15rem]">
           {/* 图标 */}
-          <View className={classIconName} style={iconStyle} />
+          {!isIcon ? <View className={classIconName} style={_iconStyle} /> : <Fragment />}
+          {isIcon && !isIconString ? (
+            <View className={classIconName} style={_iconStyle}>
+              {icon}
+            </View>
+          ) : (
+            <Fragment />
+          )}
+          {isIcon && isIconString ? <View className={lastIconClassName} style={_iconStyle} /> : <Fragment />}
         </View>
       ) : (
         <Fragment />
@@ -136,14 +202,14 @@ export const FairysTaroPortalMessage = (props: FairysTaroMessageProps) => {
     <FairysTaroPortal>
       <FairysTaroMessage {...rest} className={classNames}>
         {messageData.map((item) => {
-          const { content, visible, ...rest } = item as any;
-          if (item.visible)
+          const { content, visible, __id, ...rest } = item as MessageDataType;
+          if (visible)
             return (
-              <FairysTaroMessageItem {...rest} key={item.__id}>
+              <FairysTaroMessageItem {...rest} key={__id}>
                 {content}
               </FairysTaroMessageItem>
             );
-          return <Fragment key={`${item.__id}_hidden`} />;
+          return <Fragment key={`${__id}_hidden`} />;
         })}
       </FairysTaroMessage>
     </FairysTaroPortal>

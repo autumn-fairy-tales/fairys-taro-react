@@ -45,7 +45,40 @@ function Index() {
       </FairysTaroMainPageSearch>
       <FairysTaroMainPageBody>
         <FairysTaroMessage>
-          <FairysTaroMessageItem>这是一条提示信息这</FairysTaroMessageItem>
+          <FairysTaroMessageItem icon="ant-design--account-book-filled" type="success">
+            这是一条提示信息这
+          </FairysTaroMessageItem>
+          <FairysTaroMessageItem iconColor="red" icon="ant-design--account-book-filled" type="success">
+            这是一条提示信息这
+          </FairysTaroMessageItem>
+          <FairysTaroMessageItem
+            iconColor="red"
+            borderColor="red"
+            icon="ant-design--account-book-filled"
+            type="success"
+          >
+            这是一条提示信息这
+          </FairysTaroMessageItem>
+          <FairysTaroMessageItem
+            iconColor="red"
+            borderColor="red"
+            backgroundColor="gray"
+            icon="ant-design--account-book-filled"
+            type="success"
+          >
+            这是一条提示信息这
+          </FairysTaroMessageItem>
+          <FairysTaroMessageItem
+            iconColor="red"
+            borderColor="red"
+            backgroundColor="gray"
+            color="white"
+            icon="ant-design--account-book-filled"
+            type="success"
+          >
+            这是一条提示信息这
+          </FairysTaroMessageItem>
+          <FairysTaroMessageItem showIcon={false}>这是一条提示信息这</FairysTaroMessageItem>
           <FairysTaroMessageItem title="提示信息">这是一条提示信息这</FairysTaroMessageItem>
           <FairysTaroMessageItem type="success" title="成功信息">
             这是一条成功信息这是一条成功信息这是一条成功信息这是一条成功信息这是一条成功信息
