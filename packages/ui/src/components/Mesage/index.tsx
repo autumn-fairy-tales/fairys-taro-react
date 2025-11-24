@@ -74,7 +74,7 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
   return (
     <View className={className} {...rest}>
       {type ? (
-        <View className="fairystaro__flex fairystaro__flex-row fairystaro__justify-center">
+        <View className="fairystaro__flex fairystaro__flex-row fairystaro__justify-center fairystaro__p-t-[0.15rem]">
           {/* 图标 */}
           <View className={classIconName} style={iconStyle} />
         </View>
