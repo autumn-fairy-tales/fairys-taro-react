@@ -4,18 +4,18 @@ import React from 'react';
 /**
  * 单个proxy对象数据基础实例封装
  */
-export class ProxyInstanceObjectBase<T extends object> {
+export class ProxyInstanceObjectBase<T extends Object = any> {
   /**proxy 可状态更新字段 */
   store = proxy<T>({} as T);
 
   /**初始化存储值*/
-  _ctor = (inital?: T, fields?: string[]) => {
+  _ctor = (inital?: Partial<T>, fields?: string[]) => {
     this._setValues(inital || {}, fields);
     return this;
   };
 
   /**更新store数据 循环对象进行存储，当值是对象的时候存储为ref*/
-  _setValues = (values: Partial<T>, fields?: string[]) => {
+  _setValues = <K = T>(values: Partial<K>, fields?: string[]) => {
     if (!this.store) {
       this.store = proxy({}) as T;
     }
@@ -53,7 +53,7 @@ export class ProxyInstanceObjectBase<T extends object> {
   };
 
   /**创建 ref 对象 (ref对象不做监听更新)*/
-  _createRef = <K extends object = any>(inital?: K) => {
+  _createRef = <K extends Object = any>(inital?: K) => {
     return ref<K>(inital || ({} as K)) as K;
   };
 }
