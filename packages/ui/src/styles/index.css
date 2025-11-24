@@ -352,19 +352,19 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 2.4rem;
+  height: 2.4rem;
 }
 .fairys_taro_loading .fairys_taro_loading-main .square {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 .fairys_taro_loading .fairys_taro_loading-main .square::before {
-  width: 10px;
-  height: 10px;
+  width: 0.5rem;
+  height: 0.5rem;
   content: '';
   border: 3px solid var(--fairys-enter-loading-transform-color);
   border-radius: 15%;
@@ -387,13 +387,13 @@
   25% {
     width: 0;
     height: 0;
-    margin: 5px;
-    border-width: 5px;
+    margin: 0.2rem;
+    border-width: 0.2rem;
     border-radius: 100%;
   }
   40% {
-    width: 10px;
-    height: 10px;
+    width: 0.5rem;
+    height: 0.5rem;
     margin: initial;
     border-width: 3px;
     border-radius: 15%;
@@ -401,20 +401,18 @@
 }
 .fairys_taro_loading .name {
   position: relative;
-  margin-top: 20px;
-  font-size: 24px;
-  line-height: 1.5;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
 }
+
 .fairys_taro_loading .tips {
   position: relative;
-  margin-top: 10px;
-  font-size: 16px;
+  margin-top: 1rem;
+  font-size: 0.8rem;
   opacity: 0.5;
-  line-height: 1.5;
 }
 .fairys_taro_loading .loading-dots {
   display: inline-block;
-  width: 20px;
   text-align: left;
 }
 .fairys_taro_loading .loading-dots::after {
