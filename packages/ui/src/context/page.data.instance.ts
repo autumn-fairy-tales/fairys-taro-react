@@ -1,5 +1,6 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
+import { useRef } from 'react';
 
 export interface PageDataInstanceState extends Object {
   /**loading存储*/
@@ -61,7 +62,20 @@ export class PageDataInstance<
     onError?: (data: Record<string, any>) => void;
   } = {};
 
-  state = proxy<T>({ ...this.defaultInital } as T);
+  constructor(options?: PageDataOptions<T>) {
+    super();
+    if (options?.initialValues) {
+      this.main_page_store(options.initialValues);
+    }
+    if (options.requestConfig) {
+      this.requestConfig = options.requestConfig || {};
+    }
+    if (options?.is_scroll_page !== undefined) {
+      this.is_scroll_page = options?.is_scroll_page;
+    }
+  }
+
+  store = proxy<T>({ ...this.defaultInital } as T);
 
   /**初始化状态值*/
   main_page_store = (initalValues: Partial<T> = {}, file?: string[]) => {
@@ -179,9 +193,19 @@ export class PageDataInstance<
   };
 }
 
-export const pageDataInstance = new PageDataInstance();
+export interface PageDataOptions<T extends PageDataInstanceState = PageDataInstanceState> {
+  /**请求配置*/
+  requestConfig?: PageDataInstance<T>['requestConfig'];
+  /**初始值*/
+  initialValues?: Partial<T>;
+  /**是否滚动加载更多*/
+  is_scroll_page?: boolean;
+}
 
-export const useGlobalData = () => {
-  const state = useSnapshot(pageDataInstance.state);
-  return [state, pageDataInstance, state.__defaultValue] as const;
+export const usePageData = <T extends PageDataInstanceState = PageDataInstanceState>(
+  options: PageDataOptions<T> = {},
+) => {
+  const pageDataInstance = useRef(new PageDataInstance<T>(options)).current;
+  const store = useSnapshot(pageDataInstance.store) as T;
+  return [store, pageDataInstance, store.__defaultValue] as const;
 };
