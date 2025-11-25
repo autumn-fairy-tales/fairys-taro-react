@@ -7,10 +7,7 @@ export * from './instance';
 export const useValtioState = <T extends object>(inital?: T) => {
   const instance = useRef(new ProxyInstanceObjectBase<T>()._ctor(inital)).current;
   const state = useSnapshot(instance.store);
-  const dispatch = (value: Partial<T>) => {
-    instance._setValues(value);
-  };
-  return [state, dispatch, instance, (state as any).__defaultValue] as const;
+  return [state, instance, (state as any).__defaultValue] as const;
 };
 
 export const useValtioInstaceState = <
@@ -22,9 +19,5 @@ export const useValtioInstaceState = <
 ) => {
   const instance = useRef(new Instance()).current;
   const state = useSnapshot(instance.store);
-  const dispatch = (value: Partial<T>) => {
-    instance._setValues(value);
-  };
-
-  return [state, dispatch, instance, (state as any).__defaultValue] as const;
+  return [state, instance, (state as any).__defaultValue] as const;
 };
