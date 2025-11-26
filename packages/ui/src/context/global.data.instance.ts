@@ -4,6 +4,7 @@ import navigate from 'utils/navigate';
 import { createUseId } from 'utils/useId';
 import React from 'react';
 import { FairysTaroMessageItemProps } from 'components/Mesage';
+import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -30,14 +31,14 @@ export interface GlobalDataInstanceState {
   __defaultValue?: string;
 }
 
-export class GlobalDataInstance {
+export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
   /**
    * 设置登录页面路由(需要在入口文件中进行设置)
    * @param loginPageRoute 登录页面路由(默认pages/login/index)
    */
   public loginPageRoute = 'pages/login/index';
 
-  state = proxy<GlobalDataInstanceState>({
+  store = proxy<GlobalDataInstanceState>({
     messageData: ref([]),
     toastData: undefined,
   });
@@ -46,18 +47,18 @@ export class GlobalDataInstance {
   showMessage = (options: Omit<MessageDataType, '__id'> & { __id?: string }, timeout: number = 3000) => {
     const _that = this;
     let newItem = { ...options } as MessageDataType;
-    if (!_that.state.messageData) {
-      _that.state.messageData = ref([]);
+    if (!_that.store.messageData) {
+      _that.store.messageData = ref([]);
     }
     newItem.visible = true;
     if (!newItem.__id) {
-      newItem.__id = `${new Date().valueOf()}__${_that.state.messageData.length + 1}` + '__' + createUseId('message');
+      newItem.__id = `${new Date().valueOf()}__${_that.store.messageData.length + 1}` + '__' + createUseId('message');
     }
-    _that.state.messageData = ref([..._that.state.messageData].concat([newItem]));
+    _that.store.messageData = ref([..._that.store.messageData].concat([newItem]));
     if (timeout) {
       const timer = setTimeout(() => {
         newItem.visible = false;
-        _that.state.messageData = ref((_that.state.messageData || []).filter((it) => it.__id !== newItem.__id));
+        _that.store.messageData = ref((_that.store.messageData || []).filter((it) => it.__id !== newItem.__id));
         clearTimeout(timer);
       }, timeout);
     }
@@ -66,17 +67,17 @@ export class GlobalDataInstance {
 
   /**隐藏指定id的提示框*/
   hideMessage = (id: string | number) => {
-    this.state.messageData = ref((this.state.messageData || []).filter((it) => it.__id !== id));
+    this.store.messageData = ref((this.store.messageData || []).filter((it) => it.__id !== id));
   };
 
   /**显示Toast */
   showToast = (config: Partial<ToastDataType> = {}) => {
-    this.state.toastData = ref({ visible: true, ...config });
+    this.store.toastData = ref({ visible: true, ...config });
   };
 
   /**隐藏Toast */
   hideToast = () => {
-    this.state.toastData = ref({ ...this.state.toastData, visible: false });
+    this.store.toastData = ref({ ...this.store.toastData, visible: false });
   };
 
   /**跳转登录页面*/
@@ -91,10 +92,15 @@ export class GlobalDataInstance {
     navigate.navigateTo({ url: `/${_loginPageRoute}` });
   };
 }
-
+/**
+ * 全局数据实例
+ */
 export const globalDataInstance = new GlobalDataInstance();
 
+/**
+ * 全局数据状态管理
+ */
 export const useGlobalData = () => {
-  const state = useSnapshot(globalDataInstance.state);
-  return [state, globalDataInstance, state.__defaultValue] as const;
+  const store = useSnapshot(globalDataInstance.store);
+  return [store, globalDataInstance, store.__defaultValue] as const;
 };

@@ -202,6 +202,9 @@ export interface PageDataOptions<T extends PageDataInstanceState = PageDataInsta
   is_scroll_page?: boolean;
 }
 
+/**
+ * 页面级数据状态管理
+ */
 export const usePageData = <T extends PageDataInstanceState = PageDataInstanceState>(
   options: PageDataOptions<T> = {},
 ) => {
