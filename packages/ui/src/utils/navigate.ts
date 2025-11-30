@@ -149,7 +149,7 @@ class NavigateInstance {
    * ```
    * @see https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.navigateBack.html
    */
-  navigateBack = (options: Taro.navigateBack.Option) => {
+  navigateBack = (options?: Taro.navigateBack.Option) => {
     return Taro.navigateBack(options);
   };
 }
