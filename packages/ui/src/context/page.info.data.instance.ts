@@ -54,7 +54,7 @@ export class PageInfoDataInstance<
     /**详情查询-code!==1 时 触发*/
     onSaveError?: (data: Record<string, any>) => void;
     /**保存成功-跳转页面*/
-    saveSuccessNavigate?: string | 'navigateBack' | number | (() => void);
+    saveSuccessNavigate?: string | 'navigateBack' | number | ((data: any) => void);
     /**是否显示成功提示*/
     isShowSuccessMessage?: boolean;
   } = {};
@@ -123,7 +123,7 @@ export class PageInfoDataInstance<
   /**保存数据*/
   main_saveInfo = async () => {
     try {
-      if (this.requestSaveInfoConfig?.onSaveBefore) {
+      if (this.requestSaveInfoConfig?.onSaveInfo) {
         console.error('未配置 requestSaveInfoConfig.onSaveInfo 请求方法');
         return;
       }
@@ -143,7 +143,7 @@ export class PageInfoDataInstance<
           if (saveSuccessNavigate === 'navigateBack') {
             navigate.navigateBack();
           } else if (typeof saveSuccessNavigate === 'function') {
-            saveSuccessNavigate();
+            saveSuccessNavigate(result);
           } else if (typeof saveSuccessNavigate === 'number') {
             navigate.navigateBack({ delta: saveSuccessNavigate });
           } else if (typeof saveSuccessNavigate === 'string') {
