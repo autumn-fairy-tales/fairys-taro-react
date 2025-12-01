@@ -1,6 +1,7 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { useRef } from 'react';
+import { globalSettingDataInstance } from './global.setting.data.instance';
 
 export interface PageDataInstanceState extends Object {
   /**loading存储*/
@@ -113,7 +114,7 @@ export class PageDataInstance<
       this.updatedLoading(false);
       this.store.loading.loadMore = false;
 
-      if (result && result.code === 1) {
+      if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
         let saveData: Partial<T> = {};
         if (this.requestConfig?.onAfter) {
           saveData = this.requestConfig.onAfter(result);

@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro';
+import { globalSettingDataInstance } from 'context/global.setting.data.instance';
 import { globalDataInstance } from 'context/global.data.instance';
 
 const codeMessage = {
@@ -22,10 +23,12 @@ export interface RequestInstanceOptions extends Taro.request.Option<any, any> {
   module?: string;
   /**是否忽略token*/
   isIgnoreToken?: boolean;
+  /**是否提示错误信息*/
+  isShowErrorMessage?: boolean;
 }
 
 /**处理提示信息*/
-const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>) => {
+const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>, options?: RequestInstanceOptions) => {
   let msg = '';
   try {
     const statusCode = result.statusCode;
@@ -36,7 +39,7 @@ const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>) 
         msg = '请重新登录';
         /**重新跳转登录页面*/
         globalDataInstance.toLoginPage();
-      } else if (![1, 200].includes(code)) {
+      } else if (![globalSettingDataInstance.store.requestSuccessCode, 200].includes(code)) {
         // 提示内容
         msg = result?.data?.message || '接口异常';
       }
@@ -47,7 +50,7 @@ const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>) 
     msg = codeMessage[result?.statusCode];
     console.log(error);
   }
-  if (msg) {
+  if (msg && options?.isShowErrorMessage !== false) {
     globalDataInstance.showMessage({
       content: msg || '请求发生错误',
       type: 'error',
@@ -191,7 +194,7 @@ export class RequestInstance {
 
   /**发送请求，返回 Taro.RequestTask */
   requestBase = (options: RequestInstanceOptions) => {
-    const { data, header = {}, module, isIgnoreToken, ...restOptions } = options;
+    const { data, header = {}, module, isIgnoreToken, isShowErrorMessage, ...restOptions } = options;
     const token = Taro.getStorageSync(this.tokenFieldName || 'token');
     const newHeader = { ...header };
     if (token) {
@@ -215,14 +218,16 @@ export class RequestInstance {
         /**处理提示
          * 使用 global 状态管理
          * */
-        requestResponseHandle(result);
+        requestResponseHandle(result, options);
         options?.success?.(result);
       },
       fail: (result) => {
-        globalDataInstance.showMessage({
-          content: result.errMsg || '请求发生错误',
-          type: 'error',
-        });
+        if (isShowErrorMessage !== false) {
+          globalDataInstance.showMessage({
+            content: result.errMsg || '请求发生错误',
+            type: 'error',
+          });
+        }
         options?.fail?.(result);
       },
     });

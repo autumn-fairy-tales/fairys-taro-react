@@ -3,6 +3,7 @@ import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { useRef } from 'react';
 import navigate from './../utils/navigate';
 import { globalDataInstance } from './global.data.instance';
+import { globalSettingDataInstance } from './global.setting.data.instance';
 
 export interface PageInfoDataInstanceState extends Object {
   /**loading存储*/
@@ -103,7 +104,7 @@ export class PageInfoDataInstance<
       }
       const result = await this.requestInfoConfig.getInfo?.(newParams);
       this.updatedLoading(false);
-      if (result && result.code === 1) {
+      if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
         let saveData: Partial<T> = {};
         if (this.requestInfoConfig?.onAfter) {
           saveData = this.requestInfoConfig.onAfter(result);
@@ -131,7 +132,7 @@ export class PageInfoDataInstance<
       const newParams = await this.requestSaveInfoConfig?.onSaveBefore?.(this.store);
       const result = await this.requestSaveInfoConfig.onSaveInfo?.(newParams);
       this.updatedLoading(false);
-      if (result && result.code === 1) {
+      if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
         if (this.requestSaveInfoConfig?.isShowSuccessMessage !== false) {
           globalDataInstance.showMessage({ content: result.message || '保存成功' });
         }
