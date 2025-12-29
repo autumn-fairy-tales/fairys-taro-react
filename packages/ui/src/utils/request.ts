@@ -201,9 +201,16 @@ export class RequestInstance {
       newHeader[this.headerTokenName || 'token'] = token;
     } else {
       if (isIgnoreToken !== true) {
-        // 这种情况下没有token，也不跳转登录页
         // 跳转登录页
+        if (isShowErrorMessage !== false) {
+          globalDataInstance.showMessage({
+            content: '未登录',
+            type: 'error',
+          });
+        }
+        options?.fail?.({ errMsg: '未登录' });
         globalDataInstance.toLoginPage();
+        return undefined;
       }
     }
     return Taro.request({
