@@ -39,6 +39,7 @@
   "dependencies": {
     "@nutui/nutui-react-taro": "^3.0.18",
     "@fairys/taro-tools-react": "^0.0.0",
+    "@fairys/taro-tools-simple-form": "^0.0.0",
     "@babel/runtime": "^7.24.4",
     "@tarojs/components": "4.1.7",
     "@tarojs/helper": "4.1.7",

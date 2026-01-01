@@ -11,7 +11,8 @@ import {
   FairysTaroMainPageFooter,
 } from '@fairys/taro-tools-react';
 import './index.scss';
-import { globalDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
+// import { globalDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
+import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
 
 function Index() {
   useLoad(() => {
@@ -21,7 +22,80 @@ function Index() {
     <FairysTaroMainPage>
       {/* <FairysTaroLoading tips="加载中" loading /> */}
       <FairysTaroMainPageSearch>
-        <Button
+        <FairysTaroSimpleForm>
+          <FairysTaroSimpleForm.Item label="用户名" name="username" type="fairysCalendar" />
+          <FairysTaroSimpleForm.Item
+            label="级联选择器"
+            name="cascader"
+            type="fairysCascader"
+            attr={{
+              options: [
+                { value: 'A0', text: 'A0_1' },
+                {
+                  value: 'B0',
+                  text: 'B0_1',
+                  children: [
+                    { value: 'B11', text: 'B11_1', leaf: true },
+                    { value: 'B12', text: 'B12_1' },
+                  ],
+                },
+                { value: 'C0', text: 'C0_1' },
+              ],
+            }}
+          />
+          <FairysTaroSimpleForm.Item
+            label="复选框组"
+            name="checkboxGroup"
+            type="fairysCheckboxGroup"
+            attr={{
+              items: [
+                { value: 'A0', label: 'A0_1' },
+                { value: 'B0', label: 'B0_1' },
+                { value: 'C0', label: 'C0_1' },
+              ],
+            }}
+          />
+          <FairysTaroSimpleForm.Item
+            label="日期选择器"
+            name="datePicker"
+            type="fairysDatePicker"
+            attr={{
+              type: 'datetime',
+            }}
+          />
+          <FairysTaroSimpleForm.Item
+            label="选择器"
+            name="picker"
+            type="fairysPicker"
+            attr={{
+              options: [
+                // 第一列
+                [
+                  { label: '周一', value: 'Monday' },
+                  { label: '周二', value: 'Tuesday' },
+                  { label: '周三', value: 'Wednesday' },
+                  { label: '周四', value: 'Thursday' },
+                  { label: '周五', value: 'Friday' },
+                ],
+                // 第二列
+                [
+                  { label: '上午', value: 'Morning' },
+                  { label: '下午', value: 'Afternoon' },
+                  { label: '晚上', value: 'Evening' },
+                ],
+              ],
+            }}
+          />
+          <FairysTaroSimpleForm.Item
+            label="搜索选择器"
+            name="popupSearch"
+            type="fairysPopupSearch"
+            attr={{
+              placeholder: '请选择',
+            }}
+          />
+        </FairysTaroSimpleForm>
+        {/* <Button
           onClick={() => {
             console.log('点击了按钮');
             globalDataInstance.showToast({
@@ -41,10 +115,10 @@ function Index() {
         >
           点击2
         </Button>
-        <Text>Hello world!</Text>
+        <Text>Hello world!</Text> */}
       </FairysTaroMainPageSearch>
       <FairysTaroMainPageBody>
-        <FairysTaroMessage>
+        {/* <FairysTaroMessage>
           <FairysTaroMessageItem icon="ant-design--account-book-filled" type="success">
             这是一条提示信息这
           </FairysTaroMessageItem>
@@ -161,7 +235,7 @@ function Index() {
           <FairysTaroMessageItem type="warning">
             这是一条警告信息这是一条警告信息这是一条警告信息这是一条警告信息这是一条警告信息
           </FairysTaroMessageItem>
-        </FairysTaroMessage>
+        </FairysTaroMessage> */}
       </FairysTaroMainPageBody>
       <FairysTaroMainPageFooter>12</FairysTaroMainPageFooter>
     </FairysTaroMainPage>
