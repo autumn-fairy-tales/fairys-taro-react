@@ -5,7 +5,6 @@
 import { Form } from '@carefrees/form-utils-react-taro';
 import { FairysTaroSimpleFormProps } from './interface';
 import { ConfigListItem, ConfigItem, InputConfigType } from './item.config';
-import './styles/index.css';
 
 export const FairysTaroSimpleForm = (props: FairysTaroSimpleFormProps) => {
   return <Form labelMode="between" colCount={1} inputBordered={false} {...props} />;

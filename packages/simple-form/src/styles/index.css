@@ -1,3 +1,17 @@
 @import '@carefrees/form-utils-react-taro/assets/index.css';
+
 @unocss preflights;
 @unocss default;
+
+.nut-cell.fairys-taro-popup-search-list-virtual-cell > .nut-cell-left > .nut-cell-title {
+  width: 100%;
+}
+
+.nut-cell.fairys-taro-popup-search-list-virtual-cell > .nut-cell-extra {
+  flex: none;
+}
+
+.fairys-taro-popup-search-list-table .nut-table-main-head-tr {
+  z-index: 10;
+  position: relative;
+}
