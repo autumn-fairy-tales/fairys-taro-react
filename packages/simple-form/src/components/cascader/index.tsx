@@ -9,6 +9,8 @@ export interface FairysTaroCascaderProps
   labelInValue?: boolean;
   value?: (string | number | CascaderOption)[];
   onChange?: (value: (string | number | CascaderOption)[], pathNodes: CascaderOption[]) => void;
+  bodyClassName?: string;
+  bodyStyle?: React.CSSProperties;
 }
 
 export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
@@ -21,6 +23,8 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
     labelInValue = true,
     options,
     optionKey,
+    bodyClassName,
+    bodyStyle,
     ...rest
   } = props;
   const [visible, setVisible] = useState(false);
@@ -101,6 +105,8 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
       </Text>
       <Cascader
         {...rest}
+        className={`fairys-taro-cascader-body fairystaroform__text-left ${bodyClassName || ''}`}
+        style={bodyStyle}
         optionKey={optionKey}
         options={options}
         value={_value}

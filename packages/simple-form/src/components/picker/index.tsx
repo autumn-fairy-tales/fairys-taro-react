@@ -7,10 +7,12 @@ export interface FairysTaroPickerProps extends Omit<Partial<TaroPickerProps>, 'v
   placeholder?: string;
   value?: PickerOptions;
   onChange?: (value: PickerOptions) => void;
+  bodyClassName?: string;
+  bodyStyle?: React.CSSProperties;
 }
 
 export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
-  const { placeholder = '请选择', className, style, value, onChange, ...rest } = props;
+  const { placeholder = '请选择', bodyClassName, bodyStyle, className, style, value, onChange, ...rest } = props;
 
   const [visible, setVisible] = useState(false);
 
@@ -42,6 +44,8 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
       </Text>
       <Picker
         {...rest}
+        className={`fairys-taro-picker-body fairystaroform__text-left ${bodyClassName || ''}`}
+        style={bodyStyle}
         value={_value}
         visible={visible}
         onClose={() => setVisible(false)}
