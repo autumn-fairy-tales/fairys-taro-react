@@ -63,6 +63,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     /**表格属性*/
     tableProps = {},
     useTableProps,
+    isReplace = false,
     ...rest
   } = props;
 
@@ -78,6 +79,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.renderListItemText = renderListItemText;
   instance.tableProps = tableProps;
   instance.useTableProps = useTableProps;
+  instance.isReplace = isReplace;
 
   instance.rowKey = rowKey;
   instance.displayField = displayField;
@@ -90,7 +92,14 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
 
   useMemo(() => instance.ctor(), [maxWidth, maxHeight]);
 
-  useMemo(() => instance.updateState({ value, _tempValue: value }), [value]);
+  useMemo(() => {
+    if (!isReplace) {
+      instance.updateState({ value, _tempValue: value });
+    } else {
+      instance.updateState({ value, _tempValue: undefined });
+    }
+  }, [value, isReplace, visible]);
+
   useMemo(() => instance.updateState({ dataList: options || [], _tempFilterDataList: options || [] }), [options]);
   useMemo(() => instance.updateState({ mode }), [mode]);
   useMemo(() => instance.updateState({ columns }), [columns]);
@@ -135,7 +144,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
         closeable
         {...rest}
         left={
-          mode === 'multiple' ? (
+          mode === 'multiple' && !isReplace ? (
             <Text onClick={instance.updateOperationStatus}>{operationStatus == 'select' ? '管理' : '完成'}</Text>
           ) : (
             <Fragment />

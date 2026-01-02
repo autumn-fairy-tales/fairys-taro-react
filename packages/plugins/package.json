@@ -17,6 +17,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autumn-fairy-tales/fairys-taro-react.git",
+    "directory": "packages/plugins"
+  },
   "files": [
     "src",
     "lib",
