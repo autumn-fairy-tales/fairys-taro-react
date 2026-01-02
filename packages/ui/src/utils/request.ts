@@ -85,6 +85,10 @@ export interface RequestInstanceCreateOptions {
    * @default {}
    */
   proxy?: {
+    default?: {
+      dev?: string;
+      pro?: string;
+    };
     dev: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
     pro: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
   };
@@ -170,8 +174,13 @@ export class RequestInstance {
         }
     }
     if (!host) {
+      host = this.proxy?.default?.[process.env.NODE_ENV === 'production' ? 'pro' : 'dev'] || '';
+    }
+
+    if (!host) {
       host = this.getHttpPath(url, module);
     }
+
     return {
       host,
       url: _url,
