@@ -88,7 +88,7 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
 
   const classIconName = useMemo(
     () =>
-      clsx('fairys_taro-ui-message-icon fairystaro__box-border ', iconClassName, {
+      clsx('fairys_taro-ui-message-icon fairystaro__box-border fairystaro__text-[0.6rem]', iconClassName, {
         'ant-design--close-circle-outlined': type === 'error' && !isIcon,
         'ant-design--exclamation-circle-outlined': type === 'warning' && !isIcon,
         'ant-design--check-circle-outlined': type === 'success' && !isIcon,
@@ -107,7 +107,7 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
   );
 
   const titleClassNames = useMemo(
-    () => clsx('fairys_taro-ui-message-item-title fairystaro__font-bold', titleClassName),
+    () => clsx('fairys_taro-ui-message-item-title fairystaro__font-bold fairystaro__text-[0.6rem]', titleClassName),
     [titleClassName],
   );
 
@@ -157,7 +157,10 @@ export const FairysTaroMessageItem = (props: FairysTaroMessageItemProps) => {
           <Fragment />
         )}
         {children ? (
-          <View className={clsx('fairys_taro-ui-message-item-body', bodyClassName)} style={bodyStyle}>
+          <View
+            className={clsx('fairys_taro-ui-message-item-body fairystaro__text-[0.6rem]', bodyClassName)}
+            style={bodyStyle}
+          >
             {children}
           </View>
         ) : (
@@ -192,7 +195,7 @@ export const FairysTaroPortalMessage = (props: FairysTaroMessageProps) => {
   const classNames = useMemo(
     () =>
       clsx(
-        'fairys_taro-ui-portal-message fairystaro__pointer-events-none fairystaro__position-fixed  fairystaro__top-0  fairystaro__right-0  fairystaro__bottom-0  fairystaro__left-0',
+        'fairys_taro-ui-portal-message fairystaro__pointer-events-none fairystaro__position-fixed  fairystaro__top-0 fairystaro__right-0  fairystaro__bottom-0  fairystaro__left-0',
         messageClassName,
       ),
     [messageClassName],

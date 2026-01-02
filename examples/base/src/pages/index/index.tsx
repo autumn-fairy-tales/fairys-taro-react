@@ -1,4 +1,4 @@
-import { View, Text, Button } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { useLoad } from '@tarojs/taro';
 import {
   FairysTaroMessage,
@@ -9,19 +9,38 @@ import {
   FairysTaroMainPageSearch,
   FairysTaroMainPageBody,
   FairysTaroMainPageFooter,
+  globalDataInstance,
 } from '@fairys/taro-tools-react';
+import { Button } from '@nutui/nutui-react-taro';
 // import { globalDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
 import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
 
 function Index() {
-  useLoad(() => {
-    console.log('Page loaded.');
-  });
+  const form = FairysTaroSimpleForm.useForm();
+
+  const onSubmit = () => {
+    form
+      .validate()
+      .then((values) => {
+        console.log(values);
+        globalDataInstance.showMessage({
+          type: 'success',
+          content: '表单成功',
+        });
+      })
+      .catch((error) => {
+        globalDataInstance.showMessage({
+          type: 'error',
+          content: error.message || '表单校验失败',
+        });
+      });
+  };
+
   return (
     <FairysTaroMainPage>
       {/* <FairysTaroLoading tips="加载中" loading /> */}
       <FairysTaroMainPageSearch>
-        <FairysTaroSimpleForm>
+        <FairysTaroSimpleForm form={form}>
           <FairysTaroSimpleForm.Item label="用户名" name="username" type="fairysCalendar" />
           <FairysTaroSimpleForm.Item
             label="级联选择器"
@@ -165,7 +184,7 @@ function Index() {
         <Text>Hello world!</Text> */}
       </FairysTaroMainPageSearch>
       <FairysTaroMainPageBody>
-        {/* <FairysTaroMessage>
+        <FairysTaroMessage>
           <FairysTaroMessageItem icon="ant-design--account-book-filled" type="success">
             这是一条提示信息这
           </FairysTaroMessageItem>
@@ -282,9 +301,15 @@ function Index() {
           <FairysTaroMessageItem type="warning">
             这是一条警告信息这是一条警告信息这是一条警告信息这是一条警告信息这是一条警告信息
           </FairysTaroMessageItem>
-        </FairysTaroMessage> */}
+        </FairysTaroMessage>
       </FairysTaroMainPageBody>
-      <FairysTaroMainPageFooter>12</FairysTaroMainPageFooter>
+      <FairysTaroMainPageFooter
+        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0.3rem 0.5rem' }}
+      >
+        <Button block type="primary" onClick={onSubmit}>
+          提交
+        </Button>
+      </FairysTaroMainPageFooter>
     </FairysTaroMainPage>
   );
 }
