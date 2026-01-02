@@ -12,7 +12,6 @@ import {
 } from '@fairys/taro-tools-react';
 // import { globalDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
 import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
-import { Checkbox } from '@nutui/nutui-react-taro';
 
 function Index() {
   useLoad(() => {
@@ -28,6 +27,7 @@ function Index() {
             label="级联选择器"
             name="cascader"
             type="fairysCascader"
+            rules={[{ required: true, message: '请选择级联选择器' }]}
             attr={{
               options: [
                 { value: 'A0', text: 'A0_1' },
@@ -47,6 +47,7 @@ function Index() {
             label="复选框组"
             name="checkboxGroup"
             type="fairysCheckboxGroup"
+            rules={[{ required: true, message: '请选择复选框组' }]}
             attr={{
               items: [
                 { value: 'A0', label: 'A0_1' },
@@ -59,6 +60,7 @@ function Index() {
             label="日期选择器"
             name="datePicker"
             type="fairysDatePicker"
+            rules={[{ required: true, message: '请选择日期选择器' }]}
             attr={{
               type: 'datetime',
             }}
