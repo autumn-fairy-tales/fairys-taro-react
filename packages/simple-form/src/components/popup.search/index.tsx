@@ -1,12 +1,16 @@
 import { View, Text } from '@tarojs/components';
 import { Popup, TaroPopupProps } from '@nutui/nutui-react-taro';
-import { Fragment, useMemo } from 'react';
-import clsx from 'clsx';
-import { useFairysTaroPopupSearchBaseInstance, FairysTaroPopupSearchBaseInstanceContext } from './instance';
+import { Fragment, useEffect, useMemo } from 'react';
+import {
+  useFairysTaroPopupSearchBaseInstance,
+  FairysTaroPopupSearchBaseInstanceContext,
+  useFairysTaroPopupSearchBaseInstanceContext,
+} from './instance';
 import type { FairysTaroPopupSearchBaseInstanceMount } from './instance';
 import { FairysTaroPopupSearchFooterBase, FairysTaroPopupSearchInputBase } from './base';
 import { FairysTaroPopupSearchListVirtual } from './list.virtual';
 import { FairysTaroPopupSearchListTable } from './list.table';
+import { CustomTextClear } from 'components/clear';
 
 /**
  * 如果是多选，怎么移除某几个选中项
@@ -16,23 +20,53 @@ export interface FairysTaroPopupSearchProps<T = any>
   extends Partial<TaroPopupProps>,
     FairysTaroPopupSearchBaseInstanceMount<T> {
   placeholder?: string;
-  /**是否显示删除按钮*/
-  showDeleteButton?: boolean;
-  /**是否显示搜索框*/
-  showSearch?: boolean;
-  /**选中项*/
-  value?: T | T[];
-  /**选择数据*/
-  options?: ({
-    label?: string;
-    value?: string | number;
-    [x: string]: any;
-  } & T)[];
-  /**
-   * 最大渲染个数数量
-   */
-  maxTagCount?: number;
 }
+
+const FairysTaroPopupSearchBodyBase = () => {
+  const [state, instance] = useFairysTaroPopupSearchBaseInstanceContext();
+  const renderType = instance.renderType;
+  const showSearch = instance.showSearch;
+  const mode = instance.mode;
+  const columns = instance.columns;
+  const options = instance.options;
+  const isNeedManage = instance.isNeedManage;
+  const value = instance.value;
+  const visible = state.visible;
+
+  useMemo(() => {
+    if (isNeedManage) {
+      instance.updateState({ value, _tempValue: value });
+    } else {
+      instance.updateState({ value, _tempValue: undefined });
+    }
+  }, [value, isNeedManage, visible]);
+
+  useMemo(() => instance.updateState({ dataList: options || [], _tempFilterDataList: options || [] }), [options]);
+  useMemo(() => instance.updateState({ mode }), [mode]);
+  useMemo(() => instance.updateState({ columns }), [columns]);
+
+  useEffect(() => {
+    if (visible && typeof instance.onLoadData === 'function') {
+      instance.onSearch('');
+    }
+  }, [visible]);
+
+  return (
+    <View className="fairys-taro-popup-search-content-inner fairystaroform__flex  fairystaroform__flex-1  fairystaroform__flex-col fairystaroform__overflow-hidden">
+      {showSearch ? <FairysTaroPopupSearchInputBase /> : <Fragment />}
+      <View style={{ flex: 1, overflow: 'hidden' }}>
+        {renderType === 'list' ? (
+          <FairysTaroPopupSearchListVirtual />
+        ) : renderType === 'table' ? (
+          <FairysTaroPopupSearchListTable />
+        ) : (
+          <Fragment />
+        )}
+      </View>
+      {mode === 'multiple' ? <FairysTaroPopupSearchFooterBase /> : <Fragment />}
+    </View>
+  );
+};
 
 export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchProps<T>) {
   const {
@@ -66,7 +100,6 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     isNeedManage = false,
     ...rest
   } = props;
-
   const [state, instance] = useFairysTaroPopupSearchBaseInstance<T>();
 
   instance.maxWidth = maxWidth;
@@ -87,22 +120,16 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.columns = columns;
   instance.renderType = renderType;
 
+  instance.showDeleteButton = showDeleteButton;
+  instance.showSearch = showSearch;
+  instance.maxTagCount = maxTagCount;
+  instance.options = options;
+  instance.value = value;
+
   const operationStatus = state.operationStatus;
   const visible = state.visible;
 
   useMemo(() => instance.ctor(), [maxWidth, maxHeight]);
-
-  useMemo(() => {
-    if (isNeedManage) {
-      instance.updateState({ value, _tempValue: value });
-    } else {
-      instance.updateState({ value, _tempValue: undefined });
-    }
-  }, [value, isNeedManage, visible]);
-
-  useMemo(() => instance.updateState({ dataList: options || [], _tempFilterDataList: options || [] }), [options]);
-  useMemo(() => instance.updateState({ mode }), [mode]);
-  useMemo(() => instance.updateState({ columns }), [columns]);
 
   const renderTextValue = useMemo(() => {
     if (instance.renderText) {
@@ -123,21 +150,16 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     return value?.[instance.displayField];
   }, [value, mode, maxTagCount]);
 
-  const clsx_text = useMemo(() => {
-    // 文本溢出显示...
-    return clsx('fairys-taro-popup-search-text', {
-      'fairys-taro-popup-search-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !value,
-      'fairys-taro-popup-search-text-value fairystaroform__text-black': value,
-    });
-  }, [value]);
-
   return (
     <View className={`fairys-taro-popup-search ${className || ''}`} style={style}>
-      <View className="fairys-taro-popup-search-text-container">
-        <Text onClick={() => instance.updateState({ visible: true })} className={clsx_text}>
-          {renderTextValue || placeholder}
-        </Text>
-      </View>
+      <CustomTextClear
+        warpClassName="fairys-taro-popup-search-text-container"
+        isValue={!!renderTextValue}
+        onTextClick={() => instance.updateState({ visible: true })}
+        onClearClick={() => onChange?.(undefined)}
+      >
+        {renderTextValue || placeholder}
+      </CustomTextClear>
       <Popup
         lockScroll
         position="bottom"
@@ -156,19 +178,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
         className="fairys-taro-popup-search-content fairystaroform__flex fairystaroform__flex-col fairystaroform__overflow-hidden"
       >
         <FairysTaroPopupSearchBaseInstanceContext.Provider value={instance}>
-          <View className="fairys-taro-popup-search-content-inner fairystaroform__flex  fairystaroform__flex-1  fairystaroform__flex-col fairystaroform__overflow-hidden">
-            {showSearch ? <FairysTaroPopupSearchInputBase /> : <Fragment />}
-            <View style={{ flex: 1, overflow: 'hidden' }}>
-              {renderType === 'list' ? (
-                <FairysTaroPopupSearchListVirtual />
-              ) : renderType === 'table' ? (
-                <FairysTaroPopupSearchListTable />
-              ) : (
-                <Fragment />
-              )}
-            </View>
-            {mode === 'multiple' ? <FairysTaroPopupSearchFooterBase /> : <Fragment />}
-          </View>
+          {visible ? <FairysTaroPopupSearchBodyBase /> : <Fragment />}
         </FairysTaroPopupSearchBaseInstanceContext.Provider>
       </Popup>
     </View>

@@ -42,6 +42,22 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
     tableProps: Partial<TaroTableProps>,
     instance: FairysTaroPopupSearchBaseInstanceMount<T>,
   ) => Partial<TaroTableProps>;
+  /**是否显示删除按钮*/
+  showDeleteButton?: boolean;
+  /**是否显示搜索框*/
+  showSearch?: boolean;
+  /**选中项*/
+  value?: T | T[];
+  /**选择数据*/
+  options?: ({
+    label?: string;
+    value?: string | number;
+    [x: string]: any;
+  } & T)[];
+  /**
+   * 最大渲染个数数量
+   */
+  maxTagCount?: number;
 }
 
 export interface FairysTaroPopupSearchBaseInstanceState<T = any> {

@@ -1,7 +1,8 @@
-import { View, Text } from '@tarojs/components';
-import { DatePicker, DatePickerProps, CascaderOption } from '@nutui/nutui-react-taro';
+import { View } from '@tarojs/components';
+import { DatePicker, DatePickerProps } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
+import { CustomTextClear } from 'components/clear';
 
 export interface FairysTaroDatePickerProps extends Omit<Partial<DatePickerProps>, 'value' | 'onChange'> {
   placeholder?: string;
@@ -131,22 +132,21 @@ export const FairysTaroDatePickerBase = (props: FairysTaroDatePickerProps) => {
   const { placeholder = '请选择', value, className, style, onChange, type = 'date', ...rest } = props;
   const [visible, setVisible] = useState(false);
 
-  const clsx_text = useMemo(() => {
-    return clsx('fairys-taro-date-picker-text', {
-      'fairys-taro-date-picker-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !value,
-      'fairys-taro-date-picker-text-value fairystaroform__text-black': value,
-    });
-  }, [value]);
-
   const render = useMemo(() => {
     return renderDate(value, type);
   }, [value, type]);
 
   return (
     <View className={`fairys-taro-date-picker ${className || ''}`} style={style}>
-      <Text onClick={() => setVisible(true)} className={clsx_text}>
+      <CustomTextClear
+        warpClassName="fairys-taro-date-picker-text"
+        isValue={!!render.renderStr}
+        onTextClick={() => setVisible(true)}
+        onClearClick={() => onChange?.(undefined)}
+      >
         {render.renderStr || placeholder}
-      </Text>
+      </CustomTextClear>
+
       <DatePicker
         type={type}
         showChinese

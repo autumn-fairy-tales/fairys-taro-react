@@ -1,7 +1,8 @@
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { Cascader, CascaderProps, CascaderOption } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
+import { CustomTextClear } from 'components/clear';
 
 export interface FairysTaroCascaderProps
   extends Omit<Partial<CascaderProps>, 'visible' | 'onClose' | 'onChange' | 'value'> {
@@ -74,13 +75,6 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
     return '';
   }, [value, labelInValue, valueKey, textKey]);
 
-  const clsx_text = useMemo(() => {
-    return clsx('fairys-taro-cascader-text', {
-      'fairys-taro-cascader-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !render,
-      'fairys-taro-cascader-text-value fairystaroform__text-black': render,
-    });
-  }, [render]);
-
   const _value = useMemo(() => {
     if (Array.isArray(value) && value.length) {
       return value
@@ -100,9 +94,14 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
 
   return (
     <View className={`fairys-taro-cascader ${className || ''}`} style={style}>
-      <Text onClick={() => setVisible(true)} className={clsx_text}>
+      <CustomTextClear
+        warpClassName="fairys-taro-cascader-text"
+        isValue={!!render}
+        onTextClick={() => setVisible(true)}
+        onClearClick={() => onChange?.(undefined, undefined)}
+      >
         {render || placeholder}
-      </Text>
+      </CustomTextClear>
       <Cascader
         {...rest}
         className={`fairys-taro-cascader-body fairystaroform__text-left ${bodyClassName || ''}`}

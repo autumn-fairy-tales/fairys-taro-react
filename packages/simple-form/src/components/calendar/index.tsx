@@ -1,7 +1,8 @@
 import { View, Text, ViewProps } from '@tarojs/components';
 import { Calendar, CalendarProps } from '@nutui/nutui-react-taro';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import clsx from 'clsx';
+import { CustomTextClear } from 'components/clear';
 
 export interface FairysTaroCalendarProps extends Partial<CalendarProps> {
   placeholder?: string;
@@ -23,9 +24,14 @@ export const FairysTaroCalendarBase = (props: FairysTaroCalendarProps) => {
 
   return (
     <View className={`fairys-taro-calendar ${className || ''}`} style={style}>
-      <Text onClick={() => setVisible(true)} className={clsx_text}>
+      <CustomTextClear
+        warpClassName="fairys-taro-calendar-text"
+        isValue={!!value}
+        onTextClick={() => setVisible(true)}
+        onClearClick={() => onChange?.(undefined, undefined)}
+      >
         {value || placeholder}
-      </Text>
+      </CustomTextClear>
       <Calendar
         {...rest}
         visible={visible}
