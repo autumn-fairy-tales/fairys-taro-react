@@ -27,7 +27,7 @@ export const CustomTextClear = (props: SVG_IconProps) => {
   const { isValue = true, children, warpClassName, warpStyle, onTextClick, onClearClick, ...rest } = props;
 
   const clsx_text = useMemo(() => {
-    return clsx('fairys-taro-text', {
+    return clsx('fairys-taro-text fairystaroform__flex-1', {
       'fairys-taro-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !isValue,
       'fairys-taro-text-value fairystaroform__text-black': isValue,
     });

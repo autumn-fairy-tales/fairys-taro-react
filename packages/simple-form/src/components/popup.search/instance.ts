@@ -30,6 +30,8 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   maxHeight?: number;
   /**是否需要管理已选择的数据*/
   isNeedManage?: boolean = false;
+  /**是否选中状态，在使用 options 参数渲染固定列数据的时候是否需要选中状态*/
+  isUseOptionsChecked?: boolean = true;
   /**
    * 渲染类型
    * @default 'list'
@@ -166,6 +168,14 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
         this.state[key] = value;
       }
     }
+  };
+
+  /**判断是否使用 options 参数,并且不是管理模式*/
+  isUseOptions = () => {
+    if (Array.isArray(this.options) && !this.onLoadData && !this.isNeedManage) {
+      return this.isUseOptionsChecked;
+    }
+    return false;
   };
 
   /**搜索*/

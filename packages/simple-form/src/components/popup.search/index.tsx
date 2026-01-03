@@ -34,7 +34,7 @@ const FairysTaroPopupSearchBodyBase = () => {
   const visible = state.visible;
 
   useMemo(() => {
-    if (isNeedManage) {
+    if (isNeedManage || instance.isUseOptions()) {
       instance.updateState({ value, _tempValue: value });
     } else {
       instance.updateState({ value, _tempValue: undefined });
@@ -98,6 +98,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     tableProps = {},
     useTableProps,
     isNeedManage = false,
+    isUseOptionsChecked = true,
     ...rest
   } = props;
   const [state, instance] = useFairysTaroPopupSearchBaseInstance<T>();
@@ -113,6 +114,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.tableProps = tableProps;
   instance.useTableProps = useTableProps;
   instance.isNeedManage = isNeedManage;
+  instance.isUseOptionsChecked = isUseOptionsChecked;
 
   instance.rowKey = rowKey;
   instance.displayField = displayField;
