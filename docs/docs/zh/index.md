@@ -14,7 +14,7 @@ hero:
     src: /logo.png
     alt: Logo
 features:
-  - title: UI 组件库
-    details: 可自由替换 UI 组件库
-    icon: 🎨
+  # - title: UI 组件库
+  #   details: 可自由替换 UI 组件库
+  #   icon: 🎨
 ---
