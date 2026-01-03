@@ -50,6 +50,7 @@ export function FairysTaroPopupSearchListTable<T = any>() {
   const operationStatus = state.operationStatus;
   const columns = (state.columns || []) as TableColumnProps[];
   const tableProps = instance.useTableProps?.(instance.tableProps || {}, instance) || instance.tableProps || {};
+  const showRowDeleteButton = instance.showRowDeleteButton;
 
   const _newColumns = useMemo(() => {
     const list = [
@@ -61,7 +62,7 @@ export function FairysTaroPopupSearchListTable<T = any>() {
         render: (rowData: T) => <TableItemCheckBox rowData={rowData} />,
       } as TableColumnProps,
     ].concat([...columns]);
-    if (operationStatus === 'manage' && instance.mode === 'multiple') {
+    if (operationStatus === 'manage' && instance.mode === 'multiple' && showRowDeleteButton) {
       return [
         ...list,
         {
@@ -74,7 +75,7 @@ export function FairysTaroPopupSearchListTable<T = any>() {
       ];
     }
     return list;
-  }, [columns, operationStatus]);
+  }, [columns, operationStatus, showRowDeleteButton]);
 
   return (
     <Table

@@ -16,6 +16,7 @@ function VirtualListItem<T = any>(props: { rowData: T; dataIndex: number; index:
   const _tempValue = state._tempValue;
   const operationStatus = state.operationStatus;
   const manageSelectedDataList = state.manageSelectedDataList;
+  const showRowDeleteButton = instance.showRowDeleteButton;
   const renderText = useMemo(() => {
     return renderListItemText?.(rowData) || rowData[instance.displayField];
   }, [rowData, instance.displayField, renderListItemText]);
@@ -38,7 +39,7 @@ function VirtualListItem<T = any>(props: { rowData: T; dataIndex: number; index:
         </Checkbox>
       }
       extra={
-        operationStatus === 'manage' ? (
+        operationStatus === 'manage' && showRowDeleteButton ? (
           <Button
             size="mini"
             fill="none"

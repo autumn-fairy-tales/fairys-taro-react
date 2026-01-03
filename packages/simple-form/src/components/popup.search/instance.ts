@@ -45,7 +45,7 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
     instance: FairysTaroPopupSearchBaseInstanceMount<T>,
   ) => Partial<TaroTableProps>;
   /**是否显示删除按钮*/
-  showDeleteButton?: boolean;
+  showRowDeleteButton?: boolean;
   /**是否显示搜索框*/
   showSearch?: boolean;
   /**选中项*/

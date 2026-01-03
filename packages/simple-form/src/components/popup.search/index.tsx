@@ -81,7 +81,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     maxHeight,
     renderText,
     renderListItemText,
-    showDeleteButton = true,
+    showRowDeleteButton = true,
     showSearch = true,
     renderList,
     options,
@@ -122,7 +122,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.columns = columns;
   instance.renderType = renderType;
 
-  instance.showDeleteButton = showDeleteButton;
+  instance.showRowDeleteButton = showRowDeleteButton;
   instance.showSearch = showSearch;
   instance.maxTagCount = maxTagCount;
   instance.options = options;
