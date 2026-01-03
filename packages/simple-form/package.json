@@ -25,7 +25,7 @@
     "esm"
   ],
   "dependencies": {
-    "@carefrees/form-utils-react-taro": "^0.0.16",
+    "@carefrees/form-utils-react-taro": "^0.0.17",
     "@nutui/nutui-react-taro": "^3.0.18",
     "clsx": "2.1.1",
     "valtio": "~2.1.5"

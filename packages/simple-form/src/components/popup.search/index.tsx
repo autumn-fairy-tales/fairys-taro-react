@@ -59,11 +59,11 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     displayField = 'label',
     /**渲染类型*/
     renderType = 'list',
-    maxTagCount = 5,
+    maxTagCount = 9,
     /**表格属性*/
     tableProps = {},
     useTableProps,
-    isReplace = false,
+    isNeedManage = false,
     ...rest
   } = props;
 
@@ -79,7 +79,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.renderListItemText = renderListItemText;
   instance.tableProps = tableProps;
   instance.useTableProps = useTableProps;
-  instance.isReplace = isReplace;
+  instance.isNeedManage = isNeedManage;
 
   instance.rowKey = rowKey;
   instance.displayField = displayField;
@@ -93,12 +93,12 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   useMemo(() => instance.ctor(), [maxWidth, maxHeight]);
 
   useMemo(() => {
-    if (!isReplace) {
+    if (isNeedManage) {
       instance.updateState({ value, _tempValue: value });
     } else {
       instance.updateState({ value, _tempValue: undefined });
     }
-  }, [value, isReplace, visible]);
+  }, [value, isNeedManage, visible]);
 
   useMemo(() => instance.updateState({ dataList: options || [], _tempFilterDataList: options || [] }), [options]);
   useMemo(() => instance.updateState({ mode }), [mode]);
@@ -133,7 +133,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
 
   return (
     <View className={`fairys-taro-popup-search ${className || ''}`} style={style}>
-      <View className="fairys-taro-popup-search-text-container fairystaroform__break-all">
+      <View className="fairys-taro-popup-search-text-container">
         <Text onClick={() => instance.updateState({ visible: true })} className={clsx_text}>
           {renderTextValue || placeholder}
         </Text>
@@ -144,7 +144,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
         closeable
         {...rest}
         left={
-          mode === 'multiple' && !isReplace ? (
+          mode === 'multiple' && isNeedManage ? (
             <Text onClick={instance.updateOperationStatus}>{operationStatus == 'select' ? '管理' : '完成'}</Text>
           ) : (
             <Fragment />

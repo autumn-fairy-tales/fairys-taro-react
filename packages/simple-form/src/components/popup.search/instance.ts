@@ -28,8 +28,8 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   maxWidth?: number;
   /**最大弹窗高度*/
   maxHeight?: number;
-  /**直接替换已选择的数据*/
-  isReplace?: boolean = false;
+  /**是否需要管理已选择的数据*/
+  isNeedManage?: boolean = false;
   /**
    * 渲染类型
    * @default 'list'

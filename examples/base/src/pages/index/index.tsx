@@ -160,8 +160,63 @@ function Index() {
               ],
             }}
           />
+
+          <FairysTaroSimpleForm.Item
+            label="多选搜索选择器"
+            name="m-popupSearch"
+            type="fairysPopupSearch"
+            attr={{
+              placeholder: '请选择',
+              mode: 'multiple',
+              options: [
+                { value: 'A0', label: 'A0_1' },
+                { value: 'B0', label: 'B0_1' },
+                { value: 'C0', label: 'C0_1' },
+                { value: 'D0', label: 'D0_1' },
+                { value: 'E0', label: 'E0_1' },
+                { value: 'F0', label: 'F0_1' },
+                { value: 'G0', label: 'G0_1' },
+                { value: 'H0', label: 'H0_1' },
+                { value: 'I0', label: 'I0_1' },
+                { value: 'J0', label: 'J0_1' },
+                { value: 'K0', label: 'K0_1' },
+                { value: 'L0', label: 'L0_1' },
+                { value: 'M0', label: 'M0_1' },
+              ],
+            }}
+          />
+          <FairysTaroSimpleForm.Item
+            label="多选搜索选择器(表格)"
+            name="m-popupSearch-table"
+            type="fairysPopupSearch"
+            attr={{
+              placeholder: '请选择',
+              mode: 'multiple',
+              renderType: 'table',
+              isNeedManage: true,
+              columns: [
+                { title: '选项值', key: 'value' },
+                { title: '选项标签', key: 'label' },
+              ],
+              options: [
+                { value: 'A0', label: 'A0_1' },
+                { value: 'B0', label: 'B0_1' },
+                { value: 'C0', label: 'C0_1' },
+                { value: 'D0', label: 'D0_1' },
+                { value: 'E0', label: 'E0_1' },
+                { value: 'F0', label: 'F0_1' },
+                { value: 'G0', label: 'G0_1' },
+                { value: 'H0', label: 'H0_1' },
+                { value: 'I0', label: 'I0_1' },
+                { value: 'J0', label: 'J0_1' },
+                { value: 'K0', label: 'K0_1' },
+                { value: 'L0', label: 'L0_1' },
+                { value: 'M0', label: 'M0_1' },
+              ],
+            }}
+          />
         </FairysTaroSimpleForm>
-        {/* <Button
+        <Button
           onClick={() => {
             console.log('点击了按钮');
             globalDataInstance.showToast({
@@ -181,7 +236,7 @@ function Index() {
         >
           点击2
         </Button>
-        <Text>Hello world!</Text> */}
+        <Text>Hello world!</Text>
       </FairysTaroMainPageSearch>
       <FairysTaroMainPageBody>
         <FairysTaroMessage>
