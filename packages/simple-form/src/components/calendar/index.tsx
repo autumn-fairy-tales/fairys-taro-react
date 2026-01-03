@@ -1,8 +1,7 @@
-import { View, Text, ViewProps } from '@tarojs/components';
+import { View, ViewProps } from '@tarojs/components';
 import { Calendar, CalendarProps } from '@nutui/nutui-react-taro';
-import { Fragment, useMemo, useState } from 'react';
-import clsx from 'clsx';
-import { CustomTextClear } from 'components/clear';
+import { useState } from 'react';
+import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroCalendarProps extends Partial<CalendarProps> {
   placeholder?: string;
@@ -15,23 +14,17 @@ export interface FairysTaroCalendarProps extends Partial<CalendarProps> {
 export const FairysTaroCalendarBase = (props: FairysTaroCalendarProps) => {
   const { placeholder = '请选择', value, className, style, onChange, ...rest } = props;
   const [visible, setVisible] = useState(false);
-  const clsx_text = useMemo(() => {
-    return clsx('fairys-taro-calendar-text', {
-      'fairys-taro-calendar-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !value,
-      'fairys-taro-calendar-text-value fairystaroform__text-black': value,
-    });
-  }, [value]);
 
   return (
     <View className={`fairys-taro-calendar ${className || ''}`} style={style}>
-      <CustomTextClear
+      <FairysTaroTextClearBase
         warpClassName="fairys-taro-calendar-text"
         isValue={!!value}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined, undefined)}
       >
         {value || placeholder}
-      </CustomTextClear>
+      </FairysTaroTextClearBase>
       <Calendar
         {...rest}
         visible={visible}

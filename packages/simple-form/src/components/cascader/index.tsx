@@ -1,8 +1,7 @@
 import { View } from '@tarojs/components';
 import { Cascader, CascaderProps, CascaderOption } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
-import clsx from 'clsx';
-import { CustomTextClear } from 'components/clear';
+import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroCascaderProps
   extends Omit<Partial<CascaderProps>, 'visible' | 'onClose' | 'onChange' | 'value'> {
@@ -94,14 +93,14 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
 
   return (
     <View className={`fairys-taro-cascader ${className || ''}`} style={style}>
-      <CustomTextClear
+      <FairysTaroTextClearBase
         warpClassName="fairys-taro-cascader-text"
         isValue={!!render}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined, undefined)}
       >
         {render || placeholder}
-      </CustomTextClear>
+      </FairysTaroTextClearBase>
       <Cascader
         {...rest}
         className={`fairys-taro-cascader-body fairystaroform__text-left ${bodyClassName || ''}`}

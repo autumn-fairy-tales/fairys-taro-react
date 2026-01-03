@@ -1,1 +1,13 @@
-["index", "connectToastMessage", "EnterLoading", "MainPage", "Mesage", "Toast", "Portal"]
+[
+  "index",
+  {
+    "type": "dir",
+    "name": "context",
+    "label": "状态实例"
+  },
+  {
+    "type": "dir",
+    "name": "components",
+    "label": "基础组件"
+  }
+]

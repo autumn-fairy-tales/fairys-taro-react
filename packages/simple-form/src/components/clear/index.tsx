@@ -23,7 +23,7 @@ export interface SVG_IconProps {
   onClearClick?: (event: React.MouseEvent) => void;
 }
 
-export const CustomTextClear = (props: SVG_IconProps) => {
+export const FairysTaroTextClearBase = (props: SVG_IconProps) => {
   const { isValue = true, children, warpClassName, warpStyle, onTextClick, onClearClick, ...rest } = props;
 
   const clsx_text = useMemo(() => {

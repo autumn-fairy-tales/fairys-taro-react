@@ -1,1 +1,9 @@
-["index"]
+[
+  "index",
+  "use",
+  {
+    "type": "dir",
+    "name": "components",
+    "label": "表单基础组件"
+  }
+]

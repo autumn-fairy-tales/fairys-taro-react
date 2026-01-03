@@ -2,7 +2,7 @@ import { View } from '@tarojs/components';
 import { DatePicker, DatePickerProps } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
 import clsx from 'clsx';
-import { CustomTextClear } from 'components/clear';
+import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroDatePickerProps extends Omit<Partial<DatePickerProps>, 'value' | 'onChange'> {
   placeholder?: string;
@@ -138,14 +138,14 @@ export const FairysTaroDatePickerBase = (props: FairysTaroDatePickerProps) => {
 
   return (
     <View className={`fairys-taro-date-picker ${className || ''}`} style={style}>
-      <CustomTextClear
+      <FairysTaroTextClearBase
         warpClassName="fairys-taro-date-picker-text"
         isValue={!!render.renderStr}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined)}
       >
         {render.renderStr || placeholder}
-      </CustomTextClear>
+      </FairysTaroTextClearBase>
 
       <DatePicker
         type={type}

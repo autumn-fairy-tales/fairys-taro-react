@@ -1,8 +1,7 @@
 import { View, Text } from '@tarojs/components';
 import { Picker, TaroPickerProps, PickerOptions } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
-import clsx from 'clsx';
-import { CustomTextClear } from 'components/clear';
+import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroPickerProps extends Omit<Partial<TaroPickerProps>, 'value' | 'onChange'> {
   placeholder?: string;
@@ -33,14 +32,14 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
 
   return (
     <View className={`fairys-taro-picker ${className || ''}`} style={style}>
-      <CustomTextClear
+      <FairysTaroTextClearBase
         warpClassName="fairys-taro-picker-text"
         isValue={!!_renderValue}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined)}
       >
         {_renderValue || placeholder}
-      </CustomTextClear>
+      </FairysTaroTextClearBase>
       <Picker
         {...rest}
         className={`fairys-taro-picker-body fairystaroform__text-left ${bodyClassName || ''}`}

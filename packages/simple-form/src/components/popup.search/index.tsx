@@ -10,7 +10,7 @@ import type { FairysTaroPopupSearchBaseInstanceMount } from './instance';
 import { FairysTaroPopupSearchFooterBase, FairysTaroPopupSearchInputBase } from './base';
 import { FairysTaroPopupSearchListVirtual } from './list.virtual';
 import { FairysTaroPopupSearchListTable } from './list.table';
-import { CustomTextClear } from 'components/clear';
+import { FairysTaroTextClearBase } from 'components/clear';
 
 /**
  * 如果是多选，怎么移除某几个选中项
@@ -154,14 +154,14 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
 
   return (
     <View className={`fairys-taro-popup-search ${className || ''}`} style={style}>
-      <CustomTextClear
+      <FairysTaroTextClearBase
         warpClassName="fairys-taro-popup-search-text-container"
         isValue={!!renderTextValue}
         onTextClick={() => instance.updateState({ visible: true })}
         onClearClick={() => onChange?.(undefined)}
       >
         {renderTextValue || placeholder}
-      </CustomTextClear>
+      </FairysTaroTextClearBase>
       <Popup
         lockScroll
         position="bottom"
