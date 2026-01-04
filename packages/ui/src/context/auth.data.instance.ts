@@ -145,7 +145,7 @@ export class AuthDataInstance<T = any> {
    * @returns 是否有指定菜单权限
    */
   hasMenuPermission(menuPermission: string): boolean {
-    if (!globalSettingDataInstance.store.isAuth) {
+    if (!globalSettingDataInstance.store.isEnableAuth) {
       return true;
     }
     return this.menusPermissions.includes(menuPermission);
@@ -157,7 +157,7 @@ export class AuthDataInstance<T = any> {
    * @returns 是否有指定权限
    */
   hasPermission(permission: string): boolean {
-    if (!globalSettingDataInstance.store.isAuth) {
+    if (!globalSettingDataInstance.store.isEnableAuth) {
       return true;
     }
     return this.permissions.includes(permission);

@@ -12,12 +12,12 @@ class NavigateInstance {
     // 判断是否使用 authDataInstance中的hasMenuPermission 判断是否有菜单权限
     const useAuthHasMenuPermission = globalSettingDataInstance.store.useAuthHasMenuPermission;
     // 判断是否开启权限校验
-    const isAuth = globalSettingDataInstance.store.isAuth;
+    const isEnableAuth = globalSettingDataInstance.store.isEnableAuth;
     let isAuthFunction = this.isAuth;
-    if (useAuthHasMenuPermission && typeof isAuthFunction !== 'function' && isAuth) {
+    if (useAuthHasMenuPermission && typeof isAuthFunction !== 'function' && isEnableAuth) {
       isAuthFunction = authDataInstance.hasMenuPermission;
     }
-    if (url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes) {
+    if (url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes && isEnableAuth) {
       isAuthTo = await isAuthFunction(url);
     }
     if (isAuthTo === false) {

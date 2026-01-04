@@ -32,7 +32,7 @@ export interface GlobalSettingDataInstanceState {
   /**路由跳转默认使用authDataInstance中的hasMenuPermission 判断是否有菜单权限*/
   useAuthHasMenuPermission?: boolean;
   /**是否开启权限校验*/
-  isAuth?: boolean;
+  isEnableAuth?: boolean;
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
@@ -46,7 +46,7 @@ export class GlobalSettingDataInstance extends ProxyInstanceObjectBase<GlobalSet
     loginPageRoute: 'pages/login/index',
     ignoreAuthRoutes: [],
     useAuthHasMenuPermission: true,
-    isAuth: true,
+    isEnableAuth: true,
   };
   store = proxy<GlobalSettingDataInstanceState>({ ...this.defaultStore });
   /**
