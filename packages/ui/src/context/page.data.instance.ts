@@ -119,7 +119,7 @@ export class PageDataInstance<
         if (this.requestConfig?.onAfter) {
           saveData = this.requestConfig.onAfter(result);
         } else {
-          const dataList = result?.data?.list || result?.data?.records || [];
+          const dataList = result?.data?.list || result?.data?.rows || result?.data?.records || [];
           /**如果是第一页则直接返回数据，否则进行拼接数据*/
           let newDataList = [];
           if (this.store.page === 1) {
@@ -211,5 +211,5 @@ export const usePageData = <T extends PageDataInstanceState = PageDataInstanceSt
 ) => {
   const pageDataInstance = useRef(new PageDataInstance<T>(options)).current;
   const store = useSnapshot(pageDataInstance.store) as T;
-  return [store, pageDataInstance, store.__defaultValue] as const;
+  return [store, pageDataInstance, store.__defaultValue] as [T, PageDataInstance<T>, string | undefined];
 };

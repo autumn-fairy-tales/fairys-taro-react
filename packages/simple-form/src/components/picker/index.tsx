@@ -1,4 +1,4 @@
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import { Picker, TaroPickerProps, PickerOptions } from '@nutui/nutui-react-taro';
 import { useMemo, useState } from 'react';
 import { FairysTaroTextClearBase } from 'components/clear';

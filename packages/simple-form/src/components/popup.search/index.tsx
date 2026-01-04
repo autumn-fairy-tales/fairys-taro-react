@@ -22,8 +22,16 @@ export interface FairysTaroPopupSearchProps<T = any>
   placeholder?: string;
 }
 
-const FairysTaroPopupSearchBodyBase = () => {
-  const [state, instance] = useFairysTaroPopupSearchBaseInstanceContext();
+function RenderList<T = any>() {
+  const [state, instance] = useFairysTaroPopupSearchBaseInstanceContext<T>();
+  const renderList = instance.renderList;
+  const _tempFilterDataList = state._tempFilterDataList as T[];
+  const operationStatus = state.operationStatus;
+  return renderList?.(_tempFilterDataList || [], operationStatus, instance) || <Fragment />;
+}
+
+function FairysTaroPopupSearchBodyBase<T = any>() {
+  const [state, instance] = useFairysTaroPopupSearchBaseInstanceContext<T>();
   const renderType = instance.renderType;
   const showSearch = instance.showSearch;
   const mode = instance.mode;
@@ -56,17 +64,19 @@ const FairysTaroPopupSearchBodyBase = () => {
       {showSearch ? <FairysTaroPopupSearchInputBase /> : <Fragment />}
       <View style={{ flex: 1, overflow: 'hidden' }}>
         {renderType === 'list' ? (
-          <FairysTaroPopupSearchListVirtual />
+          <FairysTaroPopupSearchListVirtual<T> />
         ) : renderType === 'table' ? (
-          <FairysTaroPopupSearchListTable />
+          <FairysTaroPopupSearchListTable<T> />
+        ) : renderType === 'custom' ? (
+          <RenderList<T> />
         ) : (
           <Fragment />
         )}
       </View>
-      {mode === 'multiple' ? <FairysTaroPopupSearchFooterBase /> : <Fragment />}
+      {mode === 'multiple' ? <FairysTaroPopupSearchFooterBase<T> /> : <Fragment />}
     </View>
   );
-};
+}
 
 export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchProps<T>) {
   const {
@@ -135,7 +145,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
 
   const renderTextValue = useMemo(() => {
     if (instance.renderText) {
-      return instance.renderText(value);
+      return instance.renderText(value, instance);
     }
     if (instance.mode === 'multiple') {
       if (Array.isArray(value)) {
@@ -180,7 +190,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
         className="fairys-taro-popup-search-content fairystaroform__flex fairystaroform__flex-col fairystaroform__overflow-hidden"
       >
         <FairysTaroPopupSearchBaseInstanceContext.Provider value={instance}>
-          {visible ? <FairysTaroPopupSearchBodyBase /> : <Fragment />}
+          {visible ? <FairysTaroPopupSearchBodyBase<T> /> : <Fragment />}
         </FairysTaroPopupSearchBaseInstanceContext.Provider>
       </Popup>
     </View>

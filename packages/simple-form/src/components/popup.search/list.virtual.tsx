@@ -18,7 +18,7 @@ function VirtualListItem<T = any>(props: { rowData: T; dataIndex: number; index:
   const manageSelectedDataList = state.manageSelectedDataList;
   const showRowDeleteButton = instance.showRowDeleteButton;
   const renderText = useMemo(() => {
-    return renderListItemText?.(rowData) || rowData[instance.displayField];
+    return renderListItemText?.(rowData, instance) || rowData[instance.displayField];
   }, [rowData, instance.displayField, renderListItemText]);
 
   const checked = useMemo(

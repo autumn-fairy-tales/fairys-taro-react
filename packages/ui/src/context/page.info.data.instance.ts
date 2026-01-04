@@ -129,7 +129,7 @@ export class PageInfoDataInstance<
         return;
       }
       this.updatedLoading(true);
-      const newParams = await this.requestSaveInfoConfig?.onSaveBefore?.(this.store);
+      const newParams = (await this.requestSaveInfoConfig?.onSaveBefore?.(this.store)) || this.store.editFormData || {};
       const result = await this.requestSaveInfoConfig.onSaveInfo?.(newParams);
       this.updatedLoading(false);
       if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
@@ -178,5 +178,5 @@ export const usePageInfoData = <T extends PageInfoDataInstanceState = PageInfoDa
 ) => {
   const pageDataInstance = useRef(new PageInfoDataInstance<T>(options)).current;
   const store = useSnapshot(pageDataInstance.store) as T;
-  return [store, pageDataInstance, store.__defaultValue] as const;
+  return [store, pageDataInstance, store.__defaultValue] as [T, PageInfoDataInstance<T>, string | undefined];
 };

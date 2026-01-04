@@ -1,9 +1,9 @@
 import { proxy, ref, useSnapshot } from 'valtio';
-import { TaroToastProps } from '@nutui/nutui-react-taro';
+import type { TaroToastProps } from '@nutui/nutui-react-taro';
 import navigate from 'utils/navigate';
 import { createUseId } from 'utils/useId';
 import React from 'react';
-import { FairysTaroMessageItemProps } from 'components/Mesage';
+import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
@@ -102,5 +102,9 @@ export const globalDataInstance = new GlobalDataInstance();
  */
 export const useGlobalData = () => {
   const store = useSnapshot(globalDataInstance.store);
-  return [store, globalDataInstance, store.__defaultValue] as const;
+  return [store, globalDataInstance, store.__defaultValue] as [
+    GlobalDataInstanceState,
+    GlobalDataInstance,
+    string | undefined,
+  ];
 };

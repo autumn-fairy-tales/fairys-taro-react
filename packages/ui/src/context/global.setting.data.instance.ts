@@ -32,5 +32,9 @@ export const globalSettingDataInstance = new GlobalSettingDataInstance();
  */
 export const useGlobalSettingData = () => {
   const store = useSnapshot(globalSettingDataInstance.store);
-  return [store, globalSettingDataInstance, store.__defaultValue] as const;
+  return [store, globalSettingDataInstance, store.__defaultValue] as [
+    GlobalSettingDataInstanceState,
+    GlobalSettingDataInstance,
+    string | undefined,
+  ];
 };

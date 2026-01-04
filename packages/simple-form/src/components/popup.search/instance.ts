@@ -7,15 +7,19 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   /**选中项改变时触发*/
   onChange?: (value: T[] | T | undefined) => void;
   // 1. 直接传递值 ，2. 请求接口获取值
-  onLoadData?: (params: any) => Promise<T[]>;
+  onLoadData?: (params: any, instance: FairysTaroPopupSearchBaseInstanceMount<T>) => Promise<T[]>;
   /**其他请求参数*/
-  otherRequestParams?: (params: any) => any;
+  otherRequestParams?: (params: any, instance: FairysTaroPopupSearchBaseInstanceMount<T>) => any;
   /**自定义输入框显示文本*/
-  renderText?: (data: T | T[]) => React.ReactNode;
+  renderText?: (data: T | T[], instance: FairysTaroPopupSearchBaseInstanceMount<T>) => React.ReactNode;
   /**自定义渲染列表项文本*/
-  renderListItemText?: (data: T) => React.ReactNode;
+  renderListItemText?: (data: T, instance: FairysTaroPopupSearchBaseInstanceMount<T>) => React.ReactNode;
   /**自定义渲染列表数据*/
-  renderList?: (dataList: T[], type: 'select' | 'manage') => React.ReactNode;
+  renderList?: (
+    dataList: T[],
+    type: 'select' | 'manage',
+    instance: FairysTaroPopupSearchBaseInstanceMount<T>,
+  ) => React.ReactNode;
   /**选择模式*/
   mode?: 'multiple' | 'single' = 'single';
   /**列表项的唯一键值*/
@@ -36,7 +40,7 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
    * 渲染类型
    * @default 'list'
    * */
-  renderType?: 'list' | 'table' = 'list';
+  renderType?: 'list' | 'table' | 'custom' = 'list';
   /**表格属性*/
   tableProps?: Partial<TaroTableProps> = {};
   /**自定义表格属性*/
@@ -181,13 +185,14 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
   /**搜索*/
   onSearch = async (keyword: string) => {
     this.state.search = keyword;
+
     const _keyword = `${keyword || ''}`.trim();
     try {
       if (this.onLoadData && this.state.operationStatus === 'select') {
         // 延时 0.5s 搜索，避免用户输入过快导致请求次数过多
         await new Promise((resolve) => setTimeout(resolve, 500));
         const search = { keyword: _keyword };
-        const dataList = await this.onLoadData(this.otherRequestParams?.(search) || search);
+        const dataList = await this.onLoadData(this.otherRequestParams?.(search, this) || search, this);
         if (Array.isArray(dataList)) {
           this.updateState({ _tempFilterDataList: dataList || [], dataList: dataList || [] });
         } else {
