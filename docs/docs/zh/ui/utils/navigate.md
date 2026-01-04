@@ -11,7 +11,7 @@ import { navigate } from '@fairys/taro-tools-react';
 ```ts
 import Taro from '@tarojs/taro';
 declare class NavigateInstance {
-    /**判断是否已登录(方法需要在项目入口文件中进行挂载)*/
+    /**判断是否已登录(方法需要在项目入口文件中进行挂载,如果不挂载,默认使用 authDataInstance.hasMenuPermission 判断是否有菜单权限)*/
     isAuth: (url: string) => Promise<boolean> | boolean;
     private _isAuth;
     /**
