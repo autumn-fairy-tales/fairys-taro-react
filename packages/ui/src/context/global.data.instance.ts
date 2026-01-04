@@ -5,6 +5,7 @@ import { createUseId } from 'utils/useId';
 import React from 'react';
 import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
+import { globalSettingDataInstance } from './global.setting.data.instance';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -32,12 +33,6 @@ export interface GlobalDataInstanceState {
 }
 
 export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
-  /**
-   * 设置登录页面路由(需要在入口文件中进行设置)
-   * @param loginPageRoute 登录页面路由(默认pages/login/index)
-   */
-  public loginPageRoute = 'pages/login/index';
-
   store = proxy<GlobalDataInstanceState>({
     messageData: ref([]),
     toastData: undefined,
@@ -82,8 +77,9 @@ export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstan
 
   /**跳转登录页面*/
   toLoginPage = () => {
-    const isLoginPage = navigate.isCurrentPage(this.loginPageRoute || '');
-    const _loginPageRoute = `${this.loginPageRoute || ''}`.replace(/^\//, '');
+    const loginPageRoute = globalSettingDataInstance.store.loginPageRoute || '';
+    const isLoginPage = navigate.isCurrentPage(loginPageRoute || '');
+    const _loginPageRoute = `${loginPageRoute || ''}`.replace(/^\//, '');
     if (isLoginPage) {
       // 如果是登录页面不进行跳转
       return;

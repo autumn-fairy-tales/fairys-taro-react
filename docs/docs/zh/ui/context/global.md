@@ -10,6 +10,7 @@ import { globalDataInstance , useGlobalData } from '@fairys/taro-tools-react';
 
 ```ts
 import type { TaroToastProps } from '@nutui/nutui-react-taro';
+import React from 'react';
 import type { FairysTaroMessageItemProps } from '@fairys/taro-tools-react';
 import { ProxyInstanceObjectBase } from '@fairys/taro-tools-react';
 export interface MessageDataType extends FairysTaroMessageItemProps {
@@ -36,11 +37,6 @@ export interface GlobalDataInstanceState {
     __defaultValue?: string;
 }
 export declare class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
-    /**
-     * 设置登录页面路由(需要在入口文件中进行设置)
-     * @param loginPageRoute 登录页面路由(默认pages/login/index)
-     */
-    loginPageRoute: string;
     store: GlobalDataInstanceState;
     /**用于提示信息*/
     showMessage: (options: Omit<MessageDataType, "__id"> & {
@@ -63,6 +59,7 @@ export declare const globalDataInstance: GlobalDataInstance;
  * 全局数据状态管理
  */
 export declare const useGlobalData: () => [GlobalDataInstanceState, GlobalDataInstance, string | undefined];
+
 ```
 
 ## 使用

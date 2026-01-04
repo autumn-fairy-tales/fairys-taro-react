@@ -3,8 +3,6 @@ import { globalSettingDataInstance } from 'context/global.setting.data.instance'
 import { globalDataInstance } from 'context/global.data.instance';
 
 const codeMessage = {
-  // 200: '服务器成功返回请求的数据',
-  // 201: '新建或修改数据成功',
   400: '发出的请求错误',
   401: '用户没有权限',
   403: '用户访问被禁止',
@@ -34,7 +32,7 @@ const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>, 
     const statusCode = result.statusCode;
     const code = result?.data?.code;
     if (result?.data) {
-      if (statusCode === 401 || code === 401) {
+      if (statusCode === 401 || code === 401 || code === globalSettingDataInstance.store.tokenExpiredCode) {
         // 权限问题 ，重新登录
         msg = '请重新登录';
         /**重新跳转登录页面*/
@@ -59,16 +57,6 @@ const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>, 
 };
 
 export interface RequestInstanceCreateOptions {
-  /**
-   * 本地存储token字段名
-   * @default token
-   */
-  tokenFieldName?: string;
-  /**
-   * 请求头token字段名
-   * @default token
-   */
-  headerTokenName?: string;
   /**
    * 公共请求配置
    * @default {}
@@ -99,16 +87,7 @@ export class RequestInstance {
   public IP?: string | ((url: string, module?: string, env?: string) => string);
   /**简单的代理配置*/
   public proxy?: RequestInstanceCreateOptions['proxy'];
-  /**
-   * 本地存储token字段名
-   * @default token
-   */
-  public tokenFieldName = 'token';
-  /**
-   * 请求头token字段名
-   * @default token
-   */
-  public headerTokenName = 'token';
+
   /**公共请求配置*/
   public commonOptions: Omit<Taro.request.Option<any, any>, 'url'> = {};
 
@@ -126,8 +105,6 @@ export class RequestInstance {
   extends = (options: RequestInstanceCreateOptions = {}) => {
     this.IP = options.IP || this.IP;
     this.proxy = options.proxy || this.proxy;
-    this.tokenFieldName = options.tokenFieldName || this.tokenFieldName;
-    this.headerTokenName = options.headerTokenName || this.headerTokenName;
     this.commonOptions = { ...this.commonOptions, ...options.commonOptions };
     return this;
   };
@@ -204,10 +181,10 @@ export class RequestInstance {
   /**发送请求，返回 Taro.RequestTask */
   requestBase = (options: RequestInstanceOptions) => {
     const { data, header = {}, module, isIgnoreToken, isShowErrorMessage, ...restOptions } = options;
-    const token = Taro.getStorageSync(this.tokenFieldName || 'token');
+    const token = Taro.getStorageSync(globalSettingDataInstance.store.tokenFieldName || 'token');
     const newHeader = { ...header };
     if (token) {
-      newHeader[this.headerTokenName || 'token'] = token;
+      newHeader[globalSettingDataInstance.store.headerTokenName || 'token'] = token;
     } else {
       if (isIgnoreToken !== true) {
         // 跳转登录页

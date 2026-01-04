@@ -9,5 +9,10 @@
     "type": "dir",
     "name": "components",
     "label": "基础组件"
+  },
+  {
+    "type": "dir",
+    "name": "utils",
+    "label": "工具"
   }
 ]

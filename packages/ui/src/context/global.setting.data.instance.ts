@@ -7,6 +7,26 @@ export interface GlobalSettingDataInstanceState {
    * @default 200
    */
   requestSuccessCode?: number;
+  /**
+   * token过期返回code，跳转登录页面
+   * @default 401
+   */
+  tokenExpiredCode?: number;
+  /**
+   * 本地存储token字段名
+   * @default token
+   */
+  tokenFieldName?: string;
+  /**
+   * 请求头token字段名
+   * @default token
+   */
+  headerTokenName?: string;
+  /**
+   * 设置登录页面路由(需要在入口文件中进行设置)
+   * @default pages/login/index
+   */
+  loginPageRoute?: string;
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
@@ -14,6 +34,10 @@ export interface GlobalSettingDataInstanceState {
 export class GlobalSettingDataInstance extends ProxyInstanceObjectBase<GlobalSettingDataInstanceState> {
   store = proxy<GlobalSettingDataInstanceState>({
     requestSuccessCode: 200,
+    tokenFieldName: 'token',
+    headerTokenName: 'token',
+    tokenExpiredCode: 401,
+    loginPageRoute: 'pages/login/index',
   });
   /**
    * 扩展全局设置数据状态
