@@ -62,7 +62,6 @@ export interface RequestInstanceCreateOptions {
    * @default {}
    */
   commonOptions?: Omit<Taro.request.Option<any, any>, 'url'>;
-
   /**
    * 请求IP地址
    * @default ''
@@ -153,11 +152,9 @@ export class RequestInstance {
     if (!host) {
       host = this.proxy?.default?.[process.env.NODE_ENV === 'production' ? 'pro' : 'dev'] || '';
     }
-
     if (!host) {
       host = this.getHttpPath(url, module);
     }
-
     return {
       host,
       url: _url,

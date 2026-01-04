@@ -1,17 +1,28 @@
 import Taro from '@tarojs/taro';
+import { globalSettingDataInstance } from 'context/global.setting.data.instance';
+import { authDataInstance } from 'context/auth.data.instance';
 
 class NavigateInstance {
-  /**判断是否已登录(方法需要在项目入口文件中进行挂载)*/
+  /**判断是否已登录(方法需要在项目入口文件中进行挂载,如果不挂载,默认使用 authDataInstance.hasMenuPermission 判断是否有菜单权限)*/
   public isAuth: (url: string) => Promise<boolean> | boolean;
-
   private _isAuth = async (url?: string) => {
     let isAuthTo = true;
-    if (url && typeof this.isAuth === 'function') {
-      isAuthTo = await this.isAuth(url);
+    // 判断是否跳转忽略权限校验的路由
+    const isIgnoreAuthRoutes = globalSettingDataInstance.isIgnoreAuthRoutes(url);
+    // 判断是否使用 authDataInstance中的hasMenuPermission 判断是否有菜单权限
+    const useAuthHasMenuPermission = globalSettingDataInstance.store.useAuthHasMenuPermission;
+    // 判断是否开启权限校验
+    const isAuth = globalSettingDataInstance.store.isAuth;
+    let isAuthFunction = this.isAuth;
+    if (useAuthHasMenuPermission && typeof isAuthFunction !== 'function' && isAuth) {
+      isAuthFunction = authDataInstance.hasMenuPermission;
+    }
+    if (url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes) {
+      isAuthTo = await isAuthFunction(url);
     }
     if (isAuthTo === false) {
       // 无权访问页面
-      Taro.showToast({ title: '无权访问', icon: 'none' });
+      Taro.showToast({ title: `${url} 无权访问`, icon: 'none' });
       return false;
     }
     return true;

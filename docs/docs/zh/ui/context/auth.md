@@ -17,6 +17,8 @@ export interface AuthDataInstanceState<T = any> {
     token?: string;
     /**权限列表*/
     permissions?: string[];
+    /**菜单权限列表*/
+    menusPermissions?: string[];
     /**数据默认值不使用*/
     __defaultValue?: string;
 }
@@ -52,6 +54,22 @@ export declare class AuthDataInstance<T = any> {
      * @returns 权限列表
      */
     get permissions(): string[];
+    /**
+     * 设置菜单权限列表
+     * @param menusPermissions 菜单权限列表
+     */
+    set menusPermissions(menusPermissions: string[]);
+    /**
+     * 获取菜单权限列表
+     * @returns 菜单权限列表
+     */
+    get menusPermissions(): string[];
+    /**
+     * 判断是否有指定菜单权限
+     * @param menuPermission 菜单权限
+     * @returns 是否有指定菜单权限
+     */
+    hasMenuPermission(menuPermission: string): boolean;
     /**
      * 判断是否有指定权限
      * @param permission 权限

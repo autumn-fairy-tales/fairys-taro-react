@@ -10,6 +10,8 @@ export interface AuthDataInstanceState<T = any> {
   token?: string;
   /**权限列表*/
   permissions?: string[];
+  /**菜单权限列表*/
+  menusPermissions?: string[];
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
@@ -19,6 +21,7 @@ export class AuthDataInstance<T = any> {
     userInfo: undefined,
     token: undefined,
     permissions: undefined,
+    menusPermissions: undefined,
   });
 
   /**
@@ -107,6 +110,46 @@ export class AuthDataInstance<T = any> {
     }
     return this.store.permissions || [];
   }
+  /**
+   * 设置菜单权限列表
+   * @param menusPermissions 菜单权限列表
+   */
+  set menusPermissions(menusPermissions: string[]) {
+    this.store.menusPermissions = menusPermissions;
+    if (menusPermissions) {
+      Taro.setStorageSync('menusPermissions', JSON.stringify(menusPermissions));
+    } else {
+      Taro.removeStorageSync('menusPermissions');
+    }
+  }
+  /**
+   * 获取菜单权限列表
+   * @returns 菜单权限列表
+   */
+  get menusPermissions(): string[] {
+    if (!this.store.menusPermissions) {
+      const menusPermissions = Taro.getStorageSync('menusPermissions');
+      if (menusPermissions) {
+        try {
+          this.store.menusPermissions = JSON.parse(menusPermissions);
+        } catch (error) {
+          console.error('解析菜单权限列表失败', error);
+        }
+      }
+    }
+    return this.store.menusPermissions || [];
+  }
+  /**
+   * 判断是否有指定菜单权限
+   * @param menuPermission 菜单权限
+   * @returns 是否有指定菜单权限
+   */
+  hasMenuPermission(menuPermission: string): boolean {
+    if (!globalSettingDataInstance.store.isAuth) {
+      return true;
+    }
+    return this.menusPermissions.includes(menuPermission);
+  }
 
   /**
    * 判断是否有指定权限
@@ -114,6 +157,9 @@ export class AuthDataInstance<T = any> {
    * @returns 是否有指定权限
    */
   hasPermission(permission: string): boolean {
+    if (!globalSettingDataInstance.store.isAuth) {
+      return true;
+    }
     return this.permissions.includes(permission);
   }
 }

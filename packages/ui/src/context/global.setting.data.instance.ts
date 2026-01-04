@@ -27,23 +27,49 @@ export interface GlobalSettingDataInstanceState {
    * @default pages/login/index
    */
   loginPageRoute?: string;
+  /**跳转忽略权限校验的路由*/
+  ignoreAuthRoutes?: string[];
+  /**路由跳转默认使用authDataInstance中的hasMenuPermission 判断是否有菜单权限*/
+  useAuthHasMenuPermission?: boolean;
+  /**是否开启权限校验*/
+  isAuth?: boolean;
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
 
 export class GlobalSettingDataInstance extends ProxyInstanceObjectBase<GlobalSettingDataInstanceState> {
-  store = proxy<GlobalSettingDataInstanceState>({
+  defaultStore: GlobalSettingDataInstanceState = {
     requestSuccessCode: 200,
     tokenFieldName: 'token',
     headerTokenName: 'token',
     tokenExpiredCode: 401,
     loginPageRoute: 'pages/login/index',
-  });
+    ignoreAuthRoutes: [],
+    useAuthHasMenuPermission: true,
+    isAuth: true,
+  };
+  store = proxy<GlobalSettingDataInstanceState>({ ...this.defaultStore });
   /**
    * 扩展全局设置数据状态
    */
   extendStore = (state: Partial<GlobalSettingDataInstanceState>) => {
-    this._setValues(state);
+    this._setValues({
+      ...this.defaultStore,
+      ...state,
+    });
+  };
+  /**
+   * 判断是否跳转忽略权限校验的路由
+   */
+  isIgnoreAuthRoutes = (route: string): boolean => {
+    /**处理路由前缀*/
+    const _route = route.replace(/^\//, '');
+    /**处理登录页面路由前缀*/
+    const _loginPageRoute = this.store.loginPageRoute.replace(/^\//, '');
+    if (_route === _loginPageRoute) {
+      return true;
+    }
+    return (this.store.ignoreAuthRoutes || []).includes(_route) || (this.store.ignoreAuthRoutes || []).includes(route);
   };
 }
 /**

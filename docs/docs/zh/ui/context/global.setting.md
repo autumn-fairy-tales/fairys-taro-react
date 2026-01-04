@@ -9,60 +9,61 @@ import { globalSettingDataInstance , useGlobalSettingData } from '@fairys/taro-t
 ## 参数
 
 ```ts
-/**用户信息，权限判断等*/
-export interface AuthDataInstanceState<T = any> {
-    /**用户信息*/
-    userInfo?: T;
-    /**登录凭证（token）*/
-    token?: string;
-    /**权限列表*/
-    permissions?: string[];
+import { ProxyInstanceObjectBase } from '@fairys/taro-tools-react';
+export interface GlobalSettingDataInstanceState {
+    /**
+     * 请求成功返回code
+     * @default 200
+     */
+    requestSuccessCode?: number;
+    /**
+     * token过期返回code，跳转登录页面
+     * @default 401
+     */
+    tokenExpiredCode?: number;
+    /**
+     * 本地存储token字段名
+     * @default token
+     */
+    tokenFieldName?: string;
+    /**
+     * 请求头token字段名
+     * @default token
+     */
+    headerTokenName?: string;
+    /**
+     * 设置登录页面路由(需要在入口文件中进行设置)
+     * @default pages/login/index
+     */
+    loginPageRoute?: string;
+    /**跳转忽略权限校验的路由*/
+    ignoreAuthRoutes?: string[];
+    /**路由跳转默认使用authDataInstance中的hasMenuPermission 判断是否有菜单权限*/
+    useAuthHasMenuPermission?: boolean;
+    /**是否开启权限校验*/
+    isAuth?: boolean;
     /**数据默认值不使用*/
     __defaultValue?: string;
 }
-export declare class AuthDataInstance<T = any> {
-    store: AuthDataInstanceState<T>;
+export declare class GlobalSettingDataInstance extends ProxyInstanceObjectBase<GlobalSettingDataInstanceState> {
+    defaultStore: GlobalSettingDataInstanceState;
+    store: GlobalSettingDataInstanceState;
     /**
-     * 设置用户信息
-     * @param userInfo 用户信息
+     * 扩展全局设置数据状态
      */
-    set userInfo(userInfo: T);
+    extendStore: (state: Partial<GlobalSettingDataInstanceState>) => void;
     /**
-     * 获取用户信息
-     * @returns 用户信息
+     * 判断是否跳转忽略权限校验的路由
      */
-    get userInfo(): T;
-    /**
-     * 设置登录凭证（token）
-     * @param token 登录凭证（token）
-     */
-    set token(token: string);
-    /**
-     * 获取登录凭证（token）
-     * @returns 登录凭证（token）
-     */
-    get token(): string;
-    /**
-     * 设置权限列表
-     * @param permissions 权限列表
-     */
-    set permissions(permissions: string[]);
-    /**
-     * 获取权限列表
-     * @returns 权限列表
-     */
-    get permissions(): string[];
-    /**
-     * 判断是否有指定权限
-     * @param permission 权限
-     * @returns 是否有指定权限
-     */
-    hasPermission(permission: string): boolean;
+    isIgnoreAuthRoutes: (route: string) => boolean;
 }
-export declare const authDataInstance: AuthDataInstance<any>;
 /**
- * 全局数据状态管理
+ * 全局设置数据实例
  */
-export declare function useAuthData<T = any>(): [AuthDataInstanceState<T>, AuthDataInstance<T>, string | undefined];
+export declare const globalSettingDataInstance: GlobalSettingDataInstance;
+/**
+ * 全局设置数据状态管理
+ */
+export declare const useGlobalSettingData: () => [GlobalSettingDataInstanceState, GlobalSettingDataInstance, string | undefined];
 
 ```
