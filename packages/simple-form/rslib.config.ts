@@ -42,7 +42,7 @@ export default defineConfig(() => {
       rspack: (config) => {
         config.plugins.push(
           new ReplacePlugin({
-            prefix: 'fairystaro_form__',
+            prefix: 'fairystaroform__',
           }),
         );
       },
