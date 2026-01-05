@@ -10,13 +10,23 @@ import { request } from '@fairys/taro-tools-react';
 
 ```ts
 import Taro from '@tarojs/taro';
-export interface RequestInstanceOptions extends Taro.request.Option<any, any> {
+export interface TaroRequestOption {
     /**模块名称*/
     module?: string;
     /**是否忽略token*/
     isIgnoreToken?: boolean;
     /**是否提示错误信息*/
     isShowErrorMessage?: boolean;
+}
+export interface RequestInstanceOptions extends Taro.request.Option<any, any>, TaroRequestOption {
+}
+export interface DownloadFileOptions extends Taro.downloadFile.Option, TaroRequestOption {
+    /**下载进度回调*/
+    onProgress?: Taro.DownloadTask.OnProgressUpdateCallback;
+}
+export interface UploadFileOptions extends Taro.uploadFile.Option, TaroRequestOption {
+    /**上传进度回调*/
+    onProgress?: Taro.UploadTask.OnProgressUpdateCallback;
 }
 export interface RequestInstanceCreateOptions {
     /**
@@ -69,6 +79,71 @@ export declare class RequestInstance {
     };
     /**格式化地址*/
     formatUrl: (url: string, module?: string) => string;
+    formatRequestOptions: (options: RequestInstanceOptions | DownloadFileOptions | UploadFileOptions) => {
+        url: string;
+        data?: any;
+        timeout?: number;
+        method?: keyof Taro.request.Method;
+        dataType?: keyof Taro.request.DataType | string;
+        responseType?: keyof Taro.request.ResponseType;
+        enableHttp2?: boolean;
+        enableQuic?: boolean;
+        enableCache?: boolean;
+        enableHttpDNS?: boolean;
+        httpDNSServiceId?: string;
+        enableChunked?: boolean;
+        forceCellularNetwork?: boolean;
+        enableCookie?: boolean;
+        referrerStrategy?: keyof Taro.request.ReferrerStrategy;
+        success?: (result: Taro.request.SuccessCallbackResult<any>) => void;
+        fail?: (res: TaroGeneral.CallbackResult) => void;
+        complete?: (res: Partial<Taro.request.SuccessCallbackResult> & TaroGeneral.CallbackResult) => void;
+        jsonp?: boolean | string;
+        jsonpCache?: RequestCache;
+        mode?: keyof Taro.request.CorsMode;
+        credentials?: keyof Taro.request.Credentials;
+        cache?: keyof Taro.request.Cache;
+        retryTimes?: number;
+        backup?: string | string[];
+        signal?: AbortSignal;
+        dataCheck?(): boolean;
+        useStore?: boolean;
+        storeCheckKey?: string;
+        storeSign?: string;
+        storeCheck?(): boolean;
+        header: {
+            [x: string]: any;
+        };
+    } | {
+        url: string;
+        /**下载进度回调*/
+        onProgress?: Taro.DownloadTask.OnProgressUpdateCallback;
+        filePath?: string;
+        timeout?: number;
+        withCredentials?: boolean;
+        complete?: (res: TaroGeneral.CallbackResult) => void;
+        fail?: (res: TaroGeneral.CallbackResult) => void;
+        success?: (result: Taro.downloadFile.FileSuccessCallbackResult) => void;
+        header: {
+            [x: string]: any;
+        };
+    } | {
+        url: string;
+        /**上传进度回调*/
+        onProgress?: Taro.UploadTask.OnProgressUpdateCallback;
+        filePath: string;
+        name: string;
+        formData?: TaroGeneral.IAnyObject;
+        timeout?: number;
+        fileName?: string;
+        withCredentials?: boolean;
+        complete?: (res: TaroGeneral.CallbackResult) => void;
+        fail?: (res: TaroGeneral.CallbackResult) => void;
+        success?: (result: Taro.uploadFile.SuccessCallbackResult) => void;
+        header: {
+            [x: string]: any;
+        };
+    };
     /**发送请求，返回 Taro.RequestTask */
     requestBase: (options: RequestInstanceOptions) => Taro.RequestTask<any>;
     /**发送请求,返回 Promise */
@@ -101,6 +176,14 @@ export declare class RequestInstance {
         data?: any;
         message?: string;
     }>;
+    /**下载文件(返回 Taro.DownloadTask.DownloadTaskPromise ，可显示下载进度)*/
+    downloadFileTask: (options: DownloadFileOptions) => Taro.DownloadTask.DownloadTaskPromise | undefined;
+    /**下载文件*/
+    downloadFile: (options: DownloadFileOptions) => Promise<Taro.downloadFile.FileSuccessCallbackResult>;
+    /**上传文件(返回 Taro.UploadTask.UploadTaskPromise ，可显示上传进度)*/
+    uploadFileTask: (options: UploadFileOptions) => Taro.UploadTask.UploadTaskPromise;
+    /**上传文件*/
+    uploadFile: (options: UploadFileOptions) => Promise<Taro.uploadFile.SuccessCallbackResult>;
 }
 /** 请求*/
 export declare const request: RequestInstance;

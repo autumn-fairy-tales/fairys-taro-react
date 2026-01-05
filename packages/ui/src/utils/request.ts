@@ -16,7 +16,7 @@ const codeMessage = {
   504: 'nginx超时',
 } as const;
 
-export interface RequestInstanceOptions extends Taro.request.Option<any, any> {
+export interface TaroRequestOption {
   /**模块名称*/
   module?: string;
   /**是否忽略token*/
@@ -25,22 +25,37 @@ export interface RequestInstanceOptions extends Taro.request.Option<any, any> {
   isShowErrorMessage?: boolean;
 }
 
+export interface RequestInstanceOptions extends Taro.request.Option<any, any>, TaroRequestOption {}
+export interface DownloadFileOptions extends Taro.downloadFile.Option, TaroRequestOption {
+  /**下载进度回调*/
+  onProgress?: Taro.DownloadTask.OnProgressUpdateCallback;
+}
+export interface UploadFileOptions extends Taro.uploadFile.Option, TaroRequestOption {
+  /**上传进度回调*/
+  onProgress?: Taro.UploadTask.OnProgressUpdateCallback;
+}
 /**处理提示信息*/
-const requestResponseHandle = (result: Taro.request.SuccessCallbackResult<any>, options?: RequestInstanceOptions) => {
+const requestResponseHandle = (
+  result:
+    | Taro.request.SuccessCallbackResult<any>
+    | Taro.downloadFile.FileSuccessCallbackResult
+    | Taro.uploadFile.SuccessCallbackResult,
+  options?: RequestInstanceOptions,
+) => {
   let msg = '';
   try {
     const statusCode = result.statusCode;
+    // @ts-ignore
     const code = result?.data?.code;
-    if (result?.data) {
-      if (statusCode === 401 || code === 401 || code === globalSettingDataInstance.store.tokenExpiredCode) {
-        // 权限问题 ，重新登录
-        msg = '请重新登录';
-        /**重新跳转登录页面*/
-        globalDataInstance.toLoginPage();
-      } else if (![globalSettingDataInstance.store.requestSuccessCode, 200].includes(code)) {
-        // 提示内容
-        msg = result?.data?.message || '接口异常';
-      }
+    if (statusCode === 401 || code === 401 || code === globalSettingDataInstance.store.tokenExpiredCode) {
+      // 权限问题 ，重新登录
+      msg = '请重新登录';
+      /**重新跳转登录页面*/
+      globalDataInstance.toLoginPage();
+    } else if (![globalSettingDataInstance.store.requestSuccessCode, 200].includes(code)) {
+      // 提示内容
+      // @ts-ignore
+      msg = result?.data?.message || codeMessage[code || result?.statusCode] || '接口异常';
     } else {
       msg = codeMessage[result?.statusCode];
     }
@@ -175,9 +190,8 @@ export class RequestInstance {
     return `${host}/${newUrl}`;
   };
 
-  /**发送请求，返回 Taro.RequestTask */
-  requestBase = (options: RequestInstanceOptions) => {
-    const { data, header = {}, module, isIgnoreToken, isShowErrorMessage, ...restOptions } = options;
+  formatRequestOptions = (options: RequestInstanceOptions | DownloadFileOptions | UploadFileOptions) => {
+    const { header = {}, module, isIgnoreToken, isShowErrorMessage, ...restOptions } = options;
     const token = Taro.getStorageSync(globalSettingDataInstance.store.tokenFieldName || 'token');
     const newHeader = { ...header };
     if (token) {
@@ -196,6 +210,22 @@ export class RequestInstance {
         return undefined;
       }
     }
+
+    return {
+      header: newHeader,
+      ...restOptions,
+      url: this.formatUrl(options.url, module),
+    };
+  };
+
+  /**发送请求，返回 Taro.RequestTask */
+  requestBase = (options: RequestInstanceOptions) => {
+    const { isShowErrorMessage } = options;
+    const formattedOptions = this.formatRequestOptions(options);
+    if (!formattedOptions) {
+      return undefined;
+    }
+    const { header: newHeader, ...restOptions } = formattedOptions;
     return Taro.request({
       ...this.commonOptions,
       ...restOptions,
@@ -203,7 +233,6 @@ export class RequestInstance {
         ...newHeader,
         ...(options?.header || {}),
       },
-      url: this.formatUrl(options.url, module),
       success: (result) => {
         /**处理提示
          * 使用 global 状态管理
@@ -294,6 +323,119 @@ export class RequestInstance {
     } catch (error) {
       throw error;
     }
+  };
+
+  /**下载文件(返回 Taro.DownloadTask.DownloadTaskPromise ，可显示下载进度)*/
+  downloadFileTask = (options: DownloadFileOptions): Taro.DownloadTask.DownloadTaskPromise | undefined => {
+    const { isShowErrorMessage } = options;
+    const formattedOptions = this.formatRequestOptions(options);
+    if (!formattedOptions) {
+      return undefined;
+    }
+    const { header: newHeader, onProgress, ...restOptions } = formattedOptions as DownloadFileOptions;
+    const downloadTask = Taro.downloadFile({
+      ...this.commonOptions,
+      ...restOptions,
+      header: {
+        ...newHeader,
+        ...(options?.header || {}),
+      },
+      success: (result) => {
+        if (result.statusCode === 200) {
+          options?.success?.(result);
+        } else {
+          requestResponseHandle(result, options as any);
+          options?.fail?.(result);
+        }
+      },
+      fail: (result) => {
+        if (isShowErrorMessage !== false) {
+          globalDataInstance.showMessage({
+            content: result.errMsg || '请求发生错误',
+            type: 'error',
+          });
+        }
+        options?.fail?.(result);
+      },
+    });
+    /**监听下载进度*/
+    if (typeof onProgress === 'function' && downloadTask) {
+      downloadTask.onProgressUpdate(onProgress);
+    }
+    return downloadTask;
+  };
+
+  /**下载文件*/
+  downloadFile = (options: DownloadFileOptions): Promise<Taro.downloadFile.FileSuccessCallbackResult> => {
+    try {
+      return new Promise((resolve, reject) => {
+        this.downloadFileTask({
+          ...options,
+          success: (result) => {
+            options?.success?.(result);
+            resolve(result);
+          },
+          fail: (result) => {
+            options?.fail?.(result);
+            reject(result);
+          },
+        });
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  /**上传文件(返回 Taro.UploadTask.UploadTaskPromise ，可显示上传进度)*/
+  uploadFileTask = (options: UploadFileOptions) => {
+    const { isShowErrorMessage } = options;
+    const formattedOptions = this.formatRequestOptions(options);
+    if (!formattedOptions) {
+      return undefined;
+    }
+    const { header: newHeader, onProgress, ...restOptions } = formattedOptions as UploadFileOptions;
+    const uploadTask = Taro.uploadFile({
+      ...this.commonOptions,
+      ...restOptions,
+      header: {
+        ...newHeader,
+        ...(options?.header || {}),
+      },
+      success: (result) => {
+        requestResponseHandle(result, options);
+        options?.success?.(result);
+      },
+      fail: (result) => {
+        if (isShowErrorMessage !== false) {
+          globalDataInstance.showMessage({
+            content: result.errMsg || '请求发生错误',
+            type: 'error',
+          });
+        }
+        options?.fail?.(result);
+      },
+    });
+    /**监听上传进度*/
+    if (typeof onProgress === 'function' && uploadTask) {
+      uploadTask.onProgressUpdate(onProgress);
+    }
+    return uploadTask;
+  };
+  /**上传文件*/
+  uploadFile = (options: UploadFileOptions): Promise<Taro.uploadFile.SuccessCallbackResult> => {
+    return new Promise((resolve, reject) => {
+      this.uploadFileTask({
+        ...options,
+        success: (result) => {
+          options?.success?.(result);
+          resolve(result);
+        },
+        fail: (result) => {
+          options?.fail?.(result);
+          reject(result);
+        },
+      });
+    });
   };
 }
 
