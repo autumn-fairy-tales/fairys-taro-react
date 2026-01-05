@@ -1,7 +1,7 @@
 import { useRef, createContext, useContext } from 'react';
 import { proxy, useSnapshot, ref } from 'valtio';
 import Taro from '@tarojs/taro';
-import { TableColumnProps, TaroTableProps } from '@nutui/nutui-react-taro';
+import type { TableColumnProps, TaroTableProps } from '@nutui/nutui-react-taro';
 
 export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   /**选中项改变时触发*/
@@ -418,7 +418,11 @@ export function useFairysTaroPopupSearchBaseInstance<T = any>() {
   const instanceRef = useRef<FairysTaroPopupSearchBaseInstance<T>>(new FairysTaroPopupSearchBaseInstance<T>());
   const state = useSnapshot(instanceRef.current.state);
   const __defaultValue = state.__defaultValue;
-  return [state, instanceRef.current, __defaultValue] as const;
+  return [state, instanceRef.current, __defaultValue] as [
+    FairysTaroPopupSearchBaseInstanceState<T>,
+    FairysTaroPopupSearchBaseInstance<T>,
+    string,
+  ];
 }
 export const FairysTaroPopupSearchBaseInstanceContext = createContext<FairysTaroPopupSearchBaseInstance>(
   new FairysTaroPopupSearchBaseInstance(),
@@ -428,5 +432,9 @@ export function useFairysTaroPopupSearchBaseInstanceContext<T = any>(options?: {
   const instance = useContext(FairysTaroPopupSearchBaseInstanceContext) as FairysTaroPopupSearchBaseInstance<T>;
   const state = useSnapshot(instance.state, options);
   const __defaultValue = state.__defaultValue;
-  return [state, instance, __defaultValue] as const;
+  return [state, instance, __defaultValue] as [
+    FairysTaroPopupSearchBaseInstanceState<T>,
+    FairysTaroPopupSearchBaseInstance<T>,
+    string,
+  ];
 }
