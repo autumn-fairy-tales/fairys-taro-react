@@ -30,7 +30,7 @@ export interface ItemType<T, K = TaroInputProps> extends FormItemProps {
     /**输入框类型*/
     type?: T;
     /**输入框属性*/
-    attr?: K;
+    attrs?: K;
     /**自定义渲染函数*/
     render?: undefined;
     /**是否添加隐藏组件*/
@@ -43,7 +43,7 @@ type CustomType = {
     type?: 'custom';
     render?: any;
     isHide?: boolean;
-    attr?: any;
+    attrs?: any;
     label?: ReactNode | {
         text?: string;
     };
@@ -53,7 +53,7 @@ type CustomRenderType = {
     type?: 'render';
     render?: React.ReactNode;
     isHide?: boolean;
-    attr?: any;
+    attrs?: any;
     label?: ReactNode | {
         text?: string;
     };
@@ -62,7 +62,7 @@ type CustomFormListType = {
     isEmpty?: boolean;
     type?: 'formList';
     isHide?: boolean;
-    attr?: any;
+    attrs?: any;
     label?: ReactNode | {
         text?: string;
     };
@@ -140,7 +140,7 @@ function Index() {
             name="cascader"
             type="fairysCascader"
             rules={[{ required: true, message: '请选择级联选择器' }]}
-            attr={{
+            attrs={{
               options: [
                 { value: 'A0', text: 'A0_1' },
                 {
@@ -160,7 +160,7 @@ function Index() {
             name="checkboxGroup"
             type="fairysCheckboxGroup"
             rules={[{ required: true, message: '请选择复选框组' }]}
-            attr={{
+            attrs={{
               items: [
                 { value: 'A0', label: 'A0_1' },
                 { value: 'B0', label: 'B0_1' },
@@ -173,7 +173,7 @@ function Index() {
             name="datePicker"
             type="fairysDatePicker"
             rules={[{ required: true, message: '请选择日期选择器' }]}
-            attr={{
+            attrs={{
               type: 'datetime',
             }}
           />
@@ -181,7 +181,7 @@ function Index() {
             label="选择器"
             name="picker"
             type="fairysPicker"
-            attr={{
+            attrs={{
               options: [
                 // 第一列
                 [
@@ -204,7 +204,7 @@ function Index() {
             label="搜索选择器"
             name="popupSearch"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'single',
               options: [
@@ -228,7 +228,7 @@ function Index() {
             label="搜索选择器(表格)"
             name="popupSearch-table"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'single',
               renderType: 'table',
@@ -258,7 +258,7 @@ function Index() {
             label="多选搜索选择器"
             name="m-popupSearch"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'multiple',
               options: [
@@ -282,7 +282,7 @@ function Index() {
             label="多选搜索选择器(表格)"
             name="m-popupSearch-table"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'multiple',
               renderType: 'table',

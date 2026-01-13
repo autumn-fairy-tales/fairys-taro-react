@@ -41,13 +41,15 @@ function Index() {
       {/* <FairysTaroLoading tips="加载中" loading /> */}
       <FairysTaroMainPageSearch>
         <FairysTaroSimpleForm form={form}>
+          <FairysTaroSimpleForm.Item label="dd" name="dd" type="input" attrs={{ placeholder: '请输入dd' }} />
+          <FairysTaroSimpleForm.Item label="dd" name="dd" type="inputNumber" />
           <FairysTaroSimpleForm.Item label="用户名" name="username" type="fairysCalendar" />
           <FairysTaroSimpleForm.Item
             label="级联选择器"
             name="cascader"
             type="fairysCascader"
             rules={[{ required: true, message: '请选择级联选择器' }]}
-            attr={{
+            attrs={{
               options: [
                 { value: 'A0', text: 'A0_1' },
                 {
@@ -67,7 +69,7 @@ function Index() {
             name="checkboxGroup"
             type="fairysCheckboxGroup"
             rules={[{ required: true, message: '请选择复选框组' }]}
-            attr={{
+            attrs={{
               items: [
                 { value: 'A0', label: 'A0_1' },
                 { value: 'B0', label: 'B0_1' },
@@ -80,7 +82,7 @@ function Index() {
             name="datePicker"
             type="fairysDatePicker"
             rules={[{ required: true, message: '请选择日期选择器' }]}
-            attr={{
+            attrs={{
               type: 'datetime',
             }}
           />
@@ -88,7 +90,7 @@ function Index() {
             label="选择器"
             name="picker"
             type="fairysPicker"
-            attr={{
+            attrs={{
               options: [
                 // 第一列
                 [
@@ -111,7 +113,7 @@ function Index() {
             label="搜索选择器"
             name="popupSearch"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'single',
               options: [
@@ -135,7 +137,7 @@ function Index() {
             label="搜索选择器(表格)"
             name="popupSearch-table"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'single',
               renderType: 'table',
@@ -165,7 +167,7 @@ function Index() {
             label="多选搜索选择器"
             name="m-popupSearch"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'multiple',
               options: [
@@ -189,7 +191,7 @@ function Index() {
             label="多选搜索选择器(表格)"
             name="m-popupSearch-table"
             type="fairysPopupSearch"
-            attr={{
+            attrs={{
               placeholder: '请选择',
               mode: 'multiple',
               renderType: 'table',
