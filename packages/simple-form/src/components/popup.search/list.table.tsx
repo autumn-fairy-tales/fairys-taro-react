@@ -56,9 +56,10 @@ export function FairysTaroPopupSearchListTable<T = any>() {
     const list = [
       {
         key: '__checkbox',
-        width: 16,
+        width: 40,
         align: 'center',
         title: '',
+        fixed: 'left',
         render: (rowData: T) => <TableItemCheckBox rowData={rowData} />,
       } as TableColumnProps,
     ].concat([...columns]);
@@ -67,9 +68,10 @@ export function FairysTaroPopupSearchListTable<T = any>() {
         ...list,
         {
           key: '__delete',
-          width: 16,
+          width: 50,
           align: 'center',
           title: '',
+          fixed: 'right',
           render: (rowData: T) => <TableItemDelete rowData={rowData} />,
         } as TableColumnProps,
       ];

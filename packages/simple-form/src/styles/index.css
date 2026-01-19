@@ -15,3 +15,9 @@
   z-index: 10;
   position: relative;
 }
+
+/* 解决宽度不一致造成的固定列阴影错位 */
+.fairys-taro-popup-search-list-table .nut-table-main-body-tr-td,
+.fairys-taro-popup-search-list-table .nut-table-main-head-tr-th {
+  box-sizing: border-box;
+}
