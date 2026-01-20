@@ -5,6 +5,7 @@ import {
   useFairysTaroValtioFormInstance,
   useFairysTaroValtioFormInstanceContext,
   useFairysTaroValtioFormInstanceContextState,
+  useFairysTaroValtioFormInstanceContextHideState,
 } from './instance';
 import { useMemo, type ReactNode } from 'react';
 import { FairysTaroValtioFormLayout, FairysTaroValtioFormLayoutProps } from './layout';
@@ -44,6 +45,8 @@ export function FairysTaroValtioForm<T extends MObject<T> = object>(props: Fairy
 FairysTaroValtioForm.useForm = useFairysTaroValtioFormInstance;
 /**获取状态*/
 FairysTaroValtioForm.useFormState = useFairysTaroValtioFormInstanceContextState;
+/**获取隐藏状态*/
+FairysTaroValtioForm.useFormHideState = useFairysTaroValtioFormInstanceContextHideState;
 /**获取上下文实例*/
 FairysTaroValtioForm.useFormInstance = useFairysTaroValtioFormInstanceContext;
 /**多个配置项*/
