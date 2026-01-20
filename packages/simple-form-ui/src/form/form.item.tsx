@@ -10,7 +10,7 @@ import {
   FairysTaroValtioFormInstance,
   useFairysTaroValtioFormInstanceContextHideState,
 } from './instance';
-import { useFairysTaroValtioFormLayoutContext } from './layout';
+import { useFairysTaroValtioFormLayoutContext, FairysTaroValtioFormLayoutContextOptions } from './layout';
 
 export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object> extends ViewProps {
   /**表单项名称*/
@@ -57,7 +57,7 @@ export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object> ex
   /**是否显示冒号*/
   showColon?: boolean;
   /**底部显示边框*/
-  bottomBordered?: boolean;
+  borderedType?: FairysTaroValtioFormLayoutContextOptions['borderedType'];
   /**输入框属性*/
   attrs?: any;
 }
@@ -65,12 +65,14 @@ export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object> ex
 export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: FairysTaroValtioFormItemProps<T>) {
   const [layoutAttrs] = useFairysTaroValtioFormLayoutContext();
   const colCount = layoutAttrs.colCount || 1;
-  const parent_bottomBordered = layoutAttrs.bottomBordered || true;
+  const parent_borderedType = layoutAttrs.borderedType || 'bottom';
   const parent_errorLayout = layoutAttrs.errorLayout || 'right-bottom';
   const parent_formItemClassName = layoutAttrs.formItemClassName;
   const parent_formItemLabelClassName = layoutAttrs.formItemLabelClassName;
   const parent_formItemLabelStyle = layoutAttrs.formItemLabelStyle;
   const parent_formItemStyle = layoutAttrs.formItemStyle;
+  const parent_formItemBodyClassName = layoutAttrs.formItemBodyClassName;
+  const parent_formItemBodyStyle = layoutAttrs.formItemBodyStyle;
   const parent_labelMode = layoutAttrs.labelMode || 'between';
   const {
     name,
@@ -95,7 +97,7 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
     colSpan = 1,
     rowSpan = 1,
     isRequired: _isRequired,
-    bottomBordered = parent_bottomBordered,
+    borderedType = parent_borderedType,
     attrs = {},
     showColon = false,
     ...rest
@@ -149,13 +151,14 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
     return clsx(
       'fairys-taro-valtio-form-item fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
-        'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 ': bottomBordered,
+        'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200':
+          borderedType === 'bottom',
         [labelMode]: labelMode,
       },
       className,
       parent_formItemClassName,
     );
-  }, [className, parent_formItemClassName, labelMode, bottomBordered]);
+  }, [className, parent_formItemClassName, labelMode, borderedType]);
 
   /**表单项容器类名*/
   const itemContainer_cls = useMemo(() => {
@@ -192,15 +195,18 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   const itemBody_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-taro-valtio-form-item-body fairystaroform__flex-1 fairystaroform__flex fairystaroform__box-border',
+      'fairys-taro-valtio-form-item-body fairystaroform__relative fairystaroform__flex-1 fairystaroform__flex fairystaroform__box-border',
       {
         'fairystaroform__flex-row fairystaroform__justify-start': labelMode === 'left',
         'fairystaroform__flex-row fairystaroform__justify-end': labelMode === 'between' || labelMode === 'top',
         'fairystaroform__flex-row': labelMode === 'top',
+        'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 ':
+          borderedType === 'body',
       },
       bodyClassName,
+      parent_formItemBodyClassName,
     );
-  }, [bodyClassName, labelMode]);
+  }, [bodyClassName, labelMode, borderedType, parent_formItemBodyClassName]);
 
   // 表单项输入类名
   const itemInput_cls = useMemo(() => {
@@ -260,15 +266,16 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
         <View className={itemLabel_cls} style={{ ...(parent_formItemLabelStyle || {}), ...(labelStyle || {}) }}>
           {label}
         </View>
-        <View className={itemBody_cls} style={bodyStyle}>
+        <View className={itemBody_cls} style={{ ...(parent_formItemBodyStyle || {}), ...(bodyStyle || {}) }}>
           <View className={itemInput_cls}>
             {React.isValidElement(children) ? React.cloneElement(children, { ...baseControl }) : children}
           </View>
           {extra ? <View className={itemExtra_cls}>{extra}</View> : <Fragment />}
+          {borderedType === 'body' && isInvalid ? <View className={itemError_cls}>{error}</View> : <Fragment />}
         </View>
       </View>
       {helpText ? <View className={itemHelp_cls}>{helpText}</View> : <Fragment />}
-      {isInvalid ? <View className={itemError_cls}>{error}</View> : <Fragment />}
+      {isInvalid && borderedType !== 'body' ? <View className={itemError_cls}>{error}</View> : <Fragment />}
     </View>
   );
 }

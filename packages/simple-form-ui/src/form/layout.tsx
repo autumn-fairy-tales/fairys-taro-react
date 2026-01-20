@@ -21,10 +21,14 @@ export interface FairysTaroValtioFormLayoutContextOptions {
   formItemLabelClassName?: string;
   /**表单项 label  style*/
   formItemLabelStyle?: React.CSSProperties;
+  /**表单项 body  className*/
+  formItemBodyClassName?: string;
+  /**表单项 body  style*/
+  formItemBodyStyle?: React.CSSProperties;
   /**
-   * 底部边框
+   * 底部边框类型
    */
-  bottomBordered?: boolean;
+  borderedType?: 'bottom' | 'body';
 }
 
 export interface FairysTaroValtioFormLayoutProps extends FairysTaroValtioFormLayoutContextOptions {
@@ -54,6 +58,8 @@ export interface FairysTaroValtioFormLayoutProps extends FairysTaroValtioFormLay
   bordered?: boolean;
   /**显示阴影*/
   boxShadow?: boolean;
+  /**最后一个是否显示底部边框*/
+  lastItemBordered?: boolean;
 }
 
 export class FairysTaroValtioFormLayoutInstance {
@@ -61,7 +67,7 @@ export class FairysTaroValtioFormLayoutInstance {
     colCount: 1,
     errorLayout: 'right-bottom',
     labelMode: 'between',
-    bottomBordered: true,
+    borderedType: 'bottom',
   });
   updated = (options: FairysTaroValtioFormLayoutContextOptions = {}) => {
     const keys = Object.keys(options);
@@ -104,7 +110,10 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
   const parent_formItemStyle = state.formItemStyle;
   const parent_formItemLabelClassName = state.formItemLabelClassName;
   const parent_formItemLabelStyle = state.formItemLabelStyle;
-  const parent_bottomBordered = state.bottomBordered;
+  const parent_formItemBodyClassName = state.formItemBodyClassName;
+  const parent_formItemBodyStyle = state.formItemBodyStyle;
+  const parent_borderedType = state.borderedType || 'bottom';
+
   const {
     colCount = parent_colCount,
     errorLayout = parent_errorLayout,
@@ -113,7 +122,10 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
     formItemStyle = parent_formItemStyle,
     formItemLabelClassName = parent_formItemLabelClassName,
     formItemLabelStyle = parent_formItemLabelStyle,
-    bottomBordered = parent_bottomBordered,
+    formItemBodyClassName = parent_formItemBodyClassName,
+    formItemBodyStyle = parent_formItemBodyStyle,
+    borderedType = parent_borderedType,
+    lastItemBordered = true,
     gap,
     title,
     extra,
@@ -139,7 +151,9 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
         formItemStyle,
         formItemLabelClassName,
         formItemLabelStyle,
-        bottomBordered,
+        formItemBodyClassName,
+        formItemBodyStyle,
+        borderedType,
       }),
     [
       colCount,
@@ -149,7 +163,9 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
       formItemStyle,
       formItemLabelClassName,
       formItemLabelStyle,
-      bottomBordered,
+      formItemBodyClassName,
+      formItemBodyStyle,
+      borderedType,
     ],
   );
 
@@ -160,17 +176,18 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
         {
           'fairys-taro-valtio-form-layout-all-col-span': isAllColSpan,
           'fairys-taro-form-valtio-layout-box-shadow': boxShadow,
-          'fairystaroform__border fairystaroform__border-solid fairystaroform__border-gray-100': bordered,
+          'fairystaroform__border fairystaroform__border-solid fairystaroform__border-gray-200': bordered,
+          'fairys-taro-valtio-form-layout-last-item-no-border': !lastItemBordered,
         },
         className,
       ),
-    [className, isAllColSpan, bordered, boxShadow],
+    [className, isAllColSpan, bordered, boxShadow, lastItemBordered],
   );
 
   const headerCls = useMemo(
     () =>
       clsx(
-        `fairys-taro-valtio-form-layout-header fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[12px]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 fairystaroform__box-border`,
+        `fairys-taro-valtio-form-layout-header fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[12px]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 fairystaroform__box-border`,
         {
           'fairystaroform__px-[8px]': bordered || boxShadow,
           'fairystaroform__px-[4px]': !bordered && !boxShadow,
@@ -181,7 +198,10 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
   );
 
   const headerTitleCls = useMemo(
-    () => clsx(`fairys-taro-valtio-form-layout-header-title fairystaroform__font-bold fairystaroform__box-border`),
+    () =>
+      clsx(
+        `fairys-taro-valtio-form-layout-header-title fairystaroform__text-[14px] fairystaroform__font-bold fairystaroform__box-border`,
+      ),
     [],
   );
   const headerExtraCls = useMemo(

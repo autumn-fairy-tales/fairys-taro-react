@@ -32,14 +32,79 @@ function Index() {
             rules={{
               name: [{ required: true, message: '请输入用户名' }],
             }}
-            title="这是标题"
-            extra="扩展"
             bordered
+            lastItemBordered={false}
           >
             <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
             </FairysTaroValtioFormItem>
-            <FairysTaroValtioFormItem name="phone" extra="eee" label="phone">
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+          </FairysTaroValtioForm>
+
+          <FairysTaroValtioForm
+            labelMode="top"
+            rules={{
+              name: [{ required: true, message: '请输入用户名' }],
+            }}
+            title="这是标题"
+            extra="扩展"
+            bordered
+            lastItemBordered={false}
+          >
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+          </FairysTaroValtioForm>
+          <FairysTaroValtioForm
+            labelMode="left"
+            rules={{
+              name: [{ required: true, message: '请输入用户名' }],
+            }}
+            title="这是标题"
+            extra="扩展"
+            bordered
+            lastItemBordered={false}
+          >
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+          </FairysTaroValtioForm>
+          {/* ================================================================ */}
+
+          <FairysTaroValtioForm
+            rules={{
+              name: [{ required: true, message: '请输入用户名' }],
+            }}
+            title="这是标题"
+            extra="扩展"
+            bordered
+            borderedType="body"
+          >
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+          </FairysTaroValtioForm>
+
+          <FairysTaroValtioForm
+            rules={{
+              name: [{ required: true, message: '请输入用户名' }],
+            }}
+            title="这是标题"
+            extra="扩展"
+            bordered
+            borderedType="body"
+            colCount={2}
+            labelMode="top"
+          >
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
+              <Input align="right" />
+            </FairysTaroValtioFormItem>
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
             </FairysTaroValtioFormItem>
           </FairysTaroValtioForm>
