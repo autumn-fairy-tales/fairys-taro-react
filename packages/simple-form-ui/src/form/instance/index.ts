@@ -31,7 +31,7 @@ export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, 
    * @param state 更新数据对象
    * @param isValidate 是否验证(可选)
    */
-  updated = <M = T>(state: Partial<M>, isValidate?: boolean) => {
+  updated = <M = T>(state: Partial<M>, isValidate: boolean = true) => {
     const keys = Object.keys(state);
     for (let index = 0; index < keys.length; index++) {
       const key = keys[index];
