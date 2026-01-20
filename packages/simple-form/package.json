@@ -3,7 +3,7 @@
   "author": "SunLxy <1011771396@qq.com>",
   "description": "框架组件库",
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/index.js",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",
@@ -25,8 +25,8 @@
     "esm"
   ],
   "dependencies": {
-    "@fairys/taro-tools-simple-form-ui": "0.0.4",
     "@carefrees/form-utils-react-taro": "^0.0.17",
+    "@fairys/taro-tools-simple-form-ui": "^0.0.5",
     "@nutui/nutui-react-taro": "^3.0.18",
     "clsx": "2.1.1",
     "valtio": "~2.1.5"
