@@ -39,6 +39,11 @@
   margin-inline-end: 0.2rem;
   box-sizing: border-box;
 }
+
+/* 表单项输入框字体大小 */
+.fairys-taro-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native {
+  font-size: 12px;
+}
 .fairys-taro-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native:not(.h5-input) {
   display: flex;
   align-items: center;

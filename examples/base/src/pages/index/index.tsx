@@ -36,10 +36,10 @@ function Index() {
             extra="扩展"
             bordered
           >
-            <FairysTaroValtioFormItem helpText="222" name="name" extra="eee" label="用户名">
+            <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
             </FairysTaroValtioFormItem>
-            <FairysTaroValtioFormItem helpText="222" name="phone" extra="eee" label="phone">
+            <FairysTaroValtioFormItem name="phone" extra="eee" label="phone">
               <Input align="right" />
             </FairysTaroValtioFormItem>
           </FairysTaroValtioForm>

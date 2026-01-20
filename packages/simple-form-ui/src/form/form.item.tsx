@@ -147,7 +147,7 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   /**表单项类名*/
   const item_cls = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-item fairystaroform__p-[0.2rem] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
+      'fairys-taro-valtio-form-item fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 ': bottomBordered,
         [labelMode]: labelMode,
@@ -163,10 +163,10 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
     return clsx(
       'fairys-taro-valtio-form-item-container fairystaroform__flex-1 fairystaroform__h-full fairystaroform__flex fairystaroform__box-border',
       {
-        'fairystaroform__flex-row fairystaroform__items-center fairystaroform__justify-between fairystaroform__gap-[0.4rem]':
+        'fairystaroform__flex-row fairystaroform__items-center fairystaroform__justify-between fairystaroform__gap-[8px]':
           labelMode === 'between',
-        'fairystaroform__flex-col fairystaroform__gap-[0.2rem]': labelMode === 'top',
-        'fairystaroform__flex-row fairystaroform__gap-[0.4rem]': labelMode === 'left',
+        'fairystaroform__flex-col fairystaroform__gap-[4px]': labelMode === 'top',
+        'fairystaroform__flex-row fairystaroform__gap-[8px]': labelMode === 'left',
       },
       labelClassName,
     );
@@ -230,16 +230,14 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   /**表单项错误提示类名*/
   const itemError_cls = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-item-body-error fairystaroform__px-[0.2rem] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
+      'fairys-taro-valtio-form-item-body-error fairystaroform__px-[4px] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
       {
-        'fairystaroform__bottom-[-0.7rem] fairystaroform__left-0 fairystaroform__justify-start':
+        'fairystaroform__bottom-[-14px] fairystaroform__left-0 fairystaroform__justify-start':
           errorLayout === 'left-bottom',
-        'fairystaroform__bottom-[-0.7rem] fairystaroform__right-0 fairystaroform__justify-end':
+        'fairystaroform__bottom-[-14px] fairystaroform__right-0 fairystaroform__justify-end':
           errorLayout === 'right-bottom',
-        'fairystaroform__top-[-0.7rem]  fairystaroform__right-0 fairystaroform__justify-end':
-          errorLayout === 'top-right',
-        'fairystaroform__top-[-0.7rem]  fairystaroform__left-0 fairystaroform__justify-start':
-          errorLayout === 'top-left',
+        'fairystaroform__top-[-14px]  fairystaroform__right-0 fairystaroform__justify-end': errorLayout === 'top-right',
+        'fairystaroform__top-[-14px]  fairystaroform__left-0 fairystaroform__justify-start': errorLayout === 'top-left',
       },
     );
   }, [errorLayout]);

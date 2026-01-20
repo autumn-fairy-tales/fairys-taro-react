@@ -170,10 +170,10 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
   const headerCls = useMemo(
     () =>
       clsx(
-        `fairys-taro-valtio-form-layout-header fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[0.45rem]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 fairystaroform__box-border`,
+        `fairys-taro-valtio-form-layout-header fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[12px]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 fairystaroform__box-border`,
         {
-          'fairystaroform__px-[0.4rem]': bordered || boxShadow,
-          'fairystaroform__px-[0.1rem]': !bordered && !boxShadow,
+          'fairystaroform__px-[8px]': bordered || boxShadow,
+          'fairystaroform__px-[4px]': !bordered && !boxShadow,
         },
         headerClassName,
       ),
@@ -191,7 +191,7 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
 
   const body_base = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-layout-body fairystaroform__px-[0.25rem] fairystaroform__w-full fairystaroform__grid fairystaroform__gap-[0.14rem] fairystaroform__box-border',
+      'fairys-taro-valtio-form-layout-body fairystaroform__px-[8px] fairystaroform__w-full fairystaroform__grid fairystaroform__gap-[2px] fairystaroform__box-border',
       bodyClassName,
     );
   }, [bodyClassName]);
