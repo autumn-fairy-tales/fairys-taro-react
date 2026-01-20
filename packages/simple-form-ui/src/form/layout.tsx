@@ -156,7 +156,7 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
   const layoutCls = useMemo(
     () =>
       clsx(
-        `fairys-taro-valtio-form-layout fairystaroform__text-[0.6rem] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-md`,
+        `fairys-taro-valtio-form-layout fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-md`,
         {
           'fairys-taro-valtio-form-layout-all-col-span': isAllColSpan,
           'fairys-taro-form-valtio-layout-box-shadow': boxShadow,

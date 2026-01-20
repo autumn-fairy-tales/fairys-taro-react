@@ -8,6 +8,7 @@ import {
 import { Button, Input } from '@nutui/nutui-react-taro';
 import { FairysTaroValtioFormItem, FairysTaroValtioForm } from '@fairys/taro-tools-simple-form-ui';
 import { View } from '@tarojs/components';
+import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
 
 function Index() {
   const form = FairysTaroValtioForm.useForm();
@@ -21,6 +22,11 @@ function Index() {
     <FairysTaroMainPage>
       <FairysTaroMainPageSearch style={{ padding: 20 }}>
         <View>
+          <FairysTaroSimpleForm>
+            <FairysTaroSimpleForm.Item label="dd1" name="dd" type="input" attrs={{ placeholder: '请输入dd' }} />
+            <FairysTaroSimpleForm.Item label="dd" name="dd" type="inputNumber" />
+          </FairysTaroSimpleForm>
+
           <FairysTaroValtioForm
             form={form}
             rules={{
@@ -29,13 +35,12 @@ function Index() {
             title="这是标题"
             extra="扩展"
             bordered
-            // boxShadow
           >
             <FairysTaroValtioFormItem helpText="222" name="name" extra="eee" label="用户名">
-              <Input />
+              <Input align="right" />
             </FairysTaroValtioFormItem>
             <FairysTaroValtioFormItem helpText="222" name="phone" extra="eee" label="phone">
-              <Input />
+              <Input align="right" />
             </FairysTaroValtioFormItem>
           </FairysTaroValtioForm>
         </View>

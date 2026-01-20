@@ -25,9 +25,6 @@ export default defineConfig<'vite'>(async (merge) => {
     compiler: {
       type: 'vite',
     },
-    sass: {
-      data: `@use "@nutui/nutui-react-taro/dist/styles/variables.scss" as *;`,
-    },
     mini: {
       postcss: {
         pxtransform: {

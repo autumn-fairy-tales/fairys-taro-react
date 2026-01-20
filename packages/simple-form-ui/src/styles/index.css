@@ -22,12 +22,33 @@
   box-sizing: border-box;
 }
 
+.fairys-taro-valtio-form-item-label.show-colon::after {
+  content: ':';
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+  margin-inline-end: 0.1rem;
+  margin-inline-start: 0.1rem;
+  box-sizing: border-box;
+}
+
 .fairys-taro-valtio-form-item-label.required::before {
   content: '*';
   color: red;
   display: inline-block;
   margin-inline-end: 0.2rem;
   box-sizing: border-box;
+}
+.fairys-taro-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native:not(.h5-input) {
+  display: flex;
+  align-items: center;
+}
+.fairys-taro-valtio-form-item.between
+  .fairys-taro-valtio-form-item-body
+  .nut-input.nut-input-container
+  > .nut-input-native
+  .weui-input {
+  text-align: right;
 }
 
 .fairys-taro-valtio-form-layout.fairys-taro-form-layout-all-col-span {

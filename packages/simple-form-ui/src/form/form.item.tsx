@@ -1,7 +1,7 @@
 /**表单项*/
 
 import { MObject } from 'interface';
-import { View } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import type { ViewProps } from '@tarojs/components';
 import React, { Fragment, useMemo } from 'react';
 import clsx from 'clsx';
@@ -54,6 +54,8 @@ export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object> ex
   rowSpan?: number;
   /**是否必填*/
   isRequired?: boolean;
+  /**是否显示冒号*/
+  showColon?: boolean;
   /**底部显示边框*/
   bottomBordered?: boolean;
   /**输入框属性*/
@@ -95,6 +97,7 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
     isRequired: _isRequired,
     bottomBordered = parent_bottomBordered,
     attrs = {},
+    showColon = false,
     ...rest
   } = props;
   const [state, errorState, formInstance] = useFairysTaroValtioFormInstanceContextState<T>();
@@ -144,9 +147,10 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   /**表单项类名*/
   const item_cls = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-item fairystaroform__p-[0.2rem] fairystaroform__text-[0.6rem] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
+      'fairys-taro-valtio-form-item fairystaroform__p-[0.2rem] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-100 ': bottomBordered,
+        [labelMode]: labelMode,
       },
       className,
       parent_formItemClassName,
@@ -172,22 +176,23 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   const itemLabel_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-taro-valtio-form-item-label fairystaroform__text-gray-800 fairystaroform__text-[0.75rem] fairystaroform__min-h-[1.4rem] fairystaroform__flex fairystaroform__items-center fairystaroform__relative fairystaroform__box-border',
+      'fairys-taro-valtio-form-item-label fairystaroform__text-gray-800 fairystaroform__flex fairystaroform__items-center fairystaroform__relative fairystaroform__box-border',
       {
         'fairystaroform__justify-start': labelMode !== 'left',
         'fairystaroform__justify-end': labelMode === 'left',
         required: isRequired,
+        'show-colon': showColon,
       },
       labelClassName,
       parent_formItemLabelClassName,
     );
-  }, [labelClassName, parent_formItemLabelClassName, labelMode, isRequired]);
+  }, [labelClassName, parent_formItemLabelClassName, labelMode, isRequired, showColon]);
 
   /**表单项主体类名*/
   const itemBody_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-taro-valtio-form-item-body fairystaroform__flex fairystaroform__box-border',
+      'fairys-taro-valtio-form-item-body fairystaroform__flex-1 fairystaroform__flex fairystaroform__box-border',
       {
         'fairystaroform__flex-row fairystaroform__justify-start': labelMode === 'left',
         'fairystaroform__flex-row fairystaroform__justify-end': labelMode === 'between' || labelMode === 'top',
@@ -218,14 +223,14 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: F
   /**表单项底部提示内容类名*/
   const itemHelp_cls = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-item-body-help fairystaroform__text-[0.5rem] fairystaroform__w-full fairystaroform__box-border',
+      'fairys-taro-valtio-form-item-body-help fairystaroform__text-[10px] fairystaroform__w-full fairystaroform__box-border',
     );
   }, []);
 
   /**表单项错误提示类名*/
   const itemError_cls = useMemo(() => {
     return clsx(
-      'fairys-taro-valtio-form-item-body-error fairystaroform__px-[0.2rem] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[0.5rem] fairystaroform__z-10',
+      'fairys-taro-valtio-form-item-body-error fairystaroform__px-[0.2rem] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
       {
         'fairystaroform__bottom-[-0.7rem] fairystaroform__left-0 fairystaroform__justify-start':
           errorLayout === 'left-bottom',
