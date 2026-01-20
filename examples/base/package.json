@@ -40,6 +40,7 @@
     "@babel/runtime": "^7.24.4",
     "@fairys/taro-tools-react": "^0.0.4",
     "@fairys/taro-tools-simple-form": "^0.0.4",
+    "@fairys/taro-tools-simple-form-ui": "^0.0.4",
     "@nutui/nutui-react-taro": "^3.0.18",
     "@tarojs/components": "4.1.7",
     "@tarojs/helper": "4.1.7",

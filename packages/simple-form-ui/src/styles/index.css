@@ -1,0 +1,39 @@
+@import '@carefrees/form-utils-react-taro/assets/index.css';
+
+@unocss preflights;
+@unocss default;
+
+.nut-cell.fairys-taro-popup-search-list-virtual-cell > .nut-cell-left > .nut-cell-title {
+  width: 100%;
+}
+
+.nut-cell.fairys-taro-popup-search-list-virtual-cell > .nut-cell-extra {
+  flex: none;
+}
+
+.fairys-taro-popup-search-list-table .nut-table-main-head-tr {
+  z-index: 10;
+  position: relative;
+}
+
+/* 解决宽度不一致造成的固定列阴影错位 */
+.fairys-taro-popup-search-list-table .nut-table-main-body-tr-td,
+.fairys-taro-popup-search-list-table .nut-table-main-head-tr-th {
+  box-sizing: border-box;
+}
+
+.fairys-taro-valtio-form-item-label.required::before {
+  content: '*';
+  color: red;
+  display: inline-block;
+  margin-inline-end: 0.2rem;
+  box-sizing: border-box;
+}
+
+.fairys-taro-valtio-form-layout.fairys-taro-form-layout-all-col-span {
+  grid-column: 1 / -1;
+}
+
+.fairys-taro-valtio-form-layout.fairys-taro-form-layout-box-shadow {
+  box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
+}

@@ -4,16 +4,15 @@
 import { View } from '@tarojs/components';
 
 import { Fragment } from 'react';
-import type { FormItemProps, FormListProps } from '@carefrees/form-utils-react-taro';
-import { FormItem, FormHideItem, FormHideList, FormList } from '@carefrees/form-utils-react-taro';
-import { FairysTaroRadioGroupBase, FairysTaroRadioGroupProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroCalendarBase, FairysTaroCalendarProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroCascaderBase, FairysTaroCascaderProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroCheckboxGroupBase, FairysTaroCheckboxGroupProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroDatePickerBase, FairysTaroDatePickerProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroPickerBase, FairysTaroPickerProps } from '@fairys/taro-tools-simple-form-ui';
-import { FairysTaroPopupSearchBase, FairysTaroPopupSearchProps } from '@fairys/taro-tools-simple-form-ui';
-
+import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem } from './form.item';
+import type { FairysTaroValtioFormItemProps } from './form.item';
+import { FairysTaroRadioGroupBase, FairysTaroRadioGroupProps } from 'components/radio.group';
+import { FairysTaroCalendarBase, FairysTaroCalendarProps } from 'components/calendar';
+import { FairysTaroCascaderBase, FairysTaroCascaderProps } from 'components/cascader';
+import { FairysTaroCheckboxGroupBase, FairysTaroCheckboxGroupProps } from 'components/checkbox.group';
+import { FairysTaroDatePickerBase, FairysTaroDatePickerProps } from 'components/date.picker';
+import { FairysTaroPickerBase, FairysTaroPickerProps } from 'components/picker';
+import { FairysTaroPopupSearchBase, FairysTaroPopupSearchProps } from 'components/popup.search';
 import {
   Input,
   TaroInputProps,
@@ -43,7 +42,7 @@ export type MakeFieldRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick
 /**
  * 表单项配置基础类型
  */
-export interface FormItemRowConfingBaseType<T, M, K = undefined> {
+export interface FairysTaroValtioFormItemRowConfingBaseType<T, M, K = undefined> {
   /**输入框类型*/
   type: T;
   /**输入框属性*/
@@ -59,21 +58,21 @@ export interface FormItemRowConfingBaseType<T, M, K = undefined> {
 /**
  * 单个表单项配置类型
  */
-interface FormItemRowConfing<T, M, K = undefined>
-  extends FormItemRowConfingBaseType<T, M, K>,
-    Omit<FormItemProps, 'attrs'> {}
+interface FairysTaroValtioFormItemRowConfing<T, M, K = undefined>
+  extends FairysTaroValtioFormItemRowConfingBaseType<T, M, K>,
+    Omit<FairysTaroValtioFormItemProps, 'attrs'> {}
 
 /**
  * 表单项配置映射类型
  */
 export type MappedType<T extends MObject<T>> = {
-  [K in keyof T]: FormItemRowConfing<K, T[K]>;
+  [K in keyof T]: FairysTaroValtioFormItemRowConfing<K, T[K]>;
 }[keyof T];
 
 /**
  * 表单项组件名对应组件类型
  */
-export interface FormItemTypeConfing {
+export interface FairysTaroValtioFormItemTypeConfing {
   /**输入框*/
   input: TaroInputProps;
   /**数字输入框*/
@@ -111,20 +110,14 @@ export interface FormItemTypeConfing {
 }
 
 /**
- * 自定义表单列表项配置类型
- */
-export type CustomFormListType = FormItemRowConfingBaseType<'formList', any, React.ReactNode> &
-  Omit<FormListProps, 'attrs'>;
-/**
  * 表单项配置类型
  */
-export type InputConfigType =
-  | MappedType<FormItemTypeConfing>
-  | FormItemRowConfing<'custom', any, React.ReactNode>
-  | FormItemRowConfing<'render', any, React.ReactNode>
-  | CustomFormListType;
+export type FairysTaroValtioInputConfigType =
+  | MappedType<FairysTaroValtioFormItemTypeConfing>
+  | FairysTaroValtioFormItemRowConfing<'custom', any, React.ReactNode>
+  | FairysTaroValtioFormItemRowConfing<'render', any, React.ReactNode>;
 
-const create_itemConfig = (configList: InputConfigType[]) => {
+const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
   return (
     <Fragment>
       {configList.map((item, index) => {
@@ -136,14 +129,6 @@ const create_itemConfig = (configList: InputConfigType[]) => {
         } else if (type === 'render') {
           // 自定义渲染内容
           return <Fragment key={index}>{item.render}</Fragment>;
-        } else if (type === 'formList') {
-          if (typeof item.children === 'function') {
-            if (isHide) {
-              return <FormHideList sort={`${index}`} key={index} {...rest} children={item.children} name={item.name} />;
-            }
-            return <FormList sort={`${index}`} key={index} {...rest} children={item.children} name={item.name} />;
-          }
-          return <Fragment key={index} />;
         } else if (type === 'input') {
           newItem.children = <Input align="right" clearable {...attrs} />;
         } else if (type === 'inputNumber') {
@@ -187,18 +172,18 @@ const create_itemConfig = (configList: InputConfigType[]) => {
           return <View key={index} className="fairys-taro-simple-form-item-empty" />;
         }
         if (isHide) {
-          return <FormHideItem sort={`${index}`} key={index} {...(newItem as FormItemProps)} />;
+          return <FairysTaroValtioFormHideItem key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
         }
-        return <FormItem sort={`${index}`} key={index} {...(newItem as FormItemProps)} />;
+        return <FairysTaroValtioFormItem key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
       })}
     </Fragment>
   );
 };
 
-export const ConfigListItem = (props: { items: InputConfigType[] }) => {
+export const FairysTaroValtioFormConfigListItem = (props: { items: FairysTaroValtioInputConfigType[] }) => {
   return create_itemConfig(props.items);
 };
 
-export const ConfigItem = (config: InputConfigType) => {
+export const FairysTaroValtioFormConfigItem = (config: FairysTaroValtioInputConfigType) => {
   return create_itemConfig([config]);
 };

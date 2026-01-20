@@ -1,5 +1,5 @@
 {
-  "name": "@fairys/taro-tools-simple-form",
+  "name": "@fairys/taro-tools-simple-form-ui",
   "author": "SunLxy <1011771396@qq.com>",
   "description": "框架组件库",
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
@@ -18,16 +18,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/autumn-fairy-tales/fairys-taro-react.git",
-    "directory": "packages/simple-form"
+    "directory": "packages/simple-form-ui"
   },
   "files": [
     "src",
     "esm"
   ],
   "dependencies": {
-    "@fairys/taro-tools-simple-form-ui": "0.0.4",
-    "@carefrees/form-utils-react-taro": "^0.0.17",
     "@nutui/nutui-react-taro": "^3.0.18",
+    "async-validator": "~4.2.5",
+    "fast-copy": "~4.0.2",
     "clsx": "2.1.1",
     "valtio": "~2.1.5"
   },
