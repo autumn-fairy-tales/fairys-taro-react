@@ -11,20 +11,19 @@ export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, 
   /**
    * 错误信息
    */
-  errorState = proxy<Record<PropertyKey, string[]>>({} as Record<PropertyKey, string[]>);
+  errorState = proxy<Record<PropertyKey, string[]>>({});
   /**隐藏状态*/
-  hideState = proxy<Record<PropertyKey, boolean>>({} as Record<PropertyKey, boolean>);
+  hideState = proxy<Record<PropertyKey, boolean>>({});
   /**初始化表单值*/
-  ctor = (options?: { formData?: Partial<T>; hideState?: Partial<Record<PropertyKey, boolean>> }) => {
-    const { formData, hideState } = options || {};
-    this.state = proxy<T>({} as T);
-    this.errorState = proxy<Record<PropertyKey, string[]>>({} as Record<PropertyKey, string[]>);
-    this.hideState = proxy<Record<PropertyKey, boolean>>({} as Record<PropertyKey, boolean>);
-    if (formData) {
-      this.updated(copy(formData));
-    }
-    if (hideState) {
-      this.updatedHideInfo(copy(hideState));
+  ctor = (options?: { formData?: Partial<T>; hideState?: Record<PropertyKey, boolean>; isDeepCopy?: boolean }) => {
+    const { formData, hideState, isDeepCopy = true } = options || {};
+    // 如果是 isProxy,则直接赋值
+    this.errorState = proxy<Record<PropertyKey, string[]>>({});
+    this.hideState = proxy<Record<PropertyKey, boolean>>(hideState ? copy(hideState) : {});
+    if (isDeepCopy) {
+      this.state = proxy((formData ? copy(formData) : {}) as T);
+    } else if (formData) {
+      this.state = proxy(formData as T);
     }
   };
   /**
@@ -106,8 +105,8 @@ export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, 
    */
   clear = () => {
     this.state = proxy<T>({} as T);
-    this.errorState = proxy<Record<PropertyKey, string[]>>({} as Record<keyof T, string[]>);
-    this.hideState = proxy<Record<PropertyKey, boolean>>({} as Record<keyof T, boolean>);
+    this.errorState = proxy<Record<PropertyKey, string[]>>({});
+    this.hideState = proxy<Record<PropertyKey, boolean>>({});
   };
 
   // ===================================================规则处理================================================================

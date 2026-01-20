@@ -23,15 +23,17 @@ export interface FairysTaroValtioFormProps<T extends MObject<T> = object> extend
   formData?: FairysTaroValtioFormInstance<T>['state'];
   /**表单隐藏状态*/
   hideState?: FairysTaroValtioFormInstance<T>['hideState'];
+  /**formData 是否进行深度拷贝，如果不是则直接把 formData 赋值到 state ，否则使用 copy 方法深度拷贝后赋值 */
+  isDeepCopy?: boolean;
 }
 
 export function FairysTaroValtioForm<T extends MObject<T> = object>(props: FairysTaroValtioFormProps<T>) {
-  const { form, children, rules, formData, hideState, ...rest } = props;
+  const { form, children, rules, formData, hideState, isDeepCopy = true, ...rest } = props;
   const formInstance = useFairysTaroValtioFormInstance(form);
   /**表单规则*/
   formInstance.rules = rules;
   /**初始化表单值*/
-  useMemo(() => formInstance.ctor({ formData, hideState }), []);
+  useMemo(() => formInstance.ctor({ formData, hideState, isDeepCopy }), []);
   return (
     <FairysTaroValtioFormInstanceContext.Provider value={formInstance}>
       <FairysTaroValtioFormLayout {...rest}>{children}</FairysTaroValtioFormLayout>
