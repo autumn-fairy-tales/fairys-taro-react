@@ -35,6 +35,7 @@ function Index() {
             bordered
             lastItemBordered={false}
             isInvalidBorderRed
+            showColon
             // itemBorderColor='green'
             // boxShadow
           >

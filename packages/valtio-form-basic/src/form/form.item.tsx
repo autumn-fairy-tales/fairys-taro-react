@@ -115,6 +115,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const parent_labelMode = layoutAttrs.labelMode || 'between';
   const parent_itemBorderColor = layoutAttrs.itemBorderColor;
   const parent_isInvalidBorderRed = layoutAttrs.isInvalidBorderRed;
+  const parent_showColon = layoutAttrs.showColon;
 
   const {
     name,
@@ -137,7 +138,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     isRequired: _isRequired,
     itemBorderType = parent_borderedType,
     attrs = {},
-    showColon = false,
+    showColon = parent_showColon,
     itemBorderColor = parent_itemBorderColor,
     isInvalidBorderRed = parent_isInvalidBorderRed,
   } = props;

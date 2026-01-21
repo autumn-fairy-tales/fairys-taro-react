@@ -32,6 +32,8 @@ export interface FairysValtioFormLayoutContextOptions {
   itemBorderColor?: React.CSSProperties['borderColor'];
   /**是否校验失败时显示红色边框*/
   isInvalidBorderRed?: boolean;
+  /**是否显示冒号*/
+  showColon?: boolean;
 }
 
 export interface FairysValtioFormLayoutAttrsProps extends FairysValtioFormLayoutContextOptions {
@@ -163,6 +165,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const parent_borderedType = state.itemBorderType || 'bottom';
   const parent_itemBorderColor = state.itemBorderColor;
   const parent_isInvalidBorderRed = state.isInvalidBorderRed;
+  const parent_showColon = state.showColon;
 
   const {
     colCount = parent_colCount,
@@ -178,6 +181,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
     itemBorderColor = parent_itemBorderColor,
     lastItemBordered = true,
     isInvalidBorderRed = parent_isInvalidBorderRed,
+    showColon = parent_showColon,
     gap,
     isAllColSpan = false,
     className,
@@ -205,6 +209,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
         itemBorderType,
         itemBorderColor,
         isInvalidBorderRed,
+        showColon,
       }),
     [
       colCount,
@@ -219,13 +224,14 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
       itemBorderType,
       itemBorderColor,
       isInvalidBorderRed,
+      showColon,
     ],
   );
 
   const layoutCls = useMemo(
     () =>
       clsx(
-        `fairys-valtio-form-layout fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-md`,
+        `fairys-valtio-form-layout fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-[4px]`,
         {
           'fairys-valtio-form-layout-all-col-span': isAllColSpan,
           'fairys-valtio-form-layout-box-shadow': boxShadow,
