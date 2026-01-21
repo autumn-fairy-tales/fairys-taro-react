@@ -5,7 +5,7 @@ import AsyncValidator, { RuleItem, ValidateFieldsError, Values } from 'async-val
 import { copy } from 'fast-copy';
 
 /**表单实例*/
-export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, any>> {
+export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>> {
   /**状态*/
   state = proxy<T>({} as T);
   /**
@@ -113,7 +113,7 @@ export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, 
   /**列规则 */
   rules: Record<
     PropertyKey,
-    ((formData: T, instance: FairysTaroValtioFormInstance<T>) => RuleItem[] | Promise<RuleItem[]>) | RuleItem[]
+    ((formData: T, instance: FairysValtioFormInstance<T>) => RuleItem[] | Promise<RuleItem[]>) | RuleItem[]
   > = {};
   /**规则验证
    * @param fields 列字段数组(可选)
@@ -171,51 +171,49 @@ export class FairysTaroValtioFormInstance<T extends MObject<T> = Record<string, 
 }
 
 /**声明实例*/
-export function useFairysTaroValtioFormInstance<T extends MObject<T> = object>(
-  instance?: FairysTaroValtioFormInstance<T>,
-) {
-  const ref = useRef<FairysTaroValtioFormInstance<T>>();
+export function useFairysValtioFormInstance<T extends MObject<T> = object>(instance?: FairysValtioFormInstance<T>) {
+  const ref = useRef<FairysValtioFormInstance<T>>();
   if (!ref.current) {
     if (instance) {
       ref.current = instance;
     } else {
-      ref.current = new FairysTaroValtioFormInstance<T>();
+      ref.current = new FairysValtioFormInstance<T>();
     }
   }
   return ref.current;
 }
 
 /**表单实例上下文*/
-export const FairysTaroValtioFormInstanceContext = createContext<FairysTaroValtioFormInstance<any>>(
-  new FairysTaroValtioFormInstance<any>(),
+export const FairysValtioFormInstanceContext = createContext<FairysValtioFormInstance<any>>(
+  new FairysValtioFormInstance<any>(),
 );
 
 /**表单实例上下文*/
-export function useFairysTaroValtioFormInstanceContext<T extends MObject<T> = object>() {
-  return useContext(FairysTaroValtioFormInstanceContext) as FairysTaroValtioFormInstance<T>;
+export function useFairysValtioFormInstanceContext<T extends MObject<T> = object>() {
+  return useContext(FairysValtioFormInstanceContext) as FairysValtioFormInstance<T>;
 }
 
 /**状态取值*/
-export function useFairysTaroValtioFormInstanceContextState<T extends MObject<T> = object>() {
-  const instance = useFairysTaroValtioFormInstanceContext<T>();
+export function useFairysValtioFormInstanceContextState<T extends MObject<T> = object>() {
+  const instance = useFairysValtioFormInstanceContext<T>();
   const state = useSnapshot(instance.state) as T;
   const errorState = useSnapshot(instance.errorState) as Record<PropertyKey, string[]>;
   return [state, errorState, instance, (state as any).__defaultValue, errorState.__defaultValue] as [
     T,
     Record<PropertyKey, string[]>,
-    FairysTaroValtioFormInstance<T>,
+    FairysValtioFormInstance<T>,
     any,
     any,
   ];
 }
 
 /**隐藏组件状态取值*/
-export function useFairysTaroValtioFormInstanceContextHideState<T extends MObject<T> = object>() {
-  const instance = useFairysTaroValtioFormInstanceContext<T>();
+export function useFairysValtioFormInstanceContextHideState<T extends MObject<T> = object>() {
+  const instance = useFairysValtioFormInstanceContext<T>();
   const hideState = useSnapshot(instance.hideState) as Record<PropertyKey, boolean>;
   return [hideState, instance, (hideState as any).__defaultValue] as [
     Record<PropertyKey, boolean>,
-    FairysTaroValtioFormInstance<T>,
+    FairysValtioFormInstance<T>,
     any,
   ];
 }

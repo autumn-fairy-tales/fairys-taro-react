@@ -21,60 +21,18 @@
 .fairys-taro-popup-search-list-table .nut-table-main-head-tr-th {
   box-sizing: border-box;
 }
-
-.fairys-taro-valtio-form-item-label.show-colon::after {
-  content: ':';
-  display: inline-block;
-  text-align: center;
-  margin: 0;
-  margin-inline-end: 0.1rem;
-  margin-inline-start: 0.1rem;
-  box-sizing: border-box;
-}
-
-.fairys-taro-valtio-form-item-label.required::before {
-  content: '*';
-  color: red;
-  display: inline-block;
-  margin-inline-end: 0.2rem;
-  box-sizing: border-box;
-}
-
 /* 表单项输入框字体大小 */
-.fairys-taro-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native {
+.fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native {
   font-size: 12px;
 }
-.fairys-taro-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native:not(.h5-input) {
+.fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native:not(.h5-input) {
   display: flex;
   align-items: center;
 }
-.fairys-taro-valtio-form-item.between
-  .fairys-taro-valtio-form-item-body
+.fairys-valtio-form-item.between
+  .fairys-valtio-form-item-body
   .nut-input.nut-input-container
   > .nut-input-native
   .weui-input {
   text-align: right;
-}
-
-.fairys-taro-valtio-form-layout.fairys-taro-form-layout-all-col-span {
-  grid-column: 1 / -1;
-}
-
-.fairys-taro-valtio-form-layout.fairys-taro-form-layout-box-shadow {
-  box-shadow: 0 6px 16px -8px #00000014, 0 9px 28px #0000000d, 0 12px 48px 16px #00000008;
-}
-
-.fairys-taro-valtio-form-layout + .fairys-taro-valtio-form-layout {
-  margin-top: 12px;
-}
-
-.fairys-taro-valtio-form-layout-last-item-no-border
-  > .fairys-taro-valtio-form-layout-body
-  > .fairys-taro-valtio-form-item:last-child,
-.fairys-taro-valtio-form-layout-last-item-no-border
-  > .fairys-taro-valtio-form-layout-body
-  > .fairys-taro-valtio-form-item:last-child
-  > .fairys-taro-valtio-form-item-container
-  > .fairys-taro-valtio-form-item-body {
-  border-bottom: 0px;
 }

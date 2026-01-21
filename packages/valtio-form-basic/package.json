@@ -1,7 +1,7 @@
 {
-  "name": "@fairys/taro-tools-simple-form-ui",
+  "name": "@fairys/valtio-form-basic",
   "author": "SunLxy <1011771396@qq.com>",
-  "description": "框架组件库",
+  "description": "使用 valtio 实现的表单基础库, 使其更加便捷，同时支持`PC`、`H5`、`Taro`，同时也更加灵活。",
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
   "version": "0.0.8",
   "main": "lib/index.js",
@@ -18,14 +18,13 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/autumn-fairy-tales/fairys-taro-react.git",
-    "directory": "packages/simple-form-ui"
+    "directory": "packages/valtio-form-basic"
   },
   "files": [
     "src",
     "esm"
   ],
   "dependencies": {
-    "@fairys/valtio-form": "^0.0.8",
     "@nutui/nutui-react-taro": "^3.0.18",
     "async-validator": "~4.2.5",
     "clsx": "2.1.1",

@@ -61,6 +61,7 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@tarojs/plugin-html": "4.1.7",
     "@babel/core": "^7.24.4",
     "@babel/plugin-transform-class-properties": "7.25.9",
     "@babel/preset-react": "^7.24.1",
