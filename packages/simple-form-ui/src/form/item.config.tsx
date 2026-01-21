@@ -4,7 +4,7 @@
 import { View } from '@tarojs/components';
 
 import { Fragment } from 'react';
-import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem } from './form.item';
+import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem, FairysTaroValtioFormItemBase } from './form.item';
 import type { FairysTaroValtioFormItemProps } from './form.item';
 import { FairysTaroRadioGroupBase, FairysTaroRadioGroupProps } from 'components/radio.group';
 import { FairysTaroCalendarBase, FairysTaroCalendarProps } from 'components/calendar';
@@ -121,7 +121,7 @@ const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
   return (
     <Fragment>
       {configList.map((item, index) => {
-        const { type, isHide, attrs = {}, isEmpty, ...rest } = item;
+        const { type, isHide, attrs = {}, isEmpty, noStyle, ...rest } = item;
         const newItem = { attrs, ...rest };
         /**自定义表单组件*/
         if (type === 'custom') {
@@ -170,6 +170,9 @@ const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
         }
         if (isEmpty) {
           return <View key={index} className="fairys-taro-simple-form-item-empty" />;
+        }
+        if (noStyle) {
+          return <FairysTaroValtioFormItemBase key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
         }
         if (isHide) {
           return <FairysTaroValtioFormHideItem key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;

@@ -27,7 +27,9 @@ export interface FairysValtioFormLayoutContextOptions {
   /**
    * 底部边框类型
    */
-  borderedType?: 'bottom' | 'body';
+  itemBorderType?: 'bottom' | 'body';
+  /**边框颜色*/
+  itemBorderColor?: React.CSSProperties['borderColor'];
 }
 
 export interface FairysValtioFormLayoutAttrsProps extends FairysValtioFormLayoutContextOptions {
@@ -66,7 +68,7 @@ export class FairysValtioFormLayoutInstance {
     colCount: 1,
     errorLayout: 'right-bottom',
     labelMode: 'between',
-    borderedType: 'bottom',
+    itemBorderType: 'bottom',
   });
   updated = (options: FairysValtioFormLayoutContextOptions = {}) => {
     const keys = Object.keys(options);
@@ -156,7 +158,8 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const parent_formItemLabelStyle = state.formItemLabelStyle;
   const parent_formItemBodyClassName = state.formItemBodyClassName;
   const parent_formItemBodyStyle = state.formItemBodyStyle;
-  const parent_borderedType = state.borderedType || 'bottom';
+  const parent_borderedType = state.itemBorderType || 'bottom';
+  const parent_itemBorderColor = state.itemBorderColor;
 
   const {
     colCount = parent_colCount,
@@ -168,7 +171,8 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
     formItemLabelStyle = parent_formItemLabelStyle,
     formItemBodyClassName = parent_formItemBodyClassName,
     formItemBodyStyle = parent_formItemBodyStyle,
-    borderedType = parent_borderedType,
+    itemBorderType = parent_borderedType,
+    itemBorderColor = parent_itemBorderColor,
     lastItemBordered = true,
     gap,
     isAllColSpan = false,
@@ -194,7 +198,8 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
         formItemLabelStyle,
         formItemBodyClassName,
         formItemBodyStyle,
-        borderedType,
+        itemBorderType,
+        itemBorderColor,
       }),
     [
       colCount,
@@ -206,7 +211,8 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
       formItemLabelStyle,
       formItemBodyClassName,
       formItemBodyStyle,
-      borderedType,
+      itemBorderType,
+      itemBorderColor,
     ],
   );
 
@@ -270,7 +276,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
     colCount,
     errorLayout,
     labelMode,
-    borderedType,
+    itemBorderType,
     formLayoutInstance,
     //======================
     layoutName: layoutCls,
@@ -299,7 +305,7 @@ export interface FairysValtioFormLayoutAttrsReturn {
   /**
    * 底部边框类型
    */
-  borderedType: string;
+  itemBorderType: string;
   /**表单布局实例*/
   formLayoutInstance: FairysValtioFormLayoutInstance;
   /**布局ClassName*/

@@ -51,7 +51,9 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   /**是否显示冒号*/
   showColon?: boolean;
   /**底部显示边框*/
-  borderedType?: FairysValtioFormLayoutContextOptions['borderedType'];
+  itemBorderType?: FairysValtioFormLayoutContextOptions['itemBorderType'];
+  /**边框颜色*/
+  itemBorderColor?: React.CSSProperties['borderColor'];
   /**输入框属性*/
   attrs?: any;
 }
@@ -72,7 +74,7 @@ export const FormItem = (props: FormItemProps) => {
   const {
     itemClassName, itemStyle, containerClassName, itemLabelClassName, itemLabelStyle,
     itemBodyClassName, itemBodyStyle, itemInputClassName, itemExtraClassName, errorClassName, helpClassName,
-    isInvalid, borderedType, children, error
+    isInvalid, itemBorderType, children, error
   } = useFairysValtioFormItemAttrs(props)
 
   return (
@@ -86,11 +88,11 @@ export const FormItem = (props: FormItemProps) => {
             {children}
           </View>
           {extra ? <View className={itemExtraClassName}>{extra}</View> : <Fragment />}
-          {borderedType === 'body' && isInvalid ? <View className={errorClassName}>{error}</View> : <Fragment />}
+          {itemBorderType === 'body' && isInvalid ? <View className={errorClassName}>{error}</View> : <Fragment />}
         </View>
       </View>
       {helpText ? <View className={helpClassName}>{helpText}</View> : <Fragment />}
-      {isInvalid && borderedType !== 'body' ? <View className={errorClassName}>{error}</View> : <Fragment />}
+      {isInvalid && itemBorderType !== 'body' ? <View className={errorClassName}>{error}</View> : <Fragment />}
     </View>
   );
 }
@@ -100,7 +102,7 @@ export const FormItem = (props: FormItemProps) => {
 export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(props: FairysValtioFormItemAttrsProps<T>) {
   const [layoutAttrs] = useFairysValtioFormLayoutContext();
   const colCount = layoutAttrs.colCount || 1;
-  const parent_borderedType = layoutAttrs.borderedType || 'bottom';
+  const parent_borderedType = layoutAttrs.itemBorderType || 'bottom';
   const parent_errorLayout = layoutAttrs.errorLayout || 'right-bottom';
   const parent_formItemClassName = layoutAttrs.formItemClassName;
   const parent_formItemLabelClassName = layoutAttrs.formItemLabelClassName;
@@ -109,6 +111,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const parent_formItemBodyClassName = layoutAttrs.formItemBodyClassName;
   const parent_formItemBodyStyle = layoutAttrs.formItemBodyStyle;
   const parent_labelMode = layoutAttrs.labelMode || 'between';
+  const parent_itemBorderColor = layoutAttrs.itemBorderColor;
   const {
     name,
     valuePropName = 'value',
@@ -128,9 +131,10 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     colSpan = 1,
     rowSpan = 1,
     isRequired: _isRequired,
-    borderedType = parent_borderedType,
+    itemBorderType = parent_borderedType,
     attrs = {},
     showColon = false,
+    itemBorderColor = parent_itemBorderColor,
   } = props;
   const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
   const rules = formInstance.rules?.[name];
@@ -185,14 +189,15 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     return clsx(
       'fairys-valtio-form-item fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
+        'fairys-valtio-form-item-invalid': isInvalid,
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200':
-          borderedType === 'bottom',
+          itemBorderType === 'bottom',
         [labelMode]: labelMode,
       },
       className,
       parent_formItemClassName,
     );
-  }, [className, parent_formItemClassName, labelMode, borderedType]);
+  }, [className, parent_formItemClassName, labelMode, itemBorderType, isInvalid]);
 
   /**表单项容器类名*/
   const itemContainer_cls = useMemo(() => {
@@ -235,12 +240,12 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
         'fairystaroform__flex-row fairystaroform__justify-end': labelMode === 'between' || labelMode === 'top',
         'fairystaroform__flex-row': labelMode === 'top',
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 ':
-          borderedType === 'body',
+          itemBorderType === 'body',
       },
       bodyClassName,
       parent_formItemBodyClassName,
     );
-  }, [bodyClassName, labelMode, borderedType, parent_formItemBodyClassName]);
+  }, [bodyClassName, labelMode, itemBorderType, parent_formItemBodyClassName]);
 
   // 表单项输入类名
   const itemInput_cls = useMemo(() => {
@@ -297,7 +302,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   return {
     value,
     isInvalid,
-    borderedType,
+    itemBorderType,
     onValueChange,
     colSpan,
     rowSpan,
@@ -311,12 +316,21 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     error,
     // ================================================================================
     itemClassName: item_cls,
-    itemStyle: { ...(parent_formItemStyle || {}), ...styleBase, ...(style || {}) },
+    itemStyle: {
+      ...(itemBorderColor && itemBorderType === 'bottom' ? { borderBottomColor: itemBorderColor } : {}),
+      ...(parent_formItemStyle || {}),
+      ...styleBase,
+      ...(style || {}),
+    },
     containerClassName: itemContainer_cls,
     itemLabelClassName: itemLabel_cls,
     itemLabelStyle: { ...(parent_formItemLabelStyle || {}), ...(labelStyle || {}) },
     itemBodyClassName: itemBody_cls,
-    itemBodyStyle: { ...(parent_formItemBodyStyle || {}), ...(bodyStyle || {}) },
+    itemBodyStyle: {
+      ...(itemBorderColor && itemBorderType === 'body' ? { borderBottomColor: itemBorderColor } : {}),
+      ...(parent_formItemBodyStyle || {}),
+      ...(bodyStyle || {}),
+    },
     itemInputClassName: itemInput_cls,
     itemExtraClassName: itemExtra_cls,
     errorClassName: itemError_cls,
@@ -331,7 +345,7 @@ export interface FairysValtioFormItemAttrsReturn<T extends MObject<T> = object> 
   /**是否校验错误*/
   isInvalid?: boolean;
   /**边框类型*/
-  borderedType?: FairysValtioFormLayoutContextOptions['borderedType'];
+  itemBorderType?: FairysValtioFormLayoutContextOptions['itemBorderType'];
   /**值改变事件*/
   onValueChange?: (event: any) => void;
   /**当前表单项占据列数*/
@@ -379,4 +393,72 @@ export interface FairysValtioFormItemAttrsReturn<T extends MObject<T> = object> 
   helpClassName: string;
   /**子元素*/
   children?: React.ReactNode;
+}
+
+/**
+ * 没有样式的表单项属性，仅返回基础输入组件参数
+ * 
+ * @example
+ * 
+ *```tsx 
+import { Fragment } from 'react'
+import { useFairysValtioFormItemAttrs } from "@fairys/valtio-form"
+import type { FairysValtioFormItemAttrsProps } from "@fairys/valtio-form"
+export interface FormItemProps extends FairysValtioFormItemAttrsProps{}
+
+export const FormItem = (props: FormItemProps) => {
+  const { children } = useFairysValtioFormItemNoStyleAttrs(props)
+  return children
+}
+ * ```
+*/
+export function useFairysValtioFormItemNoStyleAttrs<T extends MObject<T> = object>(
+  props: FairysValtioFormItemAttrsProps<T>,
+) {
+  const {
+    name,
+    valuePropName = 'value',
+    getValueFromEvent,
+    formatValue,
+    onAfterUpdate,
+    trigger = 'onChange',
+    children,
+    attrs = {},
+  } = props;
+  const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
+  const value = state[name];
+  const error = errorState[name];
+
+  const onValueChange = (event: any) => {
+    let value = event;
+    const target = event?.detail || event?.target;
+    if (typeof getValueFromEvent === 'function') {
+      value = getValueFromEvent(event, formInstance);
+    } else if (event && target && typeof target === 'object' && valuePropName in target) {
+      value = target.valuePropName;
+    }
+    if (typeof formatValue === 'function') {
+      value = formatValue(value, formInstance, event);
+    }
+    formInstance.updated({ [name]: value });
+    if (typeof onAfterUpdate === 'function') {
+      onAfterUpdate(value, formInstance, event);
+    }
+  };
+  /**基础组件参数*/
+  const baseControl = {
+    ...attrs,
+    name,
+    [valuePropName]: value,
+    [trigger]: onValueChange,
+  };
+  return {
+    value,
+    error,
+    onValueChange,
+    state,
+    errorState,
+    formInstance,
+    children: React.isValidElement(children) ? React.cloneElement(children, { ...baseControl }) : children,
+  };
 }

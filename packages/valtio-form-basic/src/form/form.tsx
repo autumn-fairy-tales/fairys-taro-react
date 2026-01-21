@@ -49,20 +49,4 @@ export function useFairysValtioForm<T extends MObject<T> = object>(props: Fairys
     ...rest,
     formInstance,
   };
-  // return (
-  //   <FairysValtioFormInstanceContext.Provider value={formInstance}>
-  //     <FairysValtioFormLayout {...rest}>{children}</FairysValtioFormLayout>
-  //   </FairysValtioFormInstanceContext.Provider>
-  // );
 }
-
-// /**初始化实例*/
-// FairysValtioForm.useForm = useFairysValtioFormInstance;
-// /**获取状态*/
-// FairysValtioForm.useFormState = useFairysValtioFormInstanceContextState;
-// /**获取隐藏状态*/
-// FairysValtioForm.useFormHideState = useFairysValtioFormInstanceContextHideState;
-// /**获取上下文实例*/
-// FairysValtioForm.useFormInstance = useFairysValtioFormInstanceContext;
-// /**表单项*/
-// FairysValtioForm.useFormItemAttrs = useFairysValtioFormItemAttrs;

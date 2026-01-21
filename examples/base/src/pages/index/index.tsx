@@ -80,7 +80,7 @@ function Index() {
             title="这是标题"
             extra="扩展"
             bordered
-            borderedType="body"
+            itemBorderType="body"
           >
             <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
@@ -97,7 +97,7 @@ function Index() {
             title="这是标题"
             extra="扩展"
             bordered
-            borderedType="body"
+            itemBorderType="body"
             colCount={2}
             labelMode="top"
           >

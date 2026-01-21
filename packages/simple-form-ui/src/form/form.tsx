@@ -1,6 +1,6 @@
 import { MObject } from 'interface';
 import { FairysTaroValtioFormLayout } from './layout';
-import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem } from './form.item';
+import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem, FairysTaroValtioFormItemBase } from './form.item';
 import { FairysTaroValtioFormConfigListItem, FairysTaroValtioFormConfigItem } from './item.config';
 import {
   useFairysValtioForm,
@@ -37,6 +37,8 @@ FairysTaroValtioForm.useFormInstance = useFairysValtioFormInstanceContext;
 FairysTaroValtioForm.FormItemListItem = FairysTaroValtioFormConfigListItem;
 /**单个配置项*/
 FairysTaroValtioForm.FormItemConfig = FairysTaroValtioFormConfigItem;
+/**表单项基础组件(根据isHide和noStyle判断是否使用控制隐藏的表单项和无样式表单项)*/
+FairysTaroValtioForm.FormItemBase = FairysTaroValtioFormItemBase;
 /**表单项*/
 FairysTaroValtioForm.FormItem = FairysTaroValtioFormItem;
 /**隐藏表单想*/
