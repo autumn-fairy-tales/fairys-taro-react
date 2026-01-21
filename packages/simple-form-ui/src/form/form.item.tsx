@@ -4,8 +4,8 @@ import { MObject } from 'interface';
 import { View } from '@tarojs/components';
 import type { ViewProps } from '@tarojs/components';
 import { Fragment } from 'react';
-import type { FairysValtioFormItemAttrsProps } from '@fairys/valtio-form';
-import { useFairysValtioFormItemAttrs, useFairysValtioFormInstanceContextHideState } from '@fairys/valtio-form';
+import type { FairysValtioFormItemAttrsProps } from '@fairys/valtio-form-basic';
+import { useFairysValtioFormItemAttrs, useFairysValtioFormInstanceContextHideState } from '@fairys/valtio-form-basic';
 
 export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object>
   extends Omit<ViewProps, 'style'>,

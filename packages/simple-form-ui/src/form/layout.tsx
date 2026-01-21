@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { View } from '@tarojs/components';
-import type { FairysValtioFormLayoutAttrsProps } from '@fairys/valtio-form';
-import { FairysValtioFormLayoutContext, useFairysValtioFormLayoutAttrs } from '@fairys/valtio-form';
+import type { FairysValtioFormLayoutAttrsProps } from '@fairys/valtio-form-basic';
+import { FairysValtioFormLayoutContext, useFairysValtioFormLayoutAttrs } from '@fairys/valtio-form-basic';
 export interface FairysTaroValtioFormLayoutProps extends FairysValtioFormLayoutAttrsProps {}
 
 export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProps) {

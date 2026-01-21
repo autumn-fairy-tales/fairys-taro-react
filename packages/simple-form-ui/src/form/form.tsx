@@ -9,9 +9,9 @@ import {
   useFairysValtioFormInstanceContext,
   useFairysValtioFormInstanceContextState,
   useFairysValtioFormInstanceContextHideState,
-} from '@fairys/valtio-form';
-import type { FairysValtioFormAttrsProps } from '@fairys/valtio-form';
-export * from '@fairys/valtio-form';
+} from '@fairys/valtio-form-basic';
+import type { FairysValtioFormAttrsProps } from '@fairys/valtio-form-basic';
+export * from '@fairys/valtio-form-basic';
 export * from './form.item';
 export * from './layout';
 export * from './item.config';
