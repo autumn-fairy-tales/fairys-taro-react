@@ -20,6 +20,8 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
     type: 'select' | 'manage',
     instance: FairysTaroPopupSearchBaseInstanceMount<T>,
   ) => React.ReactNode;
+  /**onLoadData仅第一次成功加载，之后按照传递 options 处理*/
+  isFirstLoadAfterOptions?: boolean;
   /**选择模式*/
   mode?: 'multiple' | 'single' = 'single';
   /**列表项的唯一键值*/
@@ -93,6 +95,8 @@ export interface FairysTaroPopupSearchBaseInstanceState<T = any> {
   operationStatus: 'manage' | 'select';
   /**选中列表数据*/
   manageSelectedDataList: T[];
+  /**是否第一次成功加载并存在数据*/
+  isFirstLoadSuccess?: boolean;
   /**全选按钮是否选中状态*/
   allChecked: boolean;
   /**选择模式
@@ -101,6 +105,8 @@ export interface FairysTaroPopupSearchBaseInstanceState<T = any> {
   mode?: 'multiple' | 'single';
   /**列表列配置*/
   columns?: TableColumnProps[];
+  /**是否正在加载数据*/
+  loading?: boolean;
 }
 
 export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupSearchBaseInstanceMount<T> {
@@ -140,6 +146,10 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
     manageSelectedDataList: [],
     /**全选按钮是否选中状态*/
     allChecked: false,
+    /**是否第一次搜索值为空，并且成功加载到数据*/
+    isFirstLoadSuccess: false,
+    /**是否正在加载数据*/
+    loading: false,
   });
 
   ctor() {
@@ -183,20 +193,24 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
   };
 
   /**搜索*/
-  onSearch = async (keyword: string) => {
-    this.state.search = keyword;
-
+  private _onSearch = async (keyword: string) => {
     const _keyword = `${keyword || ''}`.trim();
     try {
-      if (this.onLoadData && this.state.operationStatus === 'select') {
+      let isRequest = this.onLoadData && this.state.operationStatus === 'select';
+      // 第一次成功加载后，根据 options 参数处理
+      if (isRequest && this.state.isFirstLoadSuccess && this.isFirstLoadAfterOptions) {
+        isRequest = false;
+      }
+      if (isRequest) {
+        this.state.loading = true;
         // 延时 0.5s 搜索，避免用户输入过快导致请求次数过多
-        await new Promise((resolve) => setTimeout(resolve, 500));
         const search = { keyword: _keyword };
         const dataList = await this.onLoadData(this.otherRequestParams?.(search, this) || search, this);
         if (Array.isArray(dataList)) {
-          this.updateState({ _tempFilterDataList: dataList || [], dataList: dataList || [] });
+          const isFirstLoadSuccess = !!dataList.length && !_keyword;
+          this.updateState({ _tempFilterDataList: dataList || [], dataList: dataList || [], isFirstLoadSuccess });
         } else {
-          this.updateState({ _tempFilterDataList: [] });
+          this.updateState({ _tempFilterDataList: [], isFirstLoadSuccess: false });
         }
       } else {
         // 直接过滤数据
@@ -231,6 +245,26 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      this.state.loading = false;
+    }
+  };
+
+  timer: NodeJS.Timeout;
+  /**搜索*/
+  onSearch = async (keyword: string, count?: number) => {
+    this.state.search = keyword;
+    if (this.onLoadData && this.state.operationStatus === 'select') {
+      if (count === 0) {
+        this._onSearch(keyword);
+      } else {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+          this._onSearch(this.state.search || '');
+        }, 800);
+      }
+    } else {
+      this._onSearch(this.state.search || '');
     }
   };
 
@@ -357,6 +391,8 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
       operationStatus: 'select',
       /**临时过滤数据列表*/
       _tempFilterDataList: this.state.dataList || [],
+      /**是否第一次成功加载并存在数据*/
+      isFirstLoadSuccess: false,
     });
   };
 

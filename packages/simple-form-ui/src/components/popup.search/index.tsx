@@ -55,7 +55,7 @@ function FairysTaroPopupSearchBodyBase<T = any>() {
 
   useEffect(() => {
     if (visible && typeof instance.onLoadData === 'function') {
-      instance.onSearch('');
+      instance.onSearch('', 0);
     }
   }, [visible]);
 
@@ -109,8 +109,11 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     useTableProps,
     isNeedManage = false,
     isUseOptionsChecked = true,
+    /**第一次成功加载后，根据 options 参数处理*/
+    isFirstLoadAfterOptions = false,
     ...rest
   } = props;
+
   const [state, instance] = useFairysTaroPopupSearchBaseInstance<T>();
 
   instance.maxWidth = maxWidth;
@@ -125,6 +128,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.useTableProps = useTableProps;
   instance.isNeedManage = isNeedManage;
   instance.isUseOptionsChecked = isUseOptionsChecked;
+  instance.isFirstLoadAfterOptions = isFirstLoadAfterOptions;
 
   instance.rowKey = rowKey;
   instance.displayField = displayField;
