@@ -30,6 +30,8 @@ export interface FairysValtioFormLayoutContextOptions {
   itemBorderType?: 'bottom' | 'body';
   /**边框颜色*/
   itemBorderColor?: React.CSSProperties['borderColor'];
+  /**是否校验失败时显示红色边框*/
+  isInvalidBorderRed?: boolean;
 }
 
 export interface FairysValtioFormLayoutAttrsProps extends FairysValtioFormLayoutContextOptions {
@@ -160,6 +162,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const parent_formItemBodyStyle = state.formItemBodyStyle;
   const parent_borderedType = state.itemBorderType || 'bottom';
   const parent_itemBorderColor = state.itemBorderColor;
+  const parent_isInvalidBorderRed = state.isInvalidBorderRed;
 
   const {
     colCount = parent_colCount,
@@ -174,6 +177,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
     itemBorderType = parent_borderedType,
     itemBorderColor = parent_itemBorderColor,
     lastItemBordered = true,
+    isInvalidBorderRed = parent_isInvalidBorderRed,
     gap,
     isAllColSpan = false,
     className,
@@ -200,6 +204,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
         formItemBodyStyle,
         itemBorderType,
         itemBorderColor,
+        isInvalidBorderRed,
       }),
     [
       colCount,
@@ -213,6 +218,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
       formItemBodyStyle,
       itemBorderType,
       itemBorderColor,
+      isInvalidBorderRed,
     ],
   );
 
@@ -222,7 +228,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
         `fairys-valtio-form-layout fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-md`,
         {
           'fairys-valtio-form-layout-all-col-span': isAllColSpan,
-          'fairys-taro-form-valtio-layout-box-shadow': boxShadow,
+          'fairys-valtio-form-layout-box-shadow': boxShadow,
           'fairystaroform__border fairystaroform__border-solid fairystaroform__border-gray-200': bordered,
           'fairys-valtio-form-layout-last-item-no-border': !lastItemBordered,
         },

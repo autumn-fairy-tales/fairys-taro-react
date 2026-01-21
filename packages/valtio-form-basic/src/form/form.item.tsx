@@ -54,6 +54,8 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   itemBorderType?: FairysValtioFormLayoutContextOptions['itemBorderType'];
   /**边框颜色*/
   itemBorderColor?: React.CSSProperties['borderColor'];
+  /**是否校验失败时显示红色边框*/
+  isInvalidBorderRed?: boolean;
   /**输入框属性*/
   attrs?: any;
 }
@@ -112,6 +114,8 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const parent_formItemBodyStyle = layoutAttrs.formItemBodyStyle;
   const parent_labelMode = layoutAttrs.labelMode || 'between';
   const parent_itemBorderColor = layoutAttrs.itemBorderColor;
+  const parent_isInvalidBorderRed = layoutAttrs.isInvalidBorderRed;
+
   const {
     name,
     valuePropName = 'value',
@@ -135,6 +139,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     attrs = {},
     showColon = false,
     itemBorderColor = parent_itemBorderColor,
+    isInvalidBorderRed = parent_isInvalidBorderRed,
   } = props;
   const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
   const rules = formInstance.rules?.[name];
@@ -190,14 +195,15 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
       'fairys-valtio-form-item fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
         'fairys-valtio-form-item-invalid': isInvalid,
+        'fairys-valtio-form-item-invalid-border-red': isInvalid && isInvalidBorderRed && itemBorderType === 'bottom',
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200':
           itemBorderType === 'bottom',
         [labelMode]: labelMode,
       },
-      className,
       parent_formItemClassName,
+      className,
     );
-  }, [className, parent_formItemClassName, labelMode, itemBorderType, isInvalid]);
+  }, [className, parent_formItemClassName, labelMode, itemBorderType, isInvalid, isInvalidBorderRed]);
 
   /**表单项容器类名*/
   const itemContainer_cls = useMemo(() => {
@@ -241,11 +247,12 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
         'fairystaroform__flex-row': labelMode === 'top',
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 ':
           itemBorderType === 'body',
+        'fairys-valtio-form-item-invalid-border-red': isInvalid && isInvalidBorderRed && itemBorderType === 'body',
       },
-      bodyClassName,
       parent_formItemBodyClassName,
+      bodyClassName,
     );
-  }, [bodyClassName, labelMode, itemBorderType, parent_formItemBodyClassName]);
+  }, [bodyClassName, labelMode, itemBorderType, parent_formItemBodyClassName, isInvalid, isInvalidBorderRed]);
 
   // 表单项输入类名
   const itemInput_cls = useMemo(() => {

@@ -34,6 +34,9 @@ function Index() {
             }}
             bordered
             lastItemBordered={false}
+            isInvalidBorderRed
+            // itemBorderColor='green'
+            // boxShadow
           >
             <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
