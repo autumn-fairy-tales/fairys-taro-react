@@ -6,7 +6,7 @@ export interface FairysValtioFormLayoutContextOptions {
   /**列数据*/
   colCount?: number;
   /**规则校验失败错误提示位置*/
-  errorLayout?: 'left-bottom' | 'right-bottom' | 'top-right' | 'top-left';
+  errorLayout?: 'bottom-left' | 'bottom-right' | 'top-right' | 'top-left' | 'left-border-top' | 'right-border-top';
   /**
    * label显示模式
    * @platform taro 支持 between
@@ -72,7 +72,7 @@ export interface FairysValtioFormLayoutAttrsProps extends FairysValtioFormLayout
 export class FairysValtioFormLayoutInstance {
   state = proxy<FairysValtioFormLayoutContextOptions>({
     colCount: 1,
-    errorLayout: 'right-bottom',
+    errorLayout: 'bottom-right',
     labelMode: 'between',
     itemBorderType: 'bottom',
   });
@@ -156,7 +156,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const formLayoutInstance = useFairysValtioFormLayoutInstance();
   const [state] = useFairysValtioFormLayoutContext();
   const parent_colCount = state.colCount || 1;
-  const parent_errorLayout = state.errorLayout || 'right-bottom';
+  const parent_errorLayout = state.errorLayout || 'bottom-right';
   const parent_labelMode = state.labelMode || 'between';
   const parent_formItemClassName = state.formItemClassName;
   const parent_formItemStyle = state.formItemStyle;

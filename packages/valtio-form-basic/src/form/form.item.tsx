@@ -42,9 +42,9 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   bodyStyle?: React.CSSProperties;
   children?: React.ReactNode;
   /**规则校验失败错误提示位置*/
-  errorLayout?: 'left-bottom' | 'right-bottom' | 'top-right' | 'top-left';
+  errorLayout?: FairysValtioFormLayoutContextOptions['errorLayout'];
   /**label显示模式*/
-  labelMode?: 'left' | 'top' | 'between';
+  labelMode?: FairysValtioFormLayoutContextOptions['labelMode'];
   /**额外内容*/
   extra?: React.ReactNode;
   /**底部提示内容*/
@@ -126,7 +126,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const [layoutAttrs] = useFairysValtioFormLayoutContext();
   const colCount = layoutAttrs.colCount || 1;
   const parent_borderedType = layoutAttrs.itemBorderType || 'bottom';
-  const parent_errorLayout = layoutAttrs.errorLayout || 'right-bottom';
+  const parent_errorLayout = layoutAttrs.errorLayout || 'bottom-right';
   const parent_formItemClassName = layoutAttrs.formItemClassName;
   const parent_formItemLabelClassName = layoutAttrs.formItemLabelClassName;
   const parent_formItemLabelStyle = layoutAttrs.formItemLabelStyle;
@@ -177,6 +177,9 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
   const value = useMemo(() => get(state, paths), [state, paths]);
   const error = errorState[_name];
+  // 使用从 Form 中设置的规则
+  const _formItemRules = formInstance.rules?.[_name];
+
   formInstance.nameToPaths[_name] = paths;
   /**挂载校验规则*/
   if (Array.isArray(rules) && rules.length) {
@@ -219,9 +222,11 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
       return _isRequired;
     } else if (Array.isArray(rules) && rules.length) {
       return rules.some((rule) => rule.required);
+    } else if (_formItemRules && Array.isArray(_formItemRules) && _formItemRules.length) {
+      return _formItemRules.some((rule) => rule.required);
     }
     return false;
-  }, [rules, formInstance]);
+  }, [rules, formInstance, _formItemRules]);
 
   /**校验是否存在错误信息*/
   const isInvalid = useMemo(() => {
@@ -325,14 +330,20 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   /**表单项错误提示类名*/
   const itemError_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item-body-error fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__px-[4px] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
+      'fairys-valtio-form-item-body-error fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
       {
         'fairystaroform__bottom-[-14px] fairystaroform__left-0 fairystaroform__justify-start':
-          errorLayout === 'left-bottom',
+          errorLayout === 'bottom-left',
         'fairystaroform__bottom-[-14px] fairystaroform__right-0 fairystaroform__justify-end':
-          errorLayout === 'right-bottom',
-        'fairystaroform__top-[-14px]  fairystaroform__right-0 fairystaroform__justify-end': errorLayout === 'top-right',
-        'fairystaroform__top-[-14px]  fairystaroform__left-0 fairystaroform__justify-start': errorLayout === 'top-left',
+          errorLayout === 'bottom-right',
+        'fairystaroform__top-[-4px]  fairystaroform__right-0 fairystaroform__justify-end': errorLayout === 'top-right',
+        'fairystaroform__top-[-4px] fairystaroform__left-0 fairystaroform__justify-start': errorLayout === 'top-left',
+        /**边框底部提示*/
+        'fairystaroform__left-0  fairystaroform__bottom-[-2px] fairystaroform__justify-start':
+          errorLayout === 'left-border-top',
+        /**边框顶部提示*/
+        'fairystaroform__right-0  fairystaroform__bottom-[-2px] fairystaroform__justify-end':
+          errorLayout === 'right-border-top',
       },
     );
   }, [errorLayout]);
