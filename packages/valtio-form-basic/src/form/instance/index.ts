@@ -129,7 +129,10 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
   rules: Record<PropertyKey, RuleItem[]> = {};
   /**表单项名称到路径映射*/
   nameToPaths: Record<PropertyKey, PropertyKey[]> = {};
-  /**验证表单项规则*/
+  /**验证表单项规则
+   * @param fields 要验证的字段(可选)
+   * @param isReturn 是否返回验证结果(可选)
+   */
   validate = async (fields?: PropertyKey[], isReturn: boolean = true): Promise<ValidateFieldsError | Values> => {
     const rules = {
       ...this.rules,
@@ -189,6 +192,17 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
         }
       });
     });
+  };
+
+  /**
+   * 验证某些前缀的字段
+   * @param prefix 前缀字段数组
+   * @param isReturn 是否返回验证结果(可选)
+   */
+  validatePrefixFields = async (prefix: string[], isReturn: boolean = true): Promise<ValidateFieldsError | Values> => {
+    const fields = Object.keys(this.rules) as PropertyKey[];
+    const _fields = fields.filter((item) => prefix.some((p) => item.toString().startsWith(p)));
+    return this.validate(_fields, isReturn);
   };
 }
 
