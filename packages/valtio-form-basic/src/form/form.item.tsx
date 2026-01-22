@@ -7,11 +7,21 @@ import { useFairysValtioFormInstanceContextState, FairysValtioFormInstance } fro
 import { useFairysValtioFormLayoutContext, FairysValtioFormLayoutContextOptions } from './layout';
 import { FairysValtioFormParentAttrs, useFairysValtioFormAttrsName } from './hooks';
 import { get } from './utils';
-import AsyncValidator, { RuleItem, ValidateFieldsError, Values } from 'async-validator';
+import { RuleItem } from 'async-validator';
 
 export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
-  /**表单项名称*/
-  name: string;
+  /**
+   * 表单项名称 ，字段需要和存储的字段路径一致
+   *
+   * @example
+   * 路径中的值为 number 类型时，会创建一个空数组。路径中的值为 string 类型时，会创建一个空对象。最后一个直接赋值
+   *
+   * 默认："name"
+   * 嵌套字段："name.a.doc" ===> { name: { a: { doc: undefined } } }
+   * 嵌套字段："name[1].a.doc" ===> { name: [{}, { a: { doc: undefined } }] }
+   * 嵌套字段："name.a[2].doc" ===> { name: { a: [{}, {}, { doc: undefined }] } }
+   */
+  name?: string;
   /**表单项标签*/
   label?: string;
   /**传递组件字段*/
@@ -383,39 +393,39 @@ export interface FairysValtioFormItemAttrsReturn<T extends MObject<T> = object> 
   /**表单项值*/
   value?: any;
   /**是否校验错误*/
-  isInvalid?: boolean;
+  isInvalid: boolean;
   /**边框类型*/
-  itemBorderType?: FairysValtioFormLayoutContextOptions['itemBorderType'];
+  itemBorderType: FairysValtioFormLayoutContextOptions['itemBorderType'];
   /**值改变事件*/
-  onValueChange?: (event: any) => void;
+  onValueChange: (event: any) => void;
   /**当前表单项占据列数*/
-  colSpan?: number;
+  colSpan: number;
   /**当前表单项占据行数*/
-  rowSpan?: number;
+  rowSpan: number;
   /**列数*/
-  colCount?: number;
+  colCount: number;
   /**标签显示模式*/
-  labelMode?: FairysValtioFormLayoutContextOptions['labelMode'];
+  labelMode: FairysValtioFormLayoutContextOptions['labelMode'];
   /**错误提示位置*/
-  errorLayout?: FairysValtioFormLayoutContextOptions['errorLayout'];
+  errorLayout: FairysValtioFormLayoutContextOptions['errorLayout'];
   /**是否必填*/
-  isRequired?: boolean;
+  isRequired: boolean;
   /**表单状态*/
-  state?: T;
+  state: T;
   /**错误状态*/
-  errorState?: Record<PropertyKey, string[]>;
+  errorState: Record<PropertyKey, string[]>;
   /**表单实例*/
-  formInstance?: FairysValtioFormInstance<T>;
+  formInstance: FairysValtioFormInstance<T>;
   /**错误信息*/
   error?: string[];
   /**拼接父级字段名后得到的表单项名称*/
-  _name: string;
+  _name?: string;
   /**表单项名称*/
-  name: string;
+  name?: string;
   /**表单项路径*/
-  paths: (string | number)[];
+  paths?: (string | number)[];
   /**父级字段名*/
-  parentName: string;
+  parentName?: string;
   /**表单属性名实例*/
   formAttrsNameInstance: FairysValtioFormParentAttrs;
   // =========================================
