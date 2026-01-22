@@ -8,7 +8,6 @@ import {
 import { Button, Input } from '@nutui/nutui-react-taro';
 import { FairysTaroValtioFormItem, FairysTaroValtioForm } from '@fairys/taro-tools-simple-form-ui';
 import { View } from '@tarojs/components';
-import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
 
 function Index() {
   const form = FairysTaroValtioForm.useForm();
@@ -22,11 +21,6 @@ function Index() {
     <FairysTaroMainPage>
       <FairysTaroMainPageSearch style={{ padding: 20 }}>
         <View>
-          <FairysTaroSimpleForm>
-            <FairysTaroSimpleForm.Item label="dd1" name="dd" type="input" attrs={{ placeholder: '请输入dd' }} />
-            <FairysTaroSimpleForm.Item label="dd" name="dd" type="inputNumber" />
-          </FairysTaroSimpleForm>
-
           <FairysTaroValtioForm
             form={form}
             rules={{
@@ -36,14 +30,29 @@ function Index() {
             lastItemBordered={false}
             isInvalidBorderRed
             showColon
-            // itemBorderColor='green'
-            // boxShadow
           >
             <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
             </FairysTaroValtioFormItem>
             <FairysTaroValtioFormItem name="name" extra="eee" label="用户名">
               <Input align="right" />
+            </FairysTaroValtioFormItem>
+          </FairysTaroValtioForm>
+
+          <FairysTaroValtioForm form={form} bordered lastItemBordered={false} isInvalidBorderRed showColon>
+            <FairysTaroValtioFormItem name="name">
+              <FairysTaroValtioFormItem name="name">
+                <FairysTaroValtioFormItem name="name">
+                  <FairysTaroValtioFormItem
+                    rules={[{ required: true, message: '请输入用户名' }]}
+                    name="name"
+                    extra="eee"
+                    label="用户名4"
+                  >
+                    <Input align="right" />
+                  </FairysTaroValtioFormItem>
+                </FairysTaroValtioFormItem>
+              </FairysTaroValtioFormItem>
             </FairysTaroValtioFormItem>
           </FairysTaroValtioForm>
 

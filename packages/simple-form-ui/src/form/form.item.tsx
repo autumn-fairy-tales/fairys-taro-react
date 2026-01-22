@@ -9,6 +9,7 @@ import {
   useFairysValtioFormItemAttrs,
   useFairysValtioFormInstanceContextHideState,
   useFairysValtioFormItemNoStyleAttrs,
+  FairysValtioFormParentAttrsContext,
 } from '@fairys/valtio-form-basic';
 
 export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object>
@@ -41,23 +42,30 @@ export function FairysTaroValtioFormItem<T extends MObject<T> = object>(
     itemBorderType,
     children,
     error,
+    formAttrsNameInstance,
   } = useFairysValtioFormItemAttrs(props);
 
   return (
-    <View className={itemClassName} style={itemStyle}>
-      <View className={containerClassName}>
-        <View className={itemLabelClassName} style={itemLabelStyle}>
-          {label}
+    <FairysValtioFormParentAttrsContext.Provider value={formAttrsNameInstance}>
+      <View className={itemClassName} style={itemStyle}>
+        <View className={containerClassName}>
+          {label ? (
+            <View className={itemLabelClassName} style={itemLabelStyle}>
+              {label}
+            </View>
+          ) : (
+            <Fragment />
+          )}
+          <View className={itemBodyClassName} style={itemBodyStyle}>
+            <View className={itemInputClassName}>{children}</View>
+            {extra ? <View className={itemExtraClassName}>{extra}</View> : <Fragment />}
+            {itemBorderType === 'body' && isInvalid ? <View className={errorClassName}>{error}</View> : <Fragment />}
+          </View>
         </View>
-        <View className={itemBodyClassName} style={itemBodyStyle}>
-          <View className={itemInputClassName}>{children}</View>
-          {extra ? <View className={itemExtraClassName}>{extra}</View> : <Fragment />}
-          {itemBorderType === 'body' && isInvalid ? <View className={errorClassName}>{error}</View> : <Fragment />}
-        </View>
+        {helpText ? <View className={helpClassName}>{helpText}</View> : <Fragment />}
+        {isInvalid && itemBorderType !== 'body' ? <View className={errorClassName}>{error}</View> : <Fragment />}
       </View>
-      {helpText ? <View className={helpClassName}>{helpText}</View> : <Fragment />}
-      {isInvalid && itemBorderType !== 'body' ? <View className={errorClassName}>{error}</View> : <Fragment />}
-    </View>
+    </FairysValtioFormParentAttrsContext.Provider>
   );
 }
 /**控制隐藏的表单项*/

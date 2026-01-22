@@ -3,6 +3,7 @@ import { createContext, useContext, useRef } from 'react';
 import { proxy, ref, snapshot, useSnapshot } from 'valtio';
 import AsyncValidator, { RuleItem, ValidateFieldsError, Values } from 'async-validator';
 import { copy } from 'fast-copy';
+import { formatePath, get, set } from 'form/utils';
 
 /**表单实例*/
 export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>> {
@@ -42,6 +43,14 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
     }
   };
 
+  /**根据路径设置值
+   * @param path 值路径
+   * @param value 值
+   */
+  updatedValueByPaths = (path: PropertyKey, value: any) => {
+    set(this.state, formatePath(path), value);
+    this.validate([path], false);
+  };
   // ===================================================隐藏状态================================================================
   /**
    * 更新行数据的隐藏信息
@@ -110,45 +119,53 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
   };
 
   // ===================================================规则处理================================================================
-  /**列规则 */
-  rules: Record<
-    PropertyKey,
-    ((formData: T, instance: FairysValtioFormInstance<T>) => RuleItem[] | Promise<RuleItem[]>) | RuleItem[]
-  > = {};
-  /**规则验证
-   * @param fields 列字段数组(可选)
-   * @param isReturn 是否返回验证结果(可选)
-   */
+  /**由表单项挂载规则,(根据表单项的字段存储路径对应校验规则)*/
+  mountRules: Record<PropertyKey, RuleItem[]> = {};
+  /**移除表单项挂载规则*/
+  removeRules = (name: PropertyKey) => {
+    delete this.mountRules[name];
+  };
+  /**表单项规则*/
+  rules: Record<PropertyKey, RuleItem[]> = {};
+  /**表单项名称到路径映射*/
+  nameToPaths: Record<PropertyKey, PropertyKey[]> = {};
+  /**验证表单项规则*/
   validate = async (fields?: PropertyKey[], isReturn: boolean = true): Promise<ValidateFieldsError | Values> => {
-    let _fields = fields;
+    const rules = {
+      ...this.rules,
+      ...this.mountRules,
+    };
+    // 根据字段路径获取对应的值
     const _formData = snapshot(this.state) as T;
-    // 没有规则，直接返回数据
-    if (!this.rules) {
-      return Promise.resolve({ ..._formData });
-    }
-    const rules: Record<PropertyKey, RuleItem[]> = {};
-    let isNeedValidate = false;
-    // 没有 fields 值，验证所有
-    if (!fields || (Array.isArray(fields) && fields.length === 0)) {
-      _fields = Object.keys(this.rules);
-    }
-    for (let index = 0; index < _fields.length; index++) {
-      isNeedValidate = true;
-      const element = _fields[index];
-      const rule = this.rules[element];
-      if (typeof rule === 'function') {
-        const _rules = await rule(_formData, this);
-        rules[element] = _rules;
-      } else if (Array.isArray(rule)) {
-        rules[element] = rule;
+    const _values: Record<PropertyKey, any> = {};
+    /**所有要验证的字段*/
+    let _fields = Object.keys(rules) as PropertyKey[];
+    /**最后要验证的规则*/
+    let _lastRules: Record<PropertyKey, RuleItem[]> = {};
+    /**是否指定了字段*/
+    let isPropsFields = false;
+    // 如果指定了字段，则只验证指定的字段
+    if (Array.isArray(fields) && fields.length) {
+      _fields = [...fields];
+      isPropsFields = true;
+      for (let index = 0; index < fields.length; index++) {
+        const field = fields[index];
+        const paths = this.nameToPaths[field];
+        _lastRules[field] = rules[field];
+        _values[field] = get(_formData, paths ? paths : formatePath(field as string));
+      }
+    } else {
+      isPropsFields = false;
+      _lastRules = { ...rules };
+      // 通过规则进行获取那些字段需要验证
+      for (let index = 0; index < _fields.length; index++) {
+        const field = _fields[index];
+        const paths = this.nameToPaths[field];
+        _values[field] = get(_formData, paths);
       }
     }
-    if (!isNeedValidate) {
-      console.warn('no rules to validate');
-      return Promise.resolve({ ..._formData });
-    }
     return new Promise((resolve, reject) => {
-      new AsyncValidator({ ...rules }).validate({ ..._formData }, (errors, fields) => {
+      new AsyncValidator({ ...rules }).validate({ ..._values }, (errors, fields) => {
         for (let index = 0; index < _fields.length; index++) {
           const field = _fields[index];
           const fidError = Array.isArray(errors) ? errors.filter((item) => item.field === field) : undefined;
@@ -162,7 +179,12 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
           if (errors) {
             reject({ errors, fields });
           } else {
-            resolve(fields);
+            /**如果是指定字段，直接返回字段值*/
+            if (isPropsFields) {
+              resolve({ ...fields });
+            } else {
+              resolve({ ..._formData });
+            }
           }
         }
       });

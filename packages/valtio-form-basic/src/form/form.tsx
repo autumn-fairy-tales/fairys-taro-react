@@ -2,6 +2,7 @@ import { MObject } from 'interface';
 import { FairysValtioFormInstance, useFairysValtioFormInstance } from './instance';
 import { useMemo, type ReactNode } from 'react';
 import { FairysValtioFormLayoutAttrsProps } from './layout';
+import { RuleItem } from 'async-validator';
 
 export interface FairysValtioFormAttrsProps<T extends MObject<T> = object> extends FairysValtioFormLayoutAttrsProps {
   /**表单实例*/
@@ -9,7 +10,7 @@ export interface FairysValtioFormAttrsProps<T extends MObject<T> = object> exten
   /**子元素*/
   children: ReactNode;
   /**表单项规则*/
-  rules?: FairysValtioFormInstance<T>['rules'];
+  rules?: Record<PropertyKey, RuleItem[]>;
   /**表单初始值*/
   formData?: FairysValtioFormInstance<T>['state'];
   /**表单隐藏状态*/

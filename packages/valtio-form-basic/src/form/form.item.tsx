@@ -1,10 +1,13 @@
 /**表单项*/
 
 import { MObject } from 'interface';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import clsx from 'clsx';
 import { useFairysValtioFormInstanceContextState, FairysValtioFormInstance } from './instance';
 import { useFairysValtioFormLayoutContext, FairysValtioFormLayoutContextOptions } from './layout';
+import { FairysValtioFormParentAttrs, useFairysValtioFormAttrsName } from './hooks';
+import { get } from './utils';
+import AsyncValidator, { RuleItem, ValidateFieldsError, Values } from 'async-validator';
 
 export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   /**表单项名称*/
@@ -58,6 +61,10 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   isInvalidBorderRed?: boolean;
   /**输入框属性*/
   attrs?: any;
+  /**是否拼接父级字段名*/
+  isJoinParentField?: boolean;
+  /**校验规则*/
+  rules?: RuleItem[];
 }
 
 /**
@@ -141,11 +148,24 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     showColon = parent_showColon,
     itemBorderColor = parent_itemBorderColor,
     isInvalidBorderRed = parent_isInvalidBorderRed,
+    isJoinParentField = true,
+    rules,
   } = props;
+
+  const {
+    name: _name,
+    paths,
+    parentName,
+    formAttrsNameInstance,
+  } = useFairysValtioFormAttrsName({ name, isJoinParentField });
   const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
-  const rules = formInstance.rules?.[name];
-  const value = state[name];
-  const error = errorState[name];
+  const value = useMemo(() => get(state, paths), [state, paths]);
+  const error = errorState[_name];
+  formInstance.nameToPaths[_name] = paths;
+  /**挂载校验规则*/
+  if (Array.isArray(rules) && rules.length) {
+    formInstance.mountRules[_name] = rules;
+  }
 
   const onValueChange = (event: any) => {
     let value = event;
@@ -158,11 +178,17 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     if (typeof formatValue === 'function') {
       value = formatValue(value, formInstance, event);
     }
-    formInstance.updated({ [name]: value });
+    formInstance.updatedValueByPaths(_name, value);
     if (typeof onAfterUpdate === 'function') {
       onAfterUpdate(value, formInstance, event);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      formInstance.removeRules(_name);
+    };
+  }, [_name]);
 
   /**基础组件参数*/
   const baseControl = {
@@ -322,6 +348,11 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     errorState,
     formInstance,
     error,
+    _name,
+    name,
+    paths,
+    parentName,
+    formAttrsNameInstance,
     // ================================================================================
     itemClassName: item_cls,
     itemStyle: {
@@ -376,6 +407,16 @@ export interface FairysValtioFormItemAttrsReturn<T extends MObject<T> = object> 
   formInstance?: FairysValtioFormInstance<T>;
   /**错误信息*/
   error?: string[];
+  /**拼接父级字段名后得到的表单项名称*/
+  _name: string;
+  /**表单项名称*/
+  name: string;
+  /**表单项路径*/
+  paths: (string | number)[];
+  /**父级字段名*/
+  parentName: string;
+  /**表单属性名实例*/
+  formAttrsNameInstance: FairysValtioFormParentAttrs;
   // =========================================
   /**表单项类名*/
   itemClassName: string;
