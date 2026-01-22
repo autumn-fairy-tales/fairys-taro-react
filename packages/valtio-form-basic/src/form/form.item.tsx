@@ -74,7 +74,7 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
  * 
  * ```tsx
 import { Fragment } from 'react'
-import { useFairysValtioFormItemAttrs } from "@fairys/valtio-form"
+import { useFairysValtioFormItemAttrs , FairysValtioFormParentAttrsContext } from "@fairys/valtio-form"
 import type { FairysValtioFormItemAttrsProps } from "@fairys/valtio-form"
 export interface FormItemProps extends FairysValtioFormItemAttrsProps{}
 
@@ -83,10 +83,11 @@ export const FormItem = (props: FormItemProps) => {
   const {
     itemClassName, itemStyle, containerClassName, itemLabelClassName, itemLabelStyle,
     itemBodyClassName, itemBodyStyle, itemInputClassName, itemExtraClassName, errorClassName, helpClassName,
-    isInvalid, itemBorderType, children, error
+    isInvalid, itemBorderType, children, error,formAttrsNameInstance
   } = useFairysValtioFormItemAttrs(props)
 
   return (
+   <FairysValtioFormParentAttrsContext.Provider value={formAttrsNameInstance}>
     <View className={itemClassName} style={itemStyle}>
       <View className={containerClassName}>
         <View className={itemLabelClassName} style={itemLabelStyle}>
@@ -103,6 +104,7 @@ export const FormItem = (props: FormItemProps) => {
       {helpText ? <View className={helpClassName}>{helpText}</View> : <Fragment />}
       {isInvalid && itemBorderType !== 'body' ? <View className={errorClassName}>{error}</View> : <Fragment />}
     </View>
+   </FairysValtioFormParentAttrsContext.Provider>
   );
 }
  * ```
@@ -166,6 +168,11 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   if (Array.isArray(rules) && rules.length) {
     formInstance.mountRules[_name] = rules;
   }
+  useEffect(() => {
+    return () => {
+      formInstance.removeRules(_name);
+    };
+  }, [_name]);
 
   const onValueChange = (event: any) => {
     let value = event;
@@ -183,12 +190,6 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
       onAfterUpdate(value, formInstance, event);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      formInstance.removeRules(_name);
-    };
-  }, [_name]);
 
   /**基础组件参数*/
   const baseControl = {
@@ -451,13 +452,15 @@ export interface FairysValtioFormItemAttrsReturn<T extends MObject<T> = object> 
  * 
  *```tsx 
 import { Fragment } from 'react'
-import { useFairysValtioFormItemAttrs } from "@fairys/valtio-form"
+import { useFairysValtioFormItemAttrs, FairysValtioFormParentAttrsContext } from "@fairys/valtio-form"
 import type { FairysValtioFormItemAttrsProps } from "@fairys/valtio-form"
 export interface FormItemProps extends FairysValtioFormItemAttrsProps{}
 
 export const FormItem = (props: FormItemProps) => {
-  const { children } = useFairysValtioFormItemNoStyleAttrs(props)
-  return children
+  const { children , formAttrsNameInstance } = useFairysValtioFormItemNoStyleAttrs(props)
+  return <FairysValtioFormParentAttrsContext.Provider value={formAttrsNameInstance}>
+    {children}
+  </FairysValtioFormParentAttrsContext.Provider>
 }
  * ```
 */
@@ -473,10 +476,29 @@ export function useFairysValtioFormItemNoStyleAttrs<T extends MObject<T> = objec
     trigger = 'onChange',
     children,
     attrs = {},
+    isJoinParentField = true,
+    rules,
   } = props;
   const [state, errorState, formInstance] = useFairysValtioFormInstanceContextState<T>();
-  const value = state[name];
-  const error = errorState[name];
+  const {
+    name: _name,
+    paths,
+    parentName,
+    formAttrsNameInstance,
+  } = useFairysValtioFormAttrsName({ name, isJoinParentField });
+  const value = useMemo(() => get(state, paths), [state, paths]);
+  const error = errorState[_name];
+  formInstance.nameToPaths[_name] = paths;
+  /**挂载校验规则*/
+  if (Array.isArray(rules) && rules.length) {
+    formInstance.mountRules[_name] = rules;
+  }
+
+  useEffect(() => {
+    return () => {
+      formInstance.removeRules(_name);
+    };
+  }, [_name]);
 
   const onValueChange = (event: any) => {
     let value = event;
@@ -489,7 +511,7 @@ export function useFairysValtioFormItemNoStyleAttrs<T extends MObject<T> = objec
     if (typeof formatValue === 'function') {
       value = formatValue(value, formInstance, event);
     }
-    formInstance.updated({ [name]: value });
+    formInstance.updatedValueByPaths(_name, value);
     if (typeof onAfterUpdate === 'function') {
       onAfterUpdate(value, formInstance, event);
     }
@@ -508,6 +530,11 @@ export function useFairysValtioFormItemNoStyleAttrs<T extends MObject<T> = objec
     state,
     errorState,
     formInstance,
+    _name,
+    name,
+    paths,
+    parentName,
+    formAttrsNameInstance,
     children: React.isValidElement(children) ? React.cloneElement(children, { ...baseControl }) : children,
   };
 }

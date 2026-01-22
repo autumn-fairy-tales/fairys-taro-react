@@ -84,8 +84,12 @@ export function FairysTaroValtioFormHideItem<T extends MObject<T> = object>(
 export function FairysTaroValtioFormItemNoStyle<T extends MObject<T> = object>(
   props: Omit<FairysTaroValtioFormItemProps<T>, 'isHide' | 'noStyle'>,
 ) {
-  const { children } = useFairysValtioFormItemNoStyleAttrs(props);
-  return children;
+  const { children, formAttrsNameInstance } = useFairysValtioFormItemNoStyleAttrs(props);
+  return (
+    <FairysValtioFormParentAttrsContext.Provider value={formAttrsNameInstance}>
+      {children}
+    </FairysValtioFormParentAttrsContext.Provider>
+  );
 }
 
 /**表单项基础组件(根据isHide和noStyle判断是否使用控制隐藏的表单项和无样式表单项)*/
