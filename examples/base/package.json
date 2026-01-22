@@ -1,6 +1,6 @@
 {
   "name": "base",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "description": "",
   "templateInfo": {
@@ -38,9 +38,9 @@
   "author": "",
   "dependencies": {
     "@babel/runtime": "^7.24.4",
-    "@fairys/taro-tools-react": "^0.0.8",
-    "@fairys/taro-tools-simple-form": "^0.0.8",
-    "@fairys/taro-tools-simple-form-ui": "^0.0.8",
+    "@fairys/taro-tools-react": "^0.0.9",
+    "@fairys/taro-tools-simple-form": "^0.0.9",
+    "@fairys/taro-tools-simple-form-ui": "^0.0.9",
     "@nutui/nutui-react-taro": "^3.0.19-cpp.24",
     "@tarojs/components": "4.1.7",
     "@tarojs/helper": "4.1.7",
@@ -61,7 +61,6 @@
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@tarojs/plugin-html": "4.1.7",
     "@babel/core": "^7.24.4",
     "@babel/plugin-transform-class-properties": "7.25.9",
     "@babel/preset-react": "^7.24.1",
@@ -69,6 +68,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@tarojs/cli": "4.1.7",
     "@tarojs/plugin-generator": "4.1.7",
+    "@tarojs/plugin-html": "4.1.7",
     "@tarojs/vite-runner": "4.1.7",
     "@types/minimatch": "^5",
     "@types/react": "~18.2.21",
