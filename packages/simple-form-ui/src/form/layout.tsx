@@ -22,16 +22,14 @@ export function FairysTaroValtioFormLayout(props: FairysTaroValtioFormLayoutProp
   return (
     <FairysValtioFormLayoutContext.Provider value={formLayoutInstance}>
       <View className={layoutName} style={layoutStyle}>
-        <View>
-          {title || extra ? (
-            <View style={headerStyle} className={headerName}>
-              <View className={headerTitleName}>{title}</View>
-              <View className={headerExtraName}>{extra}</View>
-            </View>
-          ) : (
-            <Fragment />
-          )}
-        </View>
+        {title || extra ? (
+          <View style={headerStyle} className={headerName}>
+            <View className={headerTitleName}>{title}</View>
+            <View className={headerExtraName}>{extra}</View>
+          </View>
+        ) : (
+          <Fragment />
+        )}
         <View className={bodyName} style={bodyStyle}>
           {children}
         </View>

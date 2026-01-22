@@ -69,6 +69,8 @@ export interface FairysValtioFormItemAttrsProps<T extends MObject<T> = object> {
   itemBorderColor?: React.CSSProperties['borderColor'];
   /**是否校验失败时显示红色边框*/
   isInvalidBorderRed?: boolean;
+  /**是否校验失败时显示红色文本*/
+  isInvalidTextRed?: boolean;
   /**输入框属性*/
   attrs?: any;
   /**是否拼接父级字段名*/
@@ -134,6 +136,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const parent_labelMode = layoutAttrs.labelMode || 'between';
   const parent_itemBorderColor = layoutAttrs.itemBorderColor;
   const parent_isInvalidBorderRed = layoutAttrs.isInvalidBorderRed;
+  const parent_isInvalidTextRed = layoutAttrs.isInvalidTextRed;
   const parent_showColon = layoutAttrs.showColon;
 
   const {
@@ -160,6 +163,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
     showColon = parent_showColon,
     itemBorderColor = parent_itemBorderColor,
     isInvalidBorderRed = parent_isInvalidBorderRed,
+    isInvalidTextRed = parent_isInvalidTextRed,
     isJoinParentField = true,
     rules,
   } = props;
@@ -230,9 +234,10 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   /**表单项类名*/
   const item_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
+      'fairys-valtio-form-item fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__p-[4px] fairystaroform__text-[12px] fairystaroform__relative fairystaroform__flex fairystaroform__flex-col fairystaroform__box-border fairystaroform__break-all',
       {
         'fairys-valtio-form-item-invalid': isInvalid,
+        'fairys-valtio-form-item-invalid-text-red': isInvalid && isInvalidTextRed,
         'fairys-valtio-form-item-invalid-border-red': isInvalid && isInvalidBorderRed && itemBorderType === 'bottom',
         'fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200':
           itemBorderType === 'bottom',
@@ -247,7 +252,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const itemContainer_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-valtio-form-item-container fairystaroform__flex-1 fairystaroform__h-full fairystaroform__flex fairystaroform__box-border',
+      'fairys-valtio-form-item-container fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__flex-1 fairystaroform__h-full fairystaroform__flex fairystaroform__box-border',
       {
         'fairystaroform__flex-row fairystaroform__items-center fairystaroform__justify-between fairystaroform__gap-[8px]':
           labelMode === 'between',
@@ -262,7 +267,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const itemLabel_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-valtio-form-item-label fairystaroform__text-gray-800 fairystaroform__flex fairystaroform__items-center fairystaroform__relative fairystaroform__box-border',
+      'fairys-valtio-form-item-label fairystaroform__transition-all fairystaroform__duration-300  fairystaroform__text-gray-800 fairystaroform__flex fairystaroform__items-center fairystaroform__relative fairystaroform__box-border',
       {
         'fairystaroform__justify-start': labelMode !== 'left',
         'fairystaroform__justify-end': labelMode === 'left',
@@ -278,7 +283,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   const itemBody_cls = useMemo(() => {
     // 默认两端显示
     return clsx(
-      'fairys-valtio-form-item-body fairystaroform__relative fairystaroform__flex-1 fairystaroform__flex fairystaroform__box-border',
+      'fairys-valtio-form-item-body fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__relative fairystaroform__flex-1 fairystaroform__flex fairystaroform__box-border',
       {
         'fairystaroform__flex-row fairystaroform__justify-start': labelMode === 'left',
         'fairystaroform__flex-row fairystaroform__justify-end': labelMode === 'between' || labelMode === 'top',
@@ -295,7 +300,7 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   // 表单项输入类名
   const itemInput_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item-body fairystaroform__flex fairystaroform__flex-row fairystaroform__flex-1 fairystaroform__box-border',
+      'fairys-valtio-form-item-body-input fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__min-h-[32px] fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__flex-1 fairystaroform__box-border',
       {
         'fairystaroform__justify-end fairystaroform__text-right': labelMode === 'between',
         'fairystaroform__justify-start fairystaroform__text-left fairystaroform__items-center': labelMode !== 'between',
@@ -306,21 +311,21 @@ export function useFairysValtioFormItemAttrs<T extends MObject<T> = object>(prop
   /**表单项额外内容类名*/
   const itemExtra_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item-body-extra fairystaroform__box-border fairystaroform__flex fairystaroform__items-center fairystaroform__justify-center',
+      'fairys-valtio-form-item-body-extra fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__box-border fairystaroform__flex fairystaroform__items-center fairystaroform__justify-center',
     );
   }, []);
 
   /**表单项底部提示内容类名*/
   const itemHelp_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item-body-help fairystaroform__text-[10px] fairystaroform__w-full fairystaroform__box-border',
+      'fairys-valtio-form-item-body-help fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__text-[10px] fairystaroform__w-full fairystaroform__box-border',
     );
   }, []);
 
   /**表单项错误提示类名*/
   const itemError_cls = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-item-body-error fairystaroform__px-[4px] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
+      'fairys-valtio-form-item-body-error fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__px-[4px] fairystaroform__w-full fairystaroform__flex fairystaroform__flex-row fairystaroform__box-border fairystaroform__text-red fairystaroform__absolute fairystaroform__text-[10px] fairystaroform__z-10',
       {
         'fairystaroform__bottom-[-14px] fairystaroform__left-0 fairystaroform__justify-start':
           errorLayout === 'left-bottom',

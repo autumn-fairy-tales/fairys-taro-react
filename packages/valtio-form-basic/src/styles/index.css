@@ -45,3 +45,11 @@
 .fairys-valtio-form-item-invalid-border-red {
   border-bottom-color: red !important;
 }
+
+.fairys-valtio-form-item-invalid-text-red > .fairys-valtio-form-item-container > .fairys-valtio-form-item-label,
+.fairys-valtio-form-item-invalid-text-red
+  > .fairys-valtio-form-item-container
+  > .fairys-valtio-form-item-body
+  > .fairys-valtio-form-item-body-input {
+  color: red !important;
+}

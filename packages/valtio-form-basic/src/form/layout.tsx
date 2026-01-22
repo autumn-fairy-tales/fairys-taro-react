@@ -32,6 +32,8 @@ export interface FairysValtioFormLayoutContextOptions {
   itemBorderColor?: React.CSSProperties['borderColor'];
   /**是否校验失败时显示红色边框*/
   isInvalidBorderRed?: boolean;
+  /**是否校验失败时显示红色文本*/
+  isInvalidTextRed?: boolean;
   /**是否显示冒号*/
   showColon?: boolean;
 }
@@ -165,6 +167,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const parent_borderedType = state.itemBorderType || 'bottom';
   const parent_itemBorderColor = state.itemBorderColor;
   const parent_isInvalidBorderRed = state.isInvalidBorderRed;
+  const parent_isInvalidTextRed = state.isInvalidTextRed;
   const parent_showColon = state.showColon;
 
   const {
@@ -181,6 +184,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
     itemBorderColor = parent_itemBorderColor,
     lastItemBordered = true,
     isInvalidBorderRed = parent_isInvalidBorderRed,
+    isInvalidTextRed = parent_isInvalidTextRed,
     showColon = parent_showColon,
     gap,
     isAllColSpan = false,
@@ -209,6 +213,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
         itemBorderType,
         itemBorderColor,
         isInvalidBorderRed,
+        isInvalidTextRed,
         showColon,
       }),
     [
@@ -224,6 +229,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
       itemBorderType,
       itemBorderColor,
       isInvalidBorderRed,
+      isInvalidTextRed,
       showColon,
     ],
   );
@@ -231,7 +237,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const layoutCls = useMemo(
     () =>
       clsx(
-        `fairys-valtio-form-layout fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-[4px]`,
+        `fairys-valtio-form-layout fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__text-[12px] fairystaroform__w-full fairystaroform__box-border fairystaroform__rounded-[8px]`,
         {
           'fairys-valtio-form-layout-all-col-span': isAllColSpan,
           'fairys-valtio-form-layout-box-shadow': boxShadow,
@@ -245,7 +251,7 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const headerCls = useMemo(
     () =>
       clsx(
-        `fairys-valtio-form-layout-header fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[12px]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 fairystaroform__box-border`,
+        `fairys-valtio-form-layout-header fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__flex fairystaroform__justify-between fairystaroform__items-center fairystaroform__flex-row fairystaroform__py-[10px]  fairystaroform__border-b fairystaroform__border-b-solid fairystaroform__border-b-gray-200 fairystaroform__box-border`,
         {
           'fairystaroform__px-[8px]': bordered || boxShadow,
           'fairystaroform__px-[4px]': !bordered && !boxShadow,
@@ -257,15 +263,21 @@ export function useFairysValtioFormLayoutAttrs(props: FairysValtioFormLayoutAttr
   const headerTitleCls = useMemo(
     () =>
       clsx(
-        `fairys-valtio-form-layout-header-title fairystaroform__text-[14px] fairystaroform__font-bold fairystaroform__box-border`,
+        `fairys-valtio-form-layout-header-title fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__text-[14px] fairystaroform__font-bold fairystaroform__box-border`,
       ),
     [],
   );
-  const headerExtraCls = useMemo(() => clsx(`fairys-valtio-form-layout-header-extra fairystaroform__box-border`), []);
+  const headerExtraCls = useMemo(
+    () =>
+      clsx(
+        `fairys-valtio-form-layout-header-extra fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__box-border`,
+      ),
+    [],
+  );
 
   const body_base = useMemo(() => {
     return clsx(
-      'fairys-valtio-form-layout-body fairystaroform__px-[8px] fairystaroform__w-full fairystaroform__grid fairystaroform__gap-[2px] fairystaroform__box-border',
+      'fairys-valtio-form-layout-body fairystaroform__transition-all fairystaroform__duration-300 fairystaroform__px-[8px] fairystaroform__w-full fairystaroform__grid fairystaroform__gap-[2px] fairystaroform__box-border',
       bodyClassName,
     );
   }, [bodyClassName]);
