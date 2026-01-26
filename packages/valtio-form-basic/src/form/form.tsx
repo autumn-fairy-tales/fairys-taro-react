@@ -9,7 +9,7 @@ export interface FairysValtioFormAttrsProps<T extends MObject<T> = object> exten
   form?: FairysValtioFormInstance<T>;
   /**子元素*/
   children: ReactNode;
-  /**表单项规则*/
+  /**表单项规则(如果表单项没有指定规则，则使用全局规则，如果表单项指定规则，则使用表单项规则)*/
   rules?: Record<PropertyKey, RuleItem[]>;
   /**表单初始值*/
   formData?: FairysValtioFormInstance<T>['state'];
