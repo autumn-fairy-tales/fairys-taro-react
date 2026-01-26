@@ -16,15 +16,21 @@ export class FairysValtioFormInstance<T extends MObject<T> = Record<string, any>
   /**隐藏状态*/
   hideState = proxy<Record<PropertyKey, boolean>>({});
   /**初始化表单值*/
-  ctor = (options?: { formData?: Partial<T>; hideState?: Record<PropertyKey, boolean>; isDeepCopy?: boolean }) => {
-    const { formData, hideState, isDeepCopy = true } = options || {};
+  ctor = (options?: {
+    formData?: Partial<T>;
+    hideState?: Record<PropertyKey, boolean>;
+    initFormDataType?: 'deepCopy' | 'proxy' | 'immutable';
+  }) => {
+    const { formData, hideState, initFormDataType = 'deepCopy' } = options || {};
     // 如果是 isProxy,则直接赋值
     this.errorState = proxy<Record<PropertyKey, string[]>>({});
     this.hideState = proxy<Record<PropertyKey, boolean>>(hideState ? copy(hideState) : {});
-    if (isDeepCopy) {
+    if (initFormDataType === 'deepCopy') {
       this.state = proxy((formData ? copy(formData) : {}) as T);
-    } else if (formData) {
+    } else if (initFormDataType === 'proxy') {
       this.state = proxy(formData as T);
+    } else if (initFormDataType === 'immutable') {
+      this.state = formData as T;
     }
   };
   /**

@@ -15,8 +15,13 @@ export interface FairysValtioFormAttrsProps<T extends MObject<T> = object> exten
   formData?: FairysValtioFormInstance<T>['state'];
   /**表单隐藏状态*/
   hideState?: FairysValtioFormInstance<T>['hideState'];
-  /**formData 是否进行深度拷贝，如果不是则直接把 formData 赋值到 state ，否则使用 copy 方法深度拷贝后赋值 */
-  isDeepCopy?: boolean;
+  /**
+   * 初始化表单数据类型，默认值为 deepCopy
+   * - deepCopy：使用深度拷贝初始化表单数据
+   * - proxy：使用代理对象初始化表单数据
+   * - immutable：直接使用对象，不进行任何处理，注意，这个使用必须是`valtio`中的`proxy`声明的对象数据，否则表单项更新数据不会同步
+   */
+  initFormDataType?: 'deepCopy' | 'proxy' | 'immutable';
 }
 
 /**
@@ -40,12 +45,12 @@ export const Form = (props: FormProps) => {
  * ```
 */
 export function useFairysValtioForm<T extends MObject<T> = object>(props: FairysValtioFormAttrsProps<T>) {
-  const { form, rules, formData, hideState, isDeepCopy = true, ...rest } = props;
+  const { form, rules, formData, hideState, initFormDataType = 'deepCopy', ...rest } = props;
   const formInstance = useFairysValtioFormInstance(form);
   /**表单规则*/
   formInstance.rules = rules;
   /**初始化表单值*/
-  useMemo(() => formInstance.ctor({ formData, hideState, isDeepCopy }), []);
+  useMemo(() => formInstance.ctor({ formData, hideState, initFormDataType }), []);
   return {
     ...rest,
     formInstance,
