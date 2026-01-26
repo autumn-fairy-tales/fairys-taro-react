@@ -4,7 +4,11 @@
 import { View } from '@tarojs/components';
 
 import { Fragment } from 'react';
-import { FairysTaroValtioFormItem, FairysTaroValtioFormHideItem, FairysTaroValtioFormItemBase } from './form.item';
+import {
+  FairysTaroValtioFormItemBase,
+  FairysTaroValtioFormHideItem,
+  FairysTaroValtioFormItemNoStyle,
+} from './form.item';
 import type { FairysTaroValtioFormItemProps } from './form.item';
 import { FairysTaroRadioGroupBase, FairysTaroRadioGroupProps } from 'components/radio.group';
 import { FairysTaroCalendarBase, FairysTaroCalendarProps } from 'components/calendar';
@@ -168,16 +172,20 @@ const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
           const title = attrs.title || (typeof item.label === 'string' ? item.label : '') || '请选择';
           newItem.children = <FairysTaroPopupSearchBase {...attrs} title={title} />;
         }
+        /**添加空组件*/
         if (isEmpty) {
           return <View key={index} className="fairys-taro-simple-form-item-empty" />;
         }
+        /**添加无样式组件*/
         if (noStyle) {
-          return <FairysTaroValtioFormItemBase key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
+          return <FairysTaroValtioFormItemNoStyle key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
         }
+        /**添加隐藏组件*/
         if (isHide) {
           return <FairysTaroValtioFormHideItem key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
         }
-        return <FairysTaroValtioFormItem key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
+        /**添加基础组件*/
+        return <FairysTaroValtioFormItemBase key={index} {...(newItem as FairysTaroValtioFormItemProps)} />;
       })}
     </Fragment>
   );

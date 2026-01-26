@@ -37,7 +37,7 @@ FairysTaroValtioForm.useFormInstance = useFairysValtioFormInstanceContext;
 FairysTaroValtioForm.FormItemListItem = FairysTaroValtioFormConfigListItem;
 /**单个配置项*/
 FairysTaroValtioForm.FormItemConfig = FairysTaroValtioFormConfigItem;
-/**表单项基础组件(根据isHide和noStyle判断是否使用控制隐藏的表单项和无样式表单项)*/
+/**表单项基础组件*/
 FairysTaroValtioForm.FormItemBase = FairysTaroValtioFormItemBase;
 /**表单项*/
 FairysTaroValtioForm.FormItem = FairysTaroValtioFormItem;

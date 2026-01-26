@@ -22,7 +22,7 @@ export interface FairysTaroValtioFormItemProps<T extends MObject<T> = object>
 }
 
 /**普通表单项*/
-export function FairysTaroValtioFormItem<T extends MObject<T> = object>(
+export function FairysTaroValtioFormItemBase<T extends MObject<T> = object>(
   props: Omit<FairysTaroValtioFormItemProps<T>, 'isHide' | 'noStyle'>,
 ) {
   const { label, extra, helpText } = props;
@@ -77,7 +77,7 @@ export function FairysTaroValtioFormHideItem<T extends MObject<T> = object>(
   if (isHide) {
     return <Fragment />;
   }
-  return <FairysTaroValtioFormItem<T> {...props} />;
+  return <FairysTaroValtioFormItemBase<T> {...props} />;
 }
 
 /**无样式表单项*/
@@ -93,7 +93,7 @@ export function FairysTaroValtioFormItemNoStyle<T extends MObject<T> = object>(
 }
 
 /**表单项基础组件(根据isHide和noStyle判断是否使用控制隐藏的表单项和无样式表单项)*/
-export function FairysTaroValtioFormItemBase<T extends MObject<T> = object>(props: FairysTaroValtioFormItemProps<T>) {
+export function FairysTaroValtioFormItem<T extends MObject<T> = object>(props: FairysTaroValtioFormItemProps<T>) {
   const { isHide, noStyle, ...rest } = props;
   if (isHide) {
     return <FairysTaroValtioFormHideItem<T> {...rest} />;
@@ -101,5 +101,5 @@ export function FairysTaroValtioFormItemBase<T extends MObject<T> = object>(prop
   if (noStyle) {
     return <FairysTaroValtioFormItemNoStyle<T> {...rest} />;
   }
-  return <FairysTaroValtioFormItem<T> {...rest} />;
+  return <FairysTaroValtioFormItemBase<T> {...rest} />;
 }
