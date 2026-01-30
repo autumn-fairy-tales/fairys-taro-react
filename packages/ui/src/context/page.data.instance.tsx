@@ -1,6 +1,6 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
-import { createContext, useContext, useMemo, useRef } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef } from 'react';
 import { globalSettingDataInstance } from './global.setting.data.instance';
 import Taro, { useDidShow } from '@tarojs/taro';
 
@@ -63,6 +63,8 @@ export class PageDataInstance<
   getList?: (payload: any, instance: PageDataInstance<T>) => Promise<{ code?: number; data?: any; message?: string }>;
   /**请求之后处理返回值进行存储*/
   onAfter?: (data: Record<string, any>, instance: PageDataInstance<T>) => Partial<T>;
+  /**额外数据处理*/
+  onExtraData?: (data: Record<string, any>, instance: PageDataInstance<T>) => Record<string, any>;
   /** code!==1 时 触发*/
   onError?: (data: Record<string, any>, instance: PageDataInstance<T>) => void;
   /**重置获取值的方法*/
@@ -173,7 +175,7 @@ export class PageDataInstance<
     let totalField = 'total';
     let selectedRowsField = 'selectedRows';
     let selectedRowKeysField = 'selectedRowKeys';
-    let _request: Function | undefined;
+    let _request: Function | undefined = this.getList;
     /**默认请求参数*/
     let defaultQuery = {};
     if (this.store.isTabs) {
@@ -189,8 +191,6 @@ export class PageDataInstance<
       totalField = `${tabKey}Total`;
       selectedRowsField = `${tabKey}SelectedRows`;
       selectedRowKeysField = `${tabKey}SelectedRowKeys`;
-    } else {
-      _request = this.getList;
     }
     if (!_request) {
       console.error('未配置 getList 请求方法,请检查是否配置了 getList 方法');
@@ -233,10 +233,14 @@ export class PageDataInstance<
             [totalField]: result?.data?.total || 0,
           };
           // 第一页清理
-          if (this.store[pageField] === 1) {
+          if (this.store[pageField] === 1 || !this.is_scroll_page) {
             saveData[selectedRowsField] = ref([]);
             saveData[selectedRowKeysField] = ref([]);
           }
+        }
+        if (this.onExtraData) {
+          const _temps = this.onExtraData(result, this);
+          saveData = { ...saveData, ...(_temps || {}) };
         }
         if (saveData) this._setValues(saveData);
       } else if (this.onError) {
@@ -396,6 +400,8 @@ export interface PageDataInstanceContextProviderProps<T extends PageDataInstance
   getList?: PageDataInstance<T>['getList'];
   /**请求之后处理返回值进行存储*/
   onAfter?: PageDataInstance<T>['onAfter'];
+  /** 额外数据处理*/
+  onExtraData?: PageDataInstance<T>['onExtraData'];
   /** code!== 200 时 触发*/
   onError?: PageDataInstance<T>['onError'];
   /**获取弹框内重置参数*/
@@ -427,6 +433,7 @@ export function PageDataInstanceContextProvider<T extends PageDataInstanceState 
     onBefore,
     getList,
     onAfter,
+    onExtraData,
     onError,
     getResetValues,
     defaultQuery,
@@ -440,6 +447,7 @@ export function PageDataInstanceContextProvider<T extends PageDataInstanceState 
   instance.onBefore = onBefore;
   instance.getList = getList;
   instance.onAfter = onAfter;
+  instance.onExtraData = onExtraData;
   instance.onError = onError;
   instance.getResetValues = getResetValues;
   instance.codeFields = codeFields;
@@ -451,7 +459,7 @@ export function PageDataInstanceContextProvider<T extends PageDataInstanceState 
     [pageInstance],
   );
 
-  useMemo(() => {
+  useEffect(() => {
     if (isMountLoad) {
       pageInstance.main_onSearch();
     }

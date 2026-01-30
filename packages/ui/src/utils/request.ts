@@ -178,6 +178,14 @@ export class RequestInstance {
 
   /**格式化地址*/
   formatUrl = (url: string, module?: string) => {
+    if (!url) {
+      throw new Error('请求的url必填');
+    }
+    /**如果是http或者https开头的，直接返回*/
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+      return url;
+    }
+
     let { host, url: _url } = this.getProxyHost(url, module);
     if (host) {
       host = host.replace(/\/$/, '');
