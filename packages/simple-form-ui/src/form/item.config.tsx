@@ -8,8 +8,8 @@ import {
   FairysTaroValtioFormItemBase,
   FairysTaroValtioFormHideItem,
   FairysTaroValtioFormItemNoStyle,
-} from './form.item';
-import type { FairysTaroValtioFormItemProps } from './form.item';
+} from '@fairys/taro-valtio-form-basic';
+import type { FairysTaroValtioFormItemProps } from '@fairys/taro-valtio-form-basic';
 import { FairysTaroRadioGroupBase, FairysTaroRadioGroupProps } from 'components/radio.group';
 import { FairysTaroCalendarBase, FairysTaroCalendarProps } from 'components/calendar';
 import { FairysTaroCascaderBase, FairysTaroCascaderProps } from 'components/cascader';
@@ -39,9 +39,7 @@ import {
   Uploader,
   UploaderProps,
 } from '@nutui/nutui-react-taro';
-
-export type MObject<T> = { [K in keyof T]: T[K] };
-export type MakeFieldRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+import type { MObject } from '@fairys/taro-valtio-form-basic';
 
 /**
  * 表单项配置基础类型

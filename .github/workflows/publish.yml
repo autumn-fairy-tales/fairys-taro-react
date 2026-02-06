@@ -62,7 +62,6 @@ jobs:
           npm i @fairys/taro-tools-plugins@${{ steps.create_tag.outputs.version }}
           npm i @fairys/taro-tools-simple-form@${{ steps.create_tag.outputs.version }}
           npm i @fairys/taro-tools-simple-form-ui@${{ steps.create_tag.outputs.version }}
-          npm i @fairys/valtio-form-basic@${{ steps.create_tag.outputs.version }}
           ```
           ${{ steps.changelog.outputs.compareurl }}
           ${{ steps.changelog.outputs.changelog }}

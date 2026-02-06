@@ -25,11 +25,9 @@
     "esm"
   ],
   "dependencies": {
-    "@fairys/valtio-form-basic": "^0.0.12",
+    "@fairys/taro-valtio-form-basic": "^0.0.13",
     "@nutui/nutui-react-taro": "^3.0.18",
-    "async-validator": "~4.2.5",
     "clsx": "2.1.1",
-    "fast-copy": "~4.0.2",
     "valtio": "~2.1.5"
   },
   "devDependencies": {
