@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
   "description": "文档",
@@ -10,7 +10,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@fairys/taro-tools-react": "^1.0.0"
+    "@fairys/taro-tools-react": "^1.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
