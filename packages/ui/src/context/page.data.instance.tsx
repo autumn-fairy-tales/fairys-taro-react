@@ -301,7 +301,7 @@ export class PageDataInstance<
     this.store.expandSearch = false;
   };
   /**加载更多*/
-  main_onLoadMore = () => {
+  main_onLoadMore = async () => {
     if (this.store.loading?.pageLoading) {
       // 加载中，不进行请求
       return;
@@ -329,9 +329,9 @@ export class PageDataInstance<
       // 判断是否最后一页数据
       this._setValues({
         [`${tabKey}Page`]: nextPage,
-        [`${tabKey}HasLastPage`]: hasLastPage,
       });
-      this.main_getList();
+      await this.main_getList();
+      this._setValues({ [`${tabKey}HasLastPage`]: hasLastPage });
       return;
     }
     const total = this.store.total || 0;
@@ -352,8 +352,9 @@ export class PageDataInstance<
     }
     this.store.loading.loadMore = true;
     // 判断是否最后一页数据
-    this._setValues({ page: nextPage, hasLastPage });
-    this.main_getList();
+    this._setValues({ page: nextPage });
+    await this.main_getList();
+    this._setValues({ hasLastPage });
   };
 }
 
