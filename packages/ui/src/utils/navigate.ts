@@ -17,6 +17,7 @@ class NavigateInstance {
     if (useAuthHasMenuPermission && typeof isAuthFunction !== 'function' && isEnableAuth) {
       isAuthFunction = authDataInstance.hasMenuPermission;
     }
+
     if (url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes && isEnableAuth) {
       isAuthTo = await isAuthFunction(url);
     }

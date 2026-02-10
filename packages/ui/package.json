@@ -4,7 +4,7 @@
   "description": "框架组件库",
   "homepage": "https://github.com/autumn-fairy-tales/fairys-taro-react",
   "version": "1.0.4",
-  "main": "lib/index.js",
+  "main": "esm/index.js",
   "types": "esm/index.d.ts",
   "module": "esm/index.js",
   "license": "ISC",
@@ -22,7 +22,8 @@
   },
   "files": [
     "src",
-    "esm"
+    "esm",
+    "lib"
   ],
   "dependencies": {
     "clsx": "2.1.1",

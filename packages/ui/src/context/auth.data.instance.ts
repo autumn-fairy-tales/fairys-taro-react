@@ -144,34 +144,34 @@ export class AuthDataInstance<T = any> {
    * @param menuPermission 菜单权限
    * @returns 是否有指定菜单权限
    */
-  hasMenuPermission(menuPermission: string): boolean {
+  hasMenuPermission = (menuPermission: string): boolean => {
     if (!globalSettingDataInstance.store.isEnableAuth) {
       return true;
     }
     return this.menusPermissions.includes(menuPermission);
-  }
+  };
 
   /**
    * 判断是否有指定权限
    * @param permission 权限
    * @returns 是否有指定权限
    */
-  hasPermission(permission: string): boolean {
+  hasPermission = (permission: string): boolean => {
     if (!globalSettingDataInstance.store.isEnableAuth) {
       return true;
     }
     return this.permissions.includes(permission);
-  }
+  };
 
   /**
    * 清除登录凭证（token）、权限列表、菜单权限列表、用户信息
    */
-  clear() {
+  clear = () => {
     this.token = '';
     this.permissions = [];
     this.menusPermissions = [];
     this.userInfo = undefined;
-  }
+  };
 
   /**
    * 初始化认证数据实例

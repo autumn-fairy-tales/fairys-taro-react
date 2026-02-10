@@ -75,8 +75,19 @@ export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstan
     this.store.toastData = ref({ ...this.store.toastData, visible: false });
   };
 
+  /**
+   * 跳转登录页面前执行
+   */
+  onBeforetToLoginPage?: () => boolean | void;
   /**跳转登录页面*/
   toLoginPage = () => {
+    if (this.onBeforetToLoginPage) {
+      const f = this.onBeforetToLoginPage();
+      if (f === false) {
+        // 如果返回false则不跳转登录页面
+        return;
+      }
+    }
     const loginPageRoute = globalSettingDataInstance.store.loginPageRoute || '';
     const isLoginPage = navigate.isCurrentPage(loginPageRoute || '');
     const _loginPageRoute = `${loginPageRoute || ''}`.replace(/^\//, '');
