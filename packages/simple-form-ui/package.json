@@ -25,7 +25,7 @@
     "esm"
   ],
   "dependencies": {
-    "@fairys/taro-valtio-form-basic": "^0.0.13",
+    "@fairys/taro-valtio-form-basic": "^1.0.2",
     "@nutui/nutui-react-taro": "^3.0.18",
     "clsx": "2.1.1",
     "valtio": "~2.1.5"
