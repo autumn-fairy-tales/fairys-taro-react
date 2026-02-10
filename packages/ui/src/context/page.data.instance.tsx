@@ -18,7 +18,7 @@ export interface PageDataInstanceState extends Object {
   /**是否最后一页*/
   hasLastPage?: boolean;
   /**查询条件*/
-  search?: Object;
+  search?: Record<string, any>;
   /**表格数据*/
   dataList?: any[];
   /**选择行数据*/
@@ -442,6 +442,7 @@ export function PageDataInstanceContextProvider<T extends PageDataInstanceState 
     isMountLoad,
     title,
   } = props;
+
   const pageInstance = usePageDataInstance(instance);
 
   instance.onBefore = onBefore;
