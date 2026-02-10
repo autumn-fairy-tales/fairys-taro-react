@@ -162,6 +162,30 @@ export class AuthDataInstance<T = any> {
     }
     return this.permissions.includes(permission);
   }
+
+  /**
+   * 清除登录凭证（token）、权限列表、菜单权限列表、用户信息
+   */
+  clear() {
+    this.token = '';
+    this.permissions = [];
+    this.menusPermissions = [];
+    this.userInfo = undefined;
+  }
+
+  /**
+   * 初始化认证数据实例
+   */
+  constructor() {
+    try {
+      this.store.userInfo = this.userInfo;
+      this.store.token = this.token;
+      this.store.permissions = this.permissions;
+      this.store.menusPermissions = this.menusPermissions;
+    } catch (error) {
+      console.error('初始化认证数据实例失败', error);
+    }
+  }
 }
 
 export const authDataInstance = new AuthDataInstance();
