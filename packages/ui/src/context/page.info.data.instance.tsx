@@ -188,7 +188,7 @@ export interface PageInfoDataOptions<T extends PageInfoDataInstanceState = PageI
 
 /**初始化实例*/
 export const usePageInfoDataInstance = <T extends PageInfoDataInstanceState = PageInfoDataInstanceState>(
-  instance: PageInfoDataInstance<T>,
+  instance?: PageInfoDataInstance<T>,
 ) => {
   const ref = useRef<PageInfoDataInstance<T>>();
   if (!ref.current) {
