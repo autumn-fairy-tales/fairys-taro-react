@@ -4,7 +4,6 @@ import { createContext, useContext, useEffect, useMemo, useRef } from 'react';
 import navigate from '../utils/navigate';
 import { globalDataInstance } from './global.data.instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
-import { PageDataInstance } from './page.data.instance';
 import { useDidShow } from '@tarojs/taro';
 import Taro from '@tarojs/taro';
 
@@ -73,6 +72,7 @@ export class PageInfoDataInstance<
   ctor(options?: PageInfoDataOptions<T>) {
     if (options?.isProxy) {
       this.notRefFields = ['editFormData', 'loading'];
+      this.defaultInital.editFormData = {};
       this.store.editFormData = {};
     }
     if (options?.initialValues) {
