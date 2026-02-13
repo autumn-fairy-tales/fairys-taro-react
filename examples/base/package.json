@@ -1,6 +1,6 @@
 {
   "name": "base",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "",
   "templateInfo": {
@@ -38,9 +38,9 @@
   "author": "",
   "dependencies": {
     "@babel/runtime": "^7.24.4",
-    "@fairys/taro-tools-react": "^1.0.8",
-    "@fairys/taro-tools-simple-form": "^1.0.8",
-    "@fairys/taro-tools-simple-form-ui": "^1.0.8",
+    "@fairys/taro-tools-react": "^1.0.9",
+    "@fairys/taro-tools-simple-form": "^1.0.9",
+    "@fairys/taro-tools-simple-form-ui": "^1.0.9",
     "@nutui/nutui-react-taro": "^3.0.19-cpp.24",
     "@tarojs/components": "4.1.11",
     "@tarojs/helper": "4.1.11",
