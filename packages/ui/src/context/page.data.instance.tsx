@@ -373,12 +373,13 @@ export interface PageDataOptions<T extends PageDataInstanceState = PageDataInsta
 }
 
 /**初始化实例*/
-export function usePageDataInstance<T extends PageDataInstanceState = PageDataInstanceState>(
-  instance?: PageDataInstance<T>,
-) {
-  const ref = useRef<PageDataInstance<T>>();
+export function usePageDataInstance<
+  T extends PageDataInstanceState = PageDataInstanceState,
+  M extends PageDataInstance<T> = PageDataInstance<T>,
+>(instance?: M) {
+  const ref = useRef<M>();
   if (!ref.current) {
-    ref.current = instance || new PageDataInstance<T>();
+    ref.current = instance || (new PageDataInstance<T>() as M);
   }
   return ref.current;
 }
@@ -387,33 +388,38 @@ export function usePageDataInstance<T extends PageDataInstanceState = PageDataIn
 export const PageDataInstanceContext = createContext<PageDataInstance>(new PageDataInstance());
 
 /**获取上下文实例*/
-export const usePageDataInstanceContext = <T extends PageDataInstanceState = PageDataInstanceState>() => {
-  const PageDataInstance = useContext(PageDataInstanceContext) as PageDataInstance<T>;
+export const usePageDataInstanceContext = <
+  T extends PageDataInstanceState = PageDataInstanceState,
+  M extends PageDataInstance<T> = PageDataInstance<T>,
+>() => {
+  const PageDataInstance = useContext(PageDataInstanceContext) as M;
   return PageDataInstance;
 };
 
-export interface PageDataInstanceContextProviderProps<T extends PageDataInstanceState = PageDataInstanceState>
-  extends PageDataOptions<T> {
-  instance?: PageDataInstance<T>;
+export interface PageDataInstanceContextProviderProps<
+  T extends PageDataInstanceState = PageDataInstanceState,
+  M extends PageDataInstance<T> = PageDataInstance<T>,
+> extends PageDataOptions<T> {
+  instance?: M;
   children: React.ReactNode;
   /**请求之前处理参数*/
-  onBefore?: PageDataInstance<T>['onBefore'];
+  onBefore?: M['onBefore'];
   /**请求接口*/
-  getList?: PageDataInstance<T>['getList'];
+  getList?: M['getList'];
   /**请求之后处理返回值进行存储*/
-  onAfter?: PageDataInstance<T>['onAfter'];
+  onAfter?: M['onAfter'];
   /** 额外数据处理*/
-  onExtraData?: PageDataInstance<T>['onExtraData'];
+  onExtraData?: M['onExtraData'];
   /** code!== 200 时 触发*/
-  onError?: PageDataInstance<T>['onError'];
+  onError?: M['onError'];
   /**获取弹框内重置参数*/
-  getResetValues?: PageDataInstance<T>['getResetValues'];
+  getResetValues?: M['getResetValues'];
   /**默认查询参数*/
-  defaultQuery?: PageDataInstance<T>['defaultQuery'];
+  defaultQuery?: M['defaultQuery'];
   /**那些字段取值对象 code值*/
-  codeFields?: PageDataInstance<T>['codeFields'];
+  codeFields?: M['codeFields'];
   /**那些字段取值对象的 value 值 */
-  valueFields?: PageDataInstance<T>['valueFields'];
+  valueFields?: M['valueFields'];
   /**是否是第一次加载*/
   isMountLoad?: boolean;
   /**页面标题*/
@@ -421,9 +427,10 @@ export interface PageDataInstanceContextProviderProps<T extends PageDataInstance
 }
 
 /**页面级数据状态管理上下文提供者*/
-export function PageDataInstanceContextProvider<T extends PageDataInstanceState = PageDataInstanceState>(
-  props: PageDataInstanceContextProviderProps<T>,
-) {
+export function PageDataInstanceContextProvider<
+  T extends PageDataInstanceState = PageDataInstanceState,
+  M extends PageDataInstance<T> = PageDataInstance<T>,
+>(props: PageDataInstanceContextProviderProps<T, M>) {
   const {
     instance,
     children,
@@ -481,8 +488,11 @@ export function PageDataInstanceContextProvider<T extends PageDataInstanceState 
 /**
  * 页面级数据状态管理
  */
-export const usePageDataInstanceState = <T extends PageDataInstanceState = PageDataInstanceState>() => {
-  const PageMainDataInstance = usePageDataInstanceContext<T>();
+export const usePageDataInstanceState = <
+  T extends PageDataInstanceState = PageDataInstanceState,
+  M extends PageDataInstance<T> = PageDataInstance<T>,
+>() => {
+  const PageMainDataInstance = usePageDataInstanceContext<T, M>();
   const store = useSnapshot(PageMainDataInstance.store, { sync: true }) as T;
-  return [store, PageMainDataInstance, store.__defaultValue] as [T, PageDataInstance<T>, string | undefined];
+  return [store, PageMainDataInstance, store.__defaultValue] as [T, M, string | undefined];
 };

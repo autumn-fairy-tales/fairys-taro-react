@@ -176,11 +176,14 @@ export class PageInfoDataInstance<
   };
 }
 
-export interface PageInfoDataOptions<T extends PageInfoDataInstanceState = PageInfoDataInstanceState> {
+export interface PageInfoDataOptions<
+  T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+> {
   /**详情查询请求配置*/
-  requestInfoConfig?: PageInfoDataInstance<T>['requestInfoConfig'];
+  requestInfoConfig?: M['requestInfoConfig'];
   /**详情保存请求配置*/
-  requestSaveInfoConfig?: PageInfoDataInstance<T>['requestSaveInfoConfig'];
+  requestSaveInfoConfig?: M['requestSaveInfoConfig'];
   /**初始值*/
   initialValues?: Partial<T>;
   /**editFormData是否使用valtio proxy 存储*/
@@ -188,15 +191,18 @@ export interface PageInfoDataOptions<T extends PageInfoDataInstanceState = PageI
 }
 
 /**初始化实例*/
-export const usePageInfoDataInstance = <T extends PageInfoDataInstanceState = PageInfoDataInstanceState>(
-  instance?: PageInfoDataInstance<T>,
+export const usePageInfoDataInstance = <
+  T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+>(
+  instance?: M,
 ) => {
-  const ref = useRef<PageInfoDataInstance<T>>();
+  const ref = useRef<M>();
   if (!ref.current) {
     if (instance) {
       ref.current = instance;
     } else {
-      ref.current = new PageInfoDataInstance<T>();
+      ref.current = new PageInfoDataInstance<T>() as M;
     }
   }
   return ref.current;
@@ -206,28 +212,33 @@ export const usePageInfoDataInstance = <T extends PageInfoDataInstanceState = Pa
 export const PageInfoDataInstanceContext = createContext<PageInfoDataInstance>(new PageInfoDataInstance());
 
 /**获取上下文实例*/
-export const usePageInfoDataInstanceContext = <T extends PageInfoDataInstanceState = PageInfoDataInstanceState>() => {
-  const PageInfoDataInstance = useContext(PageInfoDataInstanceContext) as PageInfoDataInstance<T>;
+export const usePageInfoDataInstanceContext = <
+  T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+>() => {
+  const PageInfoDataInstance = useContext(PageInfoDataInstanceContext) as M;
   return PageInfoDataInstance;
 };
 
 export interface PageInfoDataInstanceContextProviderProps<
   T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
-> extends PageInfoDataOptions<T> {
-  instance?: PageInfoDataInstance<T>;
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+> extends PageInfoDataOptions<T, M> {
+  instance?: M;
   children: React.ReactNode;
   /**页面标题*/
   title?: string;
   /**页面一加载是否请求详情接口*/
   isMountRequestInfo?: boolean;
   /**自定义hooks,挂载参数和设置完初始值后执行*/
-  useHooks?: (instance: PageInfoDataInstance<T>) => void;
+  useHooks?: (instance: M) => void;
 }
 
 /**页面级数据状态管理上下文提供者*/
-export function PageInfoDataInstanceContextProvider<T extends PageInfoDataInstanceState = PageInfoDataInstanceState>(
-  props: PageInfoDataInstanceContextProviderProps<T>,
-) {
+export function PageInfoDataInstanceContextProvider<
+  T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+>(props: PageInfoDataInstanceContextProviderProps<T, M>) {
   const {
     instance,
     children,
@@ -268,8 +279,11 @@ export function PageInfoDataInstanceContextProvider<T extends PageInfoDataInstan
 /**
  * 页面级数据状态管理
  */
-export const usePageInfoDataInstanceState = <T extends PageInfoDataInstanceState = PageInfoDataInstanceState>() => {
-  const PageInfoDataInstance = usePageInfoDataInstanceContext<T>();
+export const usePageInfoDataInstanceState = <
+  T extends PageInfoDataInstanceState = PageInfoDataInstanceState,
+  M extends PageInfoDataInstance<T> = PageInfoDataInstance<T>,
+>() => {
+  const PageInfoDataInstance = usePageInfoDataInstanceContext<T, M>();
   const store = useSnapshot(PageInfoDataInstance.store, { sync: true }) as T;
-  return [store, PageInfoDataInstance, store.__defaultValue] as [T, PageInfoDataInstance<T>, string | undefined];
+  return [store, PageInfoDataInstance, store.__defaultValue] as [T, M, string | undefined];
 };
