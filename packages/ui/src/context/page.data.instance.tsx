@@ -492,7 +492,7 @@ export const usePageDataInstanceState = <
   T extends PageDataInstanceState = PageDataInstanceState,
   M extends PageDataInstance<T> = PageDataInstance<T>,
 >() => {
-  const PageMainDataInstance = usePageDataInstanceContext<T, M>();
-  const store = useSnapshot(PageMainDataInstance.store, { sync: true }) as T;
-  return [store, PageMainDataInstance, store.__defaultValue] as [T, M, string | undefined];
+  const pageMainDataInstance = usePageDataInstanceContext<T, M>();
+  const store = useSnapshot(pageMainDataInstance.store, { sync: true }) as T;
+  return [store, pageMainDataInstance, store.__defaultValue] as [T, M, string | undefined];
 };
