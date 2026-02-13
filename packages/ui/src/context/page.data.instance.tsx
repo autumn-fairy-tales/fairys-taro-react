@@ -117,6 +117,7 @@ export class PageDataInstance<
       this.store.tabItems = ref(options.tabItems);
       this.store.isTabs = Array.isArray(options.tabItems) && options.tabItems.length > 0;
     }
+    return this;
   };
   /**初始化状态值*/
   main_page_store = (initalValues: Partial<T> = {}, file?: string[]) => {

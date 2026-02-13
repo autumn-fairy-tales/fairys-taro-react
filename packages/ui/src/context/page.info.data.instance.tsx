@@ -78,6 +78,7 @@ export class PageInfoDataInstance<
     if (options?.initialValues) {
       this.main_page_store(options.initialValues);
     }
+    return this;
   }
 
   store = proxy<T>({ ...this.defaultInital } as T);
