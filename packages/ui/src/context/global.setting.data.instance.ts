@@ -33,6 +33,8 @@ export interface GlobalSettingDataInstanceState {
   useAuthHasMenuPermission?: boolean;
   /**是否开启权限校验*/
   isEnableAuth?: boolean;
+  /**是否使用Taro自带的toast提示*/
+  isUseTaroToast?: boolean;
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
@@ -47,6 +49,7 @@ export class GlobalSettingDataInstance extends ProxyInstanceObjectBase<GlobalSet
     ignoreAuthRoutes: [],
     useAuthHasMenuPermission: true,
     isEnableAuth: true,
+    isUseTaroToast: true,
   };
   store = proxy<GlobalSettingDataInstanceState>({ ...this.defaultStore });
   /**

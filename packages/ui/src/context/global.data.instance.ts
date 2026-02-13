@@ -6,6 +6,7 @@ import React from 'react';
 import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
+import Taro from '@tarojs/taro';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/

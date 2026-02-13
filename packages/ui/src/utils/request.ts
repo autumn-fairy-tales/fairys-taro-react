@@ -64,10 +64,18 @@ const requestResponseHandle = (
     console.log(error);
   }
   if (msg && options?.isShowErrorMessage !== false) {
-    globalDataInstance.showMessage({
-      content: msg || '请求发生错误',
-      type: 'error',
-    });
+    if (globalSettingDataInstance.store.isUseTaroToast) {
+      Taro.showToast({
+        title: msg || '请求发生错误',
+        duration: 3000,
+        icon: 'none',
+      });
+    } else {
+      globalDataInstance.showMessage({
+        content: msg || '请求发生错误',
+        type: 'error',
+      });
+    }
   }
 };
 
@@ -208,10 +216,18 @@ export class RequestInstance {
       if (isIgnoreToken !== true) {
         // 跳转登录页
         if (isShowErrorMessage !== false) {
-          globalDataInstance.showMessage({
-            content: '未登录',
-            type: 'error',
-          });
+          if (globalSettingDataInstance.store.isUseTaroToast) {
+            Taro.showToast({
+              title: '未登录',
+              duration: 3000,
+              icon: 'none',
+            });
+          } else {
+            globalDataInstance.showMessage({
+              content: '未登录',
+              type: 'error',
+            });
+          }
         }
         options?.fail?.({ errMsg: '未登录' });
         globalDataInstance.toLoginPage();
@@ -250,10 +266,18 @@ export class RequestInstance {
       },
       fail: (result) => {
         if (isShowErrorMessage !== false) {
-          globalDataInstance.showMessage({
-            content: result.errMsg || '请求发生错误',
-            type: 'error',
-          });
+          if (globalSettingDataInstance.store.isUseTaroToast) {
+            Taro.showToast({
+              title: result.errMsg || '请求发生错误',
+              duration: 3000,
+              icon: 'none',
+            });
+          } else {
+            globalDataInstance.showMessage({
+              content: result.errMsg || '请求发生错误',
+              type: 'error',
+            });
+          }
         }
         options?.fail?.(result);
       },
@@ -358,10 +382,18 @@ export class RequestInstance {
       },
       fail: (result) => {
         if (isShowErrorMessage !== false) {
-          globalDataInstance.showMessage({
-            content: result.errMsg || '请求发生错误',
-            type: 'error',
-          });
+          if (globalSettingDataInstance.store.isUseTaroToast) {
+            Taro.showToast({
+              title: result.errMsg || '请求发生错误',
+              duration: 3000,
+              icon: 'none',
+            });
+          } else {
+            globalDataInstance.showMessage({
+              content: result.errMsg || '请求发生错误',
+              type: 'error',
+            });
+          }
         }
         options?.fail?.(result);
       },
@@ -415,10 +447,18 @@ export class RequestInstance {
       },
       fail: (result) => {
         if (isShowErrorMessage !== false) {
-          globalDataInstance.showMessage({
-            content: result.errMsg || '请求发生错误',
-            type: 'error',
-          });
+          if (globalSettingDataInstance.store.isUseTaroToast) {
+            Taro.showToast({
+              title: result.errMsg || '请求发生错误',
+              duration: 3000,
+              icon: 'none',
+            });
+          } else {
+            globalDataInstance.showMessage({
+              content: result.errMsg || '请求发生错误',
+              type: 'error',
+            });
+          }
         }
         options?.fail?.(result);
       },
