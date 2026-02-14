@@ -33,6 +33,8 @@ export interface DownloadFileOptions extends Taro.downloadFile.Option, TaroReque
 export interface UploadFileOptions extends Taro.uploadFile.Option, TaroRequestOption {
   /**上传进度回调*/
   onProgress?: Taro.UploadTask.OnProgressUpdateCallback;
+  /**数据类型*/
+  dataType?: 'json' | 'text';
 }
 /**处理提示信息*/
 const requestResponseHandle = (
@@ -433,7 +435,7 @@ export class RequestInstance {
   };
 
   /**上传文件(返回 Taro.UploadTask.UploadTaskPromise ，可显示上传进度)*/
-  uploadFileTask = (options: UploadFileOptions) => {
+  uploadFileTask = (options: Omit<UploadFileOptions, 'dataType'>) => {
     const { isShowErrorMessage } = options;
     const formattedOptions = this.formatRequestOptions(options);
     if (!formattedOptions) {
@@ -476,13 +478,27 @@ export class RequestInstance {
     return uploadTask;
   };
   /**上传文件*/
-  uploadFile = (options: UploadFileOptions): Promise<Taro.uploadFile.SuccessCallbackResult> => {
+  uploadFile = (
+    options: UploadFileOptions,
+  ): Promise<string | Record<string, any> | Taro.uploadFile.SuccessCallbackResult> => {
+    const { dataType = 'json', ...rest } = options;
     return new Promise((resolve, reject) => {
       this.uploadFileTask({
-        ...options,
+        ...rest,
         success: (result) => {
           options?.success?.(result);
-          resolve(result);
+          if (dataType === 'json') {
+            let resultData = result.data;
+            try {
+              resultData = JSON.parse(result.data);
+            } catch (error) {
+              // 解析失败，保持原始数据
+              console.log('上传文件解析数据失败', error);
+            }
+            resolve(resultData);
+          } else {
+            resolve(result);
+          }
         },
         fail: (result) => {
           options?.fail?.(result);
