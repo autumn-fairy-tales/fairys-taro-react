@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useSnapshot } from 'valtio';
+import { useSnapshot, proxy } from 'valtio';
 import { ProxyInstanceObjectBase } from './instance';
 export * from './instance';
 
@@ -19,5 +19,14 @@ export const useValtioInstaceState = <
 ) => {
   const instance = useRef(new Instance()).current;
   const state = useSnapshot(instance.store);
+  return [state, instance, (state as any).__defaultValue] as const;
+};
+
+/**
+ * 创建valtio proxy 状态管理
+ */
+export const useValtioProxyState = <T extends object>(inital?: T) => {
+  const instance = useRef(proxy(inital || ({} as T))).current;
+  const state = useSnapshot(instance);
   return [state, instance, (state as any).__defaultValue] as const;
 };

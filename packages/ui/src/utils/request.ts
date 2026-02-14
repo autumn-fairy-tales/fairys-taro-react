@@ -133,7 +133,7 @@ export class RequestInstance {
     this.IP = options.IP || this.IP;
     this.proxy = options.proxy || this.proxy;
     this.commonOptions = { ...this.commonOptions, ...options.commonOptions };
-    this.isEnableTokenAuth = options.isEnableTokenAuth || true;
+    this.isEnableTokenAuth = typeof options.isEnableTokenAuth === 'boolean' ? options.isEnableTokenAuth : true;
     return this;
   };
 
