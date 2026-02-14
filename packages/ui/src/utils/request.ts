@@ -102,9 +102,14 @@ export interface RequestInstanceCreateOptions {
     dev: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
     pro: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
   };
+  /**启用token校验*/
+  isEnableTokenAuth?: boolean;
 }
 
 export class RequestInstance {
+  /**启用token校验*/
+  public isEnableTokenAuth?: boolean = true;
+
   /**请求IP地址*/
   public IP?: string | ((url: string, module?: string, env?: string) => string);
   /**简单的代理配置*/
@@ -128,6 +133,7 @@ export class RequestInstance {
     this.IP = options.IP || this.IP;
     this.proxy = options.proxy || this.proxy;
     this.commonOptions = { ...this.commonOptions, ...options.commonOptions };
+    this.isEnableTokenAuth = options.isEnableTokenAuth || true;
     return this;
   };
 
@@ -213,7 +219,7 @@ export class RequestInstance {
     if (token) {
       newHeader[globalSettingDataInstance.store.headerTokenName || 'token'] = token;
     } else {
-      if (isIgnoreToken !== true) {
+      if (isIgnoreToken !== true && this.isEnableTokenAuth) {
         // 跳转登录页
         if (isShowErrorMessage !== false) {
           if (globalSettingDataInstance.store.isUseTaroToast) {
