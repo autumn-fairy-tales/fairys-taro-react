@@ -7,7 +7,7 @@ import { globalSettingDataInstance } from './global.setting.data.instance';
 import { useDidShow } from '@tarojs/taro';
 import Taro from '@tarojs/taro';
 
-export interface PageInfoDataInstanceState extends Object {
+export interface PageInfoDataInstanceState extends Record<string, any> {
   /**loading存储*/
   loading?: Record<string, boolean>;
   /**编辑表单数据*/
@@ -18,7 +18,6 @@ export interface PageInfoDataInstanceState extends Object {
   isInfoSuccess?: boolean;
   /**数据默认值不使用*/
   __defaultValue?: string;
-  [s: string]: any;
 }
 
 export class PageInfoDataInstance<

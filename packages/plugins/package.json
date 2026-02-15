@@ -10,7 +10,8 @@
   "module": "esm/index.js",
   "license": "ISC",
   "scripts": {
-    "build": "carefrees-rslib build --esm",
+    "create:var.css": "node scripts/create.var.css.js",
+    "build": "carefrees-rslib build --esm && npm run create:var.css",
     "watch": "carefrees-rslib build --watch --esm"
   },
   "publishConfig": {
@@ -24,7 +25,8 @@
   "files": [
     "src",
     "lib",
-    "esm"
+    "esm",
+    "assets"
   ],
   "dependencies": {
     "unplugin-transform-class": "^0.6.0"

@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useMemo, useRef } from 'react';
 import { globalSettingDataInstance } from './global.setting.data.instance';
 import Taro, { useDidShow } from '@tarojs/taro';
 
-export interface PageDataInstanceState extends Object {
+export interface PageDataInstanceState extends Record<string, any> {
   /**loading存储*/
   loading?: Record<string, boolean>;
   /**当前页*/
