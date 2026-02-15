@@ -10,7 +10,7 @@ export const FairysTaroMainPage = (props: FairysTaroMainPageProps) => {
   const cls = useMemo(
     () =>
       clsx(
-        'fairys_taro-ui-main-page fairystaro__text-red-100 fairystaro__box-border fairystaro__w-full fairystaro__h-full fairystaro__flex fairystaro__flex-col fairystaro__overflow-auto',
+        'fairys_taro-ui-main-page fairystaro__box-border fairystaro__w-full fairystaro__h-full fairystaro__flex fairystaro__flex-col fairystaro__overflow-auto',
         itemClassName,
       ),
     [itemClassName],
