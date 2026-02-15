@@ -20,7 +20,9 @@
   box-sizing: border-box;
 }
 /* 表单项输入框字体大小 */
-.fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native {
+.fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native,
+.fairys-valtio-form-item-body .nut-input.nut-input-container .nut-input-placeholder,
+.fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native::placeholder {
   font-size: 12px;
 }
 .fairys-valtio-form-item-body .nut-input.nut-input-container > .nut-input-native:not(.h5-input) {
