@@ -1,6 +1,6 @@
 import { FairysTaroPortalMessage } from 'components/Mesage';
 import { FairysTaroToast } from 'components/Toast';
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 
 export interface ConnectToastMessageOptions {
   /**
@@ -13,7 +13,7 @@ export interface ConnectToastMessageOptions {
 
 export const connectToastMessage = (Component: React.FC, options: ConnectToastMessageOptions = {}) => {
   const { isRoot = false } = options;
-  return (props: any) => {
+  return memo((props: any) => {
     // 在 h5 中，只有根页面才需要展示 message 组件 和 toast 组件，其他页面只是渲染组件就好
 
     // 微信中，根目录不显示 message 组件 和 toast 组件，因为会遮挡页面内容
@@ -37,5 +37,5 @@ export const connectToastMessage = (Component: React.FC, options: ConnectToastMe
         {isRoot ? <FairysTaroPortalMessage /> : <Fragment />}
       </Fragment>
     );
-  };
+  });
 };
