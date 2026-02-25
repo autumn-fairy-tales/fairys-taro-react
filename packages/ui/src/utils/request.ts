@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro';
 import { globalSettingDataInstance } from 'context/global.setting.data.instance';
-import { globalDataInstance } from 'context/global.data.instance';
+import { globalMessageDataInstance } from 'context/global.message.data.instance';
 
 const codeMessage = {
   400: '发出的请求错误',
@@ -53,7 +53,7 @@ const requestResponseHandle = (
       // 权限问题 ，重新登录
       msg = '请重新登录';
       /**重新跳转登录页面*/
-      globalDataInstance.toLoginPage();
+      globalMessageDataInstance.toLoginPage();
     } else if (![globalSettingDataInstance.store.requestSuccessCode, 200].includes(code)) {
       // 提示内容
       // @ts-ignore
@@ -73,7 +73,7 @@ const requestResponseHandle = (
         icon: 'none',
       });
     } else {
-      globalDataInstance.showMessage({
+      globalMessageDataInstance.showMessage({
         content: msg || '请求发生错误',
         type: 'error',
       });
@@ -231,14 +231,14 @@ export class RequestInstance {
               icon: 'none',
             });
           } else {
-            globalDataInstance.showMessage({
+            globalMessageDataInstance.showMessage({
               content: '未登录',
               type: 'error',
             });
           }
         }
         options?.fail?.({ errMsg: '未登录' });
-        globalDataInstance.toLoginPage();
+        globalMessageDataInstance.toLoginPage();
         return undefined;
       }
     }
@@ -281,7 +281,7 @@ export class RequestInstance {
               icon: 'none',
             });
           } else {
-            globalDataInstance.showMessage({
+            globalMessageDataInstance.showMessage({
               content: result.errMsg || '请求发生错误',
               type: 'error',
             });
@@ -397,7 +397,7 @@ export class RequestInstance {
               icon: 'none',
             });
           } else {
-            globalDataInstance.showMessage({
+            globalMessageDataInstance.showMessage({
               content: result.errMsg || '请求发生错误',
               type: 'error',
             });
@@ -462,7 +462,7 @@ export class RequestInstance {
               icon: 'none',
             });
           } else {
-            globalDataInstance.showMessage({
+            globalMessageDataInstance.showMessage({
               content: result.errMsg || '请求发生错误',
               type: 'error',
             });

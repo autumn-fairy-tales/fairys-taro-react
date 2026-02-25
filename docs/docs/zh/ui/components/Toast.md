@@ -10,7 +10,7 @@ import { FairysTaroToast } from '@fairys/taro-tools-react';
 
 :::warning
 
-内置消息数据，使用`globalDataInstance`中的状态存储对象中的`toastData`数据进行渲染，当前组件已封装进`connectToastMessage`中
+内置消息数据，使用`globalMessageDataInstance`中的状态存储对象中的`toastData`数据进行渲染，当前组件已封装进`connectToastMessage`中
 
 :::
 

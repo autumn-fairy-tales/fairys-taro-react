@@ -1,9 +1,9 @@
 import { View, ViewProps } from '@tarojs/components';
 import { Fragment, useMemo } from 'react';
-import { useGlobalData } from 'context/global.data.instance';
+import { useGlobalMessageData } from 'context/global.message.data.instance';
 import { FairysTaroPortal } from 'components/Portal';
 import clsx from 'clsx';
-import type { MessageDataType } from 'context/global.data.instance';
+import type { MessageDataType } from 'context/global.message.data.instance';
 
 export interface FairysTaroMessageItemProps extends Omit<ViewProps, 'style'> {
   /**
@@ -190,7 +190,7 @@ export const FairysTaroMessage = (props: FairysTaroMessageProps) => {
 export const FairysTaroPortalMessage = (props: FairysTaroMessageProps) => {
   const { className: messageClassName, ...rest } = props;
 
-  const [state] = useGlobalData();
+  const [state] = useGlobalMessageData();
   const messageData = state.messageData;
   const classNames = useMemo(
     () =>

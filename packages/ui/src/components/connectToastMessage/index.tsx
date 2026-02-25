@@ -11,6 +11,17 @@ export interface ConnectToastMessageOptions {
   isRoot?: boolean;
 }
 
+/**
+ * 高阶组件，用于为 React 组件连接 Toast 和 Message 功能
+ *
+ * 根据不同的运行环境（H5/微信小程序）和组件层级（根页面/子页面），
+ * 决定是否渲染 Toast 和 Message 组件，以避免功能冲突和界面遮挡
+ *
+ * @param Component - 需要被包装的 React 组件
+ * @param options - 配置选项
+ * @param options.isRoot - 是否为根页面组件，默认为 false
+ * @returns 返回一个经过优化的 React 组件，根据环境条件选择性渲染 Toast 和 Message
+ */
 export const connectToastMessage = (Component: React.FC, options: ConnectToastMessageOptions = {}) => {
   const { isRoot = false } = options;
   return memo((props: any) => {

@@ -9,10 +9,10 @@ import {
   FairysTaroMainPageSearch,
   FairysTaroMainPageBody,
   FairysTaroMainPageFooter,
-  globalDataInstance,
+  globalMessageDataInstance,
 } from '@fairys/taro-tools-react';
 import { Button } from '@nutui/nutui-react-taro';
-// import { globalDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
+// import { globalMessageDataInstance } from '@fairys/taro-tools-react/esm/context/global.data.instance';
 import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
 
 function Index() {
@@ -23,13 +23,13 @@ function Index() {
       .validate()
       .then((values) => {
         console.log(values);
-        globalDataInstance.showMessage({
+        globalMessageDataInstance.showMessage({
           type: 'success',
           content: '表单成功',
         });
       })
       .catch((error) => {
-        globalDataInstance.showMessage({
+        globalMessageDataInstance.showMessage({
           type: 'error',
           content: error.message || '表单校验失败',
         });
@@ -246,7 +246,7 @@ function Index() {
         <Button
           onClick={() => {
             console.log('点击了按钮');
-            globalDataInstance.showToast({
+            globalMessageDataInstance.showToast({
               content: '这是一条提示信息',
             });
           }}
@@ -256,7 +256,7 @@ function Index() {
         <Button
           onClick={() => {
             console.log('点击了按钮');
-            globalDataInstance.showMessage({
+            globalMessageDataInstance.showMessage({
               content: '这是一条提示信息',
             });
           }}

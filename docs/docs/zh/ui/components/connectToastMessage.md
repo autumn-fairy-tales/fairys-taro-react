@@ -22,7 +22,7 @@ export interface ConnectToastMessageOptions {
 ## 使用
 
 ```tsx
-import { connectToastMessage , globalDataInstance } from '@fairys/taro-tools-react';
+import { connectToastMessage , globalMessageDataInstance } from '@fairys/taro-tools-react';
 import { View, Text , Button } from '@tarojs/components';
 
 const Page = ()=>{
@@ -30,8 +30,8 @@ const Page = ()=>{
   return (
     <View>
       <Text>Hello World</Text>
-      <Button onClick={()=> globalDataInstance.showMessage({ content: '这是一条提示信息', }) }>show Message</Button>
-      <Button onClick={()=> globalDataInstance.showToast({ content: '这是一条提示信息', }) }>show Toast</Button>
+      <Button onClick={()=> globalMessageDataInstance.showMessage({ content: '这是一条提示信息', }) }>show Message</Button>
+      <Button onClick={()=> globalMessageDataInstance.showToast({ content: '这是一条提示信息', }) }>show Toast</Button>
     </View>
   )
 

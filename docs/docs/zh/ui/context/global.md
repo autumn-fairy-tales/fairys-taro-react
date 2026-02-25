@@ -1,9 +1,9 @@
-# 全局数据状态实例
+# 全局消息数据状态实例
 
 **引入**
 
 ```ts
-import { globalDataInstance , useGlobalData } from '@fairys/taro-tools-react';
+import { globalMessageDataInstance , useGlobalMessageData } from '@fairys/taro-tools-react';
 ```
 
 ## 参数
@@ -28,7 +28,7 @@ export interface MessageDataType extends FairysTaroMessageItemProps {
 }
 export interface ToastDataType extends Partial<TaroToastProps> {
 }
-export interface GlobalDataInstanceState {
+export interface GlobalMessageDataInstanceState {
     /**弹框提示框*/
     messageData?: MessageDataType[];
     /**提示框数据*/
@@ -36,8 +36,8 @@ export interface GlobalDataInstanceState {
     /**数据默认值不使用*/
     __defaultValue?: string;
 }
-export declare class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
-    store: GlobalDataInstanceState;
+export declare class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMessageDataInstanceState> {
+    store: GlobalMessageDataInstanceState;
     /**用于提示信息*/
     showMessage: (options: Omit<MessageDataType, "__id"> & {
         __id?: string;
@@ -54,25 +54,25 @@ export declare class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDa
 /**
  * 全局数据实例
  */
-export declare const globalDataInstance: GlobalDataInstance;
+export declare const globalMessageDataInstance: GlobalMessageDataInstance;
 /**
  * 全局数据状态管理
  */
-export declare const useGlobalData: () => [GlobalDataInstanceState, GlobalDataInstance, string | undefined];
+export declare const useGlobalMessageData: () => [GlobalMessageDataInstanceState, GlobalMessageDataInstance, string | undefined];
 
 ```
 
 ## 使用
 
 ```ts
-import { globalDataInstance , useGlobalData ，connectToastMessage} from '@fairys/taro-tools-react';
+import { globalMessageDataInstance , useGlobalMessageData ，connectToastMessage} from '@fairys/taro-tools-react';
 import { View, Text , Button } from '@tarojs/components';
 
 const Page = ()=> {
-    const [state, instance] = useGlobalData()
+    const [state, instance] = useGlobalMessageData()
   return (
     <View>
-      <Button onClick={()=>globalDataInstance.showToast({ content:'Hello World' })}>World</Button>
+      <Button onClick={()=>globalMessageDataInstance.showToast({ content:'Hello World' })}>World</Button>
       <Button onClick={()=>instance.showToast({ content:'Hello World' })}>Hello</Button>
     </View>
   )

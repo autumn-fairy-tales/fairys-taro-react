@@ -2,7 +2,7 @@ import { proxy, ref, useSnapshot } from 'valtio';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { createContext, useContext, useEffect, useMemo, useRef } from 'react';
 import navigate from '../utils/navigate';
-import { globalDataInstance } from './global.data.instance';
+import { globalMessageDataInstance } from './global.message.data.instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
 import { useDidShow } from '@tarojs/taro';
 import Taro from '@tarojs/taro';
@@ -146,7 +146,7 @@ export class PageInfoDataInstance<
       this.updatedLoading(false);
       if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
         if (this.requestSaveInfoConfig?.isShowSuccessMessage === false) {
-          globalDataInstance.showMessage({ content: result.message || '保存成功' });
+          globalMessageDataInstance.showMessage({ content: result.message || '保存成功' });
         } else {
           Taro.showToast({ title: result.message || '保存成功', icon: 'none' });
         }

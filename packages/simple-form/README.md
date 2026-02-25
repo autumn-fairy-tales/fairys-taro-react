@@ -97,7 +97,7 @@ import {
   FairysTaroMainPageSearch,
   FairysTaroMainPageBody,
   FairysTaroMainPageFooter,
-  globalDataInstance,
+  globalMessageDataInstance,
 } from '@fairys/taro-tools-react';
 import { Button } from '@nutui/nutui-react-taro';
 import { FairysTaroSimpleForm } from '@fairys/taro-tools-simple-form';
@@ -110,13 +110,13 @@ function Index() {
       .validate()
       .then((values) => {
         console.log(values);
-        globalDataInstance.showMessage({
+        globalMessageDataInstance.showMessage({
           type: 'success',
           content: '表单成功',
         });
       })
       .catch((error) => {
-        globalDataInstance.showMessage({
+        globalMessageDataInstance.showMessage({
           type: 'error',
           content: error.message || '表单校验失败',
         });

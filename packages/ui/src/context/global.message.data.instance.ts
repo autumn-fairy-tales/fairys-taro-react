@@ -6,7 +6,6 @@ import React from 'react';
 import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
-import Taro from '@tarojs/taro';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -24,7 +23,7 @@ export interface MessageDataType extends FairysTaroMessageItemProps {
 
 export interface ToastDataType extends Partial<TaroToastProps> {}
 
-export interface GlobalDataInstanceState {
+export interface GlobalMessageDataInstanceState {
   /**弹框提示框*/
   messageData?: MessageDataType[];
   /**提示框数据*/
@@ -32,9 +31,11 @@ export interface GlobalDataInstanceState {
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
-
-export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
-  store = proxy<GlobalDataInstanceState>({
+/**
+ * 全局消息数据实例
+ */
+export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMessageDataInstanceState> {
+  store = proxy<GlobalMessageDataInstanceState>({
     messageData: ref([]),
     toastData: undefined,
   });
@@ -101,18 +102,18 @@ export class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstan
   };
 }
 /**
- * 全局数据实例
+ * 全局消息数据实例
  */
-export const globalDataInstance = new GlobalDataInstance();
+export const globalMessageDataInstance = new GlobalMessageDataInstance();
 
 /**
- * 全局数据状态管理
+ * 全局消息数据状态管理
  */
-export const useGlobalData = () => {
-  const store = useSnapshot(globalDataInstance.store);
-  return [store, globalDataInstance, store.__defaultValue] as [
-    GlobalDataInstanceState,
-    GlobalDataInstance,
+export const useGlobalMessageData = () => {
+  const store = useSnapshot(globalMessageDataInstance.store);
+  return [store, globalMessageDataInstance, store.__defaultValue] as [
+    GlobalMessageDataInstanceState,
+    GlobalMessageDataInstance,
     string | undefined,
   ];
 };
