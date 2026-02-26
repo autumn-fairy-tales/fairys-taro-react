@@ -16,6 +16,8 @@ export interface PageInfoDataInstanceState extends Record<string, any> {
   editType?: 'add' | 'edit' | 'info';
   /**查询详情是否成功*/
   isInfoSuccess?: boolean;
+  /**下拉刷新状态*/
+  refresherStatus?: boolean;
   /**数据默认值不使用*/
   __defaultValue?: string;
 }
@@ -32,6 +34,8 @@ export class PageInfoDataInstance<
     editFormData: ref({}),
     /**查询详情是否成功*/
     isInfoSuccess: false,
+    /**下拉刷新状态*/
+    refresherStatus: false,
     /**加载状态*/
     loading: { pageLoading: false },
   } as unknown as T;
@@ -104,6 +108,7 @@ export class PageInfoDataInstance<
       return;
     }
     Taro.showLoading({ title: '加载中...' });
+    this.store.refresherStatus = true;
     try {
       this.updatedLoading(true);
       let newParams = {} as any;
@@ -127,6 +132,7 @@ export class PageInfoDataInstance<
       console.log(error);
       this.updatedLoading(false);
     }
+    this.store.refresherStatus = false;
     Taro.hideLoading();
   };
 

@@ -7,6 +7,10 @@ import Taro, { useDidShow } from '@tarojs/taro';
 export interface PageDataInstanceState extends Record<string, any> {
   /**loading存储*/
   loading?: Record<string, boolean>;
+  /**下拉刷新状态*/
+  refresherStatus?: boolean;
+  /**上拉加载*/
+  loadMoreStatus?: boolean;
   /**当前页*/
   page?: number;
   /**分页数*/
@@ -42,6 +46,10 @@ export interface PageDataInstanceState extends Record<string, any> {
     query?: Record<string, any>;
     [s: string]: any;
   }[];
+  /**tab多页签下拉刷新状态*/
+  tabRefresherStatus?: Record<string, boolean>;
+  /**tab多页签上拉加载状态*/
+  tabLoadMoreStatus?: Record<string, boolean>;
   /**是否是tab多页签*/
   isTabs?: boolean;
   /**是否展开查询条件*/
@@ -95,6 +103,14 @@ export class PageDataInstance<
     selectedRowKeys: ref([]),
     /**加载状态*/
     loading: { pageLoading: false },
+    /**tab多页签下拉刷新状态*/
+    tabRefresherStatus: {},
+    /**下拉刷新状态*/
+    refresherStatus: false,
+    /**上拉加载*/
+    loadMoreStatus: false,
+    /**tab多页签上拉加载状态*/
+    tabLoadMoreStatus: {},
     /**是否最后一页*/
     hasLastPage: false,
   } as unknown as T;
@@ -151,7 +167,6 @@ export class PageDataInstance<
       this.store.search[key] = value[key];
     }
   };
-
   /**更新页面级的 pageLoading */
   updatedPageLoading = (loading: boolean = true) => {
     if (typeof this.store?.loading === 'object') {
@@ -160,7 +175,11 @@ export class PageDataInstance<
       this.store.loading = { pageLoading: loading };
     }
   };
-  /**更新页面级的 loadMore */
+  /**
+   * 更新加载状态对象
+   *
+   * @param value - 包含页面键和对应加载状态的键值对对象
+   */
   updatedLoading = (value: Record<string, boolean>) => {
     if (typeof this.store?.loading === 'object') {
       this.store.loading = { ...this.store.loading, ...value };
@@ -209,6 +228,27 @@ export class PageDataInstance<
         page: this.store[pageField] || 1,
         pageSize: this.store[pageSizeField] || this.store.defaultPageSize || 20,
       };
+      if (payload.page === 1) {
+        if (this.store.isTabs) {
+          const tabKey = this.store.tabKey;
+          if (!this.store.tabRefresherStatus) {
+            this.store.tabRefresherStatus = {};
+          }
+          this.store.tabRefresherStatus[tabKey] = true;
+        } else {
+          this.store.refresherStatus = true;
+        }
+      } else {
+        if (this.store.isTabs) {
+          const tabKey = this.store.tabKey;
+          if (!this.store.tabLoadMoreStatus) {
+            this.store.tabLoadMoreStatus = {};
+          }
+          this.store.tabLoadMoreStatus[tabKey] = true;
+        } else {
+          this.store.loadMoreStatus = true;
+        }
+      }
       let newParams = this.formateParams({ ...payload }) as any;
       if (this.onBefore) {
         newParams = this.onBefore(payload, this.store, this);
@@ -251,6 +291,20 @@ export class PageDataInstance<
       console.log(error);
       this.store.loading.loadMore = false;
       this.updatedPageLoading(false);
+    }
+    if (this.store.isTabs) {
+      const tabKey = this.store.tabKey;
+      if (!this.store.tabRefresherStatus) {
+        this.store.tabRefresherStatus = {};
+      }
+      if (!this.store.tabLoadMoreStatus) {
+        this.store.tabLoadMoreStatus = {};
+      }
+      this.store.tabLoadMoreStatus[tabKey] = false;
+      this.store.tabRefresherStatus[tabKey] = false;
+    } else {
+      this.store.refresherStatus = false;
+      this.store.loadMoreStatus = false;
     }
     Taro.hideLoading();
   };
