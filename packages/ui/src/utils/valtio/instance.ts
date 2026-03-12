@@ -1,5 +1,5 @@
 import { proxy, ref } from 'valtio';
-import React from 'react';
+import React, { useRef } from 'react';
 
 /**
  * 单个proxy对象数据基础实例封装
@@ -59,3 +59,14 @@ export class ProxyInstanceObjectBase<T extends Object = any> {
     return ref<K>(inital || ({} as K)) as K;
   };
 }
+
+/**
+ * 创建单个proxy对象数据基础实例封装
+ */
+export const useProxyInstanceObjectBase = <T extends object>(inital?: T) => {
+  const ref = useRef<ProxyInstanceObjectBase<T>>();
+  if (!ref.current) {
+    ref.current = new ProxyInstanceObjectBase<T>()._ctor(inital);
+  }
+  return ref.current;
+};
