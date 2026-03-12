@@ -101,8 +101,8 @@ export interface RequestInstanceCreateOptions {
       dev?: string;
       pro?: string;
     };
-    dev: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
-    pro: Record<string, string | { target: string; pathRewrite: Record<string, string> }>;
+    dev: Record<string, string | { target: string; pathRewrite?: Record<string, string> }>;
+    pro: Record<string, string | { target: string; pathRewrite?: Record<string, string> }>;
   };
   /**启用token校验*/
   isEnableTokenAuth?: boolean;
