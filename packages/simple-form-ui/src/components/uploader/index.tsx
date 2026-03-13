@@ -301,7 +301,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
   }, [fileList.length, maxCount, isOnlyPreview]);
 
   return (
-    <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2 fairystaroform__box-border fairystaroform__flex-wrap">
+    <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-4 fairystaroform__box-border fairystaroform__flex-wrap">
       {(fileList || []).map((item) => {
         return (
           <FairysTaroUploaderItemBase
