@@ -23,6 +23,8 @@ export interface TaroRequestOption {
   isIgnoreToken?: boolean;
   /**是否提示错误信息*/
   isShowErrorMessage?: boolean;
+  /**成功状态码*/
+  requestSuccessCode?: number;
 }
 
 export interface RequestInstanceOptions extends Taro.request.Option<any, any>, TaroRequestOption {}
@@ -45,6 +47,7 @@ const requestResponseHandle = (
   options?: RequestInstanceOptions,
 ) => {
   let msg = '';
+  const requestSuccessCode = options?.requestSuccessCode;
   try {
     const statusCode = result.statusCode;
     // @ts-ignore
@@ -54,7 +57,7 @@ const requestResponseHandle = (
       msg = '请重新登录';
       /**重新跳转登录页面*/
       globalMessageDataInstance.toLoginPage();
-    } else if (![globalSettingDataInstance.store.requestSuccessCode, 200].includes(code)) {
+    } else if (![globalSettingDataInstance.store.requestSuccessCode, requestSuccessCode, 1, 200].includes(code)) {
       // 提示内容
       // @ts-ignore
       msg = result?.data?.message || codeMessage[code || result?.statusCode] || '接口异常';
@@ -215,9 +218,12 @@ export class RequestInstance {
   };
 
   formatRequestOptions = (options: RequestInstanceOptions | DownloadFileOptions | UploadFileOptions) => {
-    const { header = {}, module, isIgnoreToken, isShowErrorMessage, ...restOptions } = options;
+    const { header = {}, module, isIgnoreToken, isShowErrorMessage, requestSuccessCode, ...restOptions } = options;
     const token = Taro.getStorageSync(globalSettingDataInstance.store.tokenFieldName || 'token');
-    const newHeader = { ...header };
+    const newHeader = {
+      'accept-charset': 'utf-8',
+      ...header,
+    };
     if (token) {
       newHeader[globalSettingDataInstance.store.headerTokenName || 'token'] = token;
     } else {
