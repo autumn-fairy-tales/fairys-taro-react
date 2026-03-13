@@ -17,6 +17,7 @@ import { FairysTaroCheckboxGroupBase, FairysTaroCheckboxGroupProps } from 'compo
 import { FairysTaroDatePickerBase, FairysTaroDatePickerProps } from 'components/date.picker';
 import { FairysTaroPickerBase, FairysTaroPickerProps } from 'components/picker';
 import { FairysTaroPopupSearchBase, FairysTaroPopupSearchProps } from 'components/popup.search';
+import { FairysTaroUploaderBase, FairysTaroUploaderBaseProps } from 'components/uploader';
 import {
   Input,
   TaroInputProps,
@@ -109,6 +110,8 @@ export interface FairysTaroValtioFormItemTypeConfing {
   textarea: TextAreaProps;
   /**上传组件*/
   uploader: UploaderProps;
+  /**上传组件*/
+  fairysUploader: FairysTaroUploaderBaseProps;
 }
 
 /**
@@ -132,7 +135,7 @@ const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
           // 自定义渲染内容
           return <Fragment key={index}>{item.render}</Fragment>;
         } else if (type === 'input') {
-          newItem.children = <Input align="right" clearable {...attrs} />;
+          newItem.children = <Input align="right" {...attrs} />;
         } else if (type === 'inputNumber') {
           newItem.children = <InputNumber {...attrs} />;
         } else if (type === 'fairysRadioGroup') {
@@ -169,6 +172,8 @@ const create_itemConfig = (configList: FairysTaroValtioInputConfigType[]) => {
         } else if (type === 'fairysPopupSearch') {
           const title = attrs.title || (typeof item.label === 'string' ? item.label : '') || '请选择';
           newItem.children = <FairysTaroPopupSearchBase {...attrs} title={title} />;
+        } else if (type === 'fairysUploader') {
+          newItem.children = <FairysTaroUploaderBase {...attrs} />;
         }
         /**添加空组件*/
         if (isEmpty) {

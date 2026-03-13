@@ -6,3 +6,4 @@ export * from './date.picker';
 export * from './picker';
 export * from './popup.search';
 export * from './radio.group';
+export * from './uploader';
