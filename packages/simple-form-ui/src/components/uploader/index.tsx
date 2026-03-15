@@ -99,15 +99,15 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
     ) : null;
 
   return (
-    <View className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm">
+    <View className="fairys-taro-uploader-list-item fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm">
       <Image
         mode="aspectFill"
         src={previewUrl}
-        className="fairystaroform__w-full fairystaroform__h-full fairystaroform__rounded-sm "
+        className="fairys-taro-uploader-list-item-image fairystaroform__w-full fairystaroform__h-full fairystaroform__rounded-sm "
         onClick={() => uploaderBaseInstance.onPreviewImage(item)}
       />
       {status === 'uploading' || status === 'error' ? (
-        <View className="fairystaroform__absolute fairystaroform__top-0 fairystaroform__left-0 fairystaroform__w-full fairystaroform__h-full fairystaroform__bg-black/50 fairystaroform__rounded-sm fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2 ">
+        <View className="fairys-taro-uploader-list-item-image-tip fairystaroform__absolute fairystaroform__top-0 fairystaroform__left-0 fairystaroform__w-full fairystaroform__h-full fairystaroform__bg-black/50 fairystaroform__rounded-sm fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2 ">
           {icon}
           {message && <View className="fairystaroform__text-white">{message}</View>}
         </View>
@@ -117,7 +117,7 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
       {isOnlyPreview ? (
         <Fragment />
       ) : (
-        <View className="fairystaroform__absolute fairystaroform__right-[-8px] fairystaroform__top-[-8px]">
+        <View className="fairys-taro-uploader-list-item-image-delete fairystaroform__absolute fairystaroform__right-[-8px] fairystaroform__top-[-8px]">
           <Close2
             className="fairystaroform__w-[20px] fairystaroform__h-[20px] fairystaroform__text-gray-600!"
             onClick={() => uploaderBaseInstance.onDeleteItem(item)}
@@ -134,22 +134,24 @@ export const FairysTaroUploaderFileListItemBase = (props: FairysTaroUploaderItem
   const status = item.status;
   /**图标*/
   const icon = status === 'uploading' ? <Loading className="nut-icon-loading" color="#fff" /> : null;
-
   return (
-    <View className="fairystaroform__w-full fairystaroform__relative fairystaroform__box-border fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
-      <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
+    <View className="fairys-taro-uploader-file-list-item fairystaroform__w-full fairystaroform__relative fairystaroform__box-border fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
+      <View className="fairys-taro-uploader-file-list-item-content fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
         <Link />
         {icon}
       </View>
-      <View className="fairystaroform__flex-1" onClick={() => uploaderBaseInstance.onPreviewImage(item)}>
+      <View
+        className="fairys-taro-uploader-file-list-item-name fairystaroform__flex-1"
+        onClick={() => uploaderBaseInstance.onPreviewImage(item)}
+      >
         {item.name || item.id}
       </View>
       {isOnlyPreview ? (
         <Fragment />
       ) : (
-        <View>
+        <View className="fairys-taro-uploader-file-list-item-delete">
           <Close2
-            className="fairystaroform__w-[20px] fairystaroform__h-[20px] fairystaroform__text-gray-600!"
+            className="fairystaroform__w-[15px] fairystaroform__h-[15px] fairystaroform__text-gray-600!"
             onClick={() => uploaderBaseInstance.onDeleteItem(item)}
           />
         </View>
@@ -222,7 +224,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
   }, [fileList]);
 
   return (
-    <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-4 fairystaroform__box-border fairystaroform__flex-wrap">
+    <View className="fairys-taro-uploader fairystaroform__px-[12px] fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-4 fairystaroform__box-border fairystaroform__flex-wrap">
       {(renderData.imageAndVideoList || []).map((item) => {
         return (
           <FairysTaroUploaderItemBase
@@ -234,7 +236,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
       })}
       {isShowUploadButton ? (
         <View
-          className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm fairystaroform__bg-[#f2f3f5] fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2"
+          className="fairys-taro-uploader-button fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm fairystaroform__bg-[#f2f3f5] fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2"
           onClick={uploaderBaseInstance.onClickUploaderButton}
         >
           {uploadIcon}

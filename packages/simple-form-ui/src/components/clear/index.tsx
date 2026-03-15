@@ -35,7 +35,7 @@ export const FairysTaroTextClearBase = (props: SVG_IconProps) => {
 
   return (
     <View
-      className={`fairys-taro-clear fairystaroform__flex fairystaroform__items-center fairystaroform__gap-1 ${
+      className={`fairys-taro-clear fairystaroform__flex fairystaroform__items-center fairystaroform__gap-1 fairystaroform__box-border fairystaroform__px-[12px] ${
         warpClassName || ''
       }`}
       style={warpStyle}

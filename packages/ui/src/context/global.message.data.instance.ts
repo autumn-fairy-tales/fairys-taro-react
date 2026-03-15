@@ -6,6 +6,7 @@ import React from 'react';
 import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
+import Taro from '@tarojs/taro';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -81,6 +82,16 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
    * 跳转登录页面前执行
    */
   onBeforetToLoginPage?: () => boolean | void;
+  // 跳转 redirect 路由
+  toRedirect = () => {
+    //  获取当前路由参数
+    const currentPath = Taro.getCurrentInstance().router?.params?.redirect || '';
+    if (currentPath) {
+      // 跳转 redirect 路由
+      navigate.navigateTo({ url: currentPath });
+    }
+  };
+
   /**跳转登录页面*/
   toLoginPage = () => {
     if (this.onBeforetToLoginPage) {
@@ -90,6 +101,9 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
         return;
       }
     }
+    // 当前路由
+    const currentPath = Taro.getCurrentInstance().router?.path || '';
+
     const loginPageRoute = globalSettingDataInstance.store.loginPageRoute || '';
     const isLoginPage = navigate.isCurrentPage(loginPageRoute || '');
     const _loginPageRoute = `${loginPageRoute || ''}`.replace(/^\//, '');
@@ -98,7 +112,7 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
       return;
     }
     // 跳转登录页面
-    navigate.navigateTo({ url: `/${_loginPageRoute}` });
+    navigate.navigateTo({ url: `/${_loginPageRoute}?redirect=${currentPath}` });
   };
 }
 /**
