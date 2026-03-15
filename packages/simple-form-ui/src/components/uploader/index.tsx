@@ -1,9 +1,10 @@
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { Fragment, useMemo, useRef } from 'react';
-import { proxy, useSnapshot, snapshot, ref } from 'valtio';
-import { Failure, Loading, Close2, Photograph } from '@nutui/icons-react-taro';
+import { Fragment, useMemo } from 'react';
+import { useSnapshot } from 'valtio';
+import { Failure, Loading, Close2, Photograph, Link } from '@nutui/icons-react-taro';
 import { Image } from '@nutui/nutui-react-taro';
+import { FairysTaroUploaderBaseInstance, useFairysTaroUploaderBaseInstance } from './instance';
 
 export interface FairysTaroUploaderItem {
   /**id*/
@@ -18,10 +19,16 @@ export interface FairysTaroUploaderItem {
   message?: string;
   /**文件类型*/
   type?: string;
-  /**预览url地址*/
+  /**预览url地址(建议使用http或者https协议地址，只有图片时可使用base64编码)*/
   previewUrl?: string;
+  /**预览类型
+   * @default "image"
+   */
+  previewType?: 'image' | 'video' | 'unknown' | keyof Taro.openDocument.FileType;
   /**上传结果数据*/
   uploadResult?: any;
+  /**文件大小*/
+  size?: number;
 }
 
 export interface FairysTaroUploaderBaseProps {
@@ -29,14 +36,22 @@ export interface FairysTaroUploaderBaseProps {
   value?: FairysTaroUploaderItem[];
   /**上传项列表改变事件*/
   onChange?: (value: FairysTaroUploaderItem[]) => void;
-  /**选择图片选项*/
-  chooseImageOption?: Taro.chooseImage.Option;
   /**上传文件*/
   uploadFile?: (item: FairysTaroUploaderItem) => Promise<any>;
   /**加载预览*/
-  loadPreviewItem?: (item: FairysTaroUploaderItem) => Promise<string>;
+  loadPreviewItem?: (item: FairysTaroUploaderItem) => Promise<
+    | string
+    | {
+        url: string;
+        type?: 'url' | 'base64';
+        contentType?: string;
+        name?: string;
+      }
+  >;
   /**预览图片*/
   previewImageOption?: Taro.previewImage.Option;
+  /**预览媒体文件*/
+  previewMediaOption?: Taro.previewMedia.Option;
   /**最大上传数量*/
   maxCount?: number;
   /**是否仅预览*/
@@ -45,167 +60,20 @@ export interface FairysTaroUploaderBaseProps {
   uploadLabel?: React.ReactNode;
   /**上传按钮图标*/
   uploadIcon?: React.ReactNode;
-}
-
-export class FairysTaroUploaderBaseInstance {
-  /**上传项列表改变事件*/
-  onChange?: FairysTaroUploaderBaseProps['onChange'];
+  /**多选*/
+  multiple?: boolean;
+  /**
+   * 上传类型
+   * @default "chooseImage"
+   */
+  uploadType?: 'chooseMessageFile' | 'chooseMedia' | 'chooseImage';
   /**选择图片选项*/
-  chooseImageOption?: FairysTaroUploaderBaseProps['chooseImageOption'];
-  /**上传文件*/
-  uploadFile?: FairysTaroUploaderBaseProps['uploadFile'];
-  /**加载预览*/
-  loadPreviewItem?: FairysTaroUploaderBaseProps['loadPreviewItem'];
-  /**预览图片*/
-  previewImageOption?: FairysTaroUploaderBaseProps['previewImageOption'];
-  /**最大上传数量*/
-  maxCount?: FairysTaroUploaderBaseProps['maxCount'];
-  /**上传项列表*/
-  store = proxy<{ value: FairysTaroUploaderItem[] }>({ value: [] });
-  /**更新上传项列表*/
-  updatedValue = (value: FairysTaroUploaderItem[]) => {
-    this.store.value = [...value];
-  };
-
-  /**加载预览*/
-  loadPreview = async () => {
-    if (typeof this.loadPreviewItem !== 'function') {
-      return;
-    }
-    const fileList = this.store.value;
-    for (let index = 0; index < fileList.length; index++) {
-      const element = fileList[index];
-      if (element.previewUrl) {
-        continue;
-      }
-      // 获取预览数据
-      const previewUrl = await this.loadPreviewItem(element);
-      const finxIndex = this.store.value.findIndex((it) => it.id === element.id);
-      if (finxIndex !== -1) {
-        const _item = { ...this.store.value[finxIndex] };
-        _item.previewUrl = previewUrl;
-        if (!previewUrl) {
-          _item.status = 'error';
-          _item.message = '加载预览失败';
-        }
-        this.store.value[finxIndex] = { ..._item };
-      }
-    }
-  };
-
-  /**循环上传文件*/
-  loopUpload = async (items: FairysTaroUploaderItem[]) => {
-    if (typeof this.uploadFile !== 'function') {
-      return;
-    }
-    /**上传文件*/
-    for (let index = 0; index < items.length; index++) {
-      const item = items[index];
-      try {
-        /**上传文件*/
-        const uploadResult = await this.uploadFile(item);
-        const finxIndex = this.store.value.findIndex((it) => it.uuid === item.uuid);
-        if (finxIndex !== -1 && uploadResult) {
-          const _item = { ...this.store.value[finxIndex] };
-          _item.uploadResult = uploadResult;
-          _item.status = 'success';
-          _item.message = '上传成功';
-          this.store.value[finxIndex] = { ..._item };
-        }
-      } catch (error) {
-        const finxIndex = this.store.value.findIndex((it) => it.uuid === item.uuid);
-        if (finxIndex !== -1) {
-          const _item = { ...this.store.value[finxIndex] };
-          _item.status = 'error';
-          _item.message = '上传失败';
-          this.store.value[finxIndex] = { ..._item };
-        }
-      }
-    }
-    /**上传完成*/
-    this.onChange?.([...this.store.value]);
-  };
-
-  /**上传项列表改变事件*/
-  onValuesChange = (_value: Taro.chooseImage.SuccessCallbackResult) => {
-    const tempFiles: FairysTaroUploaderItem[] = (_value.tempFiles || []).map((it, index) => {
-      const uuid = new Date().valueOf() + '_' + index;
-      const name = it.path.split('/').pop() || '';
-      return {
-        id: it.path,
-        uuid: uuid,
-        name: name,
-        type: it.type,
-        status: typeof this.uploadFile !== 'function' ? 'success' : 'uploading',
-        previewUrl: it.path,
-        message: typeof this.uploadFile !== 'function' ? '上传成功' : '上传中',
-      };
-    });
-    const _list = [...this.store.value].concat([...tempFiles]);
-    this.updatedValue(_list);
-    this.onChange?.(_list);
-    /**进行上传数据处理*/
-    this.loopUpload([...tempFiles]);
-  };
-
-  /**点击上传图标*/
-  onClickUploaderButton = () => {
-    const length = this.store.value.length;
-    const pam: Taro.chooseImage.Option = {};
-    if (this.maxCount) {
-      if (length >= this.maxCount) {
-        Taro.showToast({
-          title: '最多只能上传' + this.maxCount + '张图片',
-          icon: 'none',
-        });
-        return;
-      }
-      const count = this.maxCount - length;
-      pam.count = count;
-    }
-    Taro.chooseImage({
-      ...this.chooseImageOption,
-      ...pam,
-      success: (res) => {
-        this.onValuesChange(res);
-      },
-      fail: (err) => {
-        console.log(err);
-        Taro.showToast({
-          title: err.errMsg,
-          icon: 'none',
-        });
-      },
-    });
-  };
-
-  /**预览图片*/
-  onPreviewImage = (item: FairysTaroUploaderItem) => {
-    // 所有数据
-    const _snapshot = snapshot(this.store);
-    const fileList = _snapshot.value;
-    Taro.previewImage({
-      ...this.previewImageOption,
-      urls: fileList.map((it) => it.previewUrl || '').filter(Boolean),
-      current: item.previewUrl || '',
-    });
-  };
-
-  /**删除*/
-  onDeleteItem = (item: FairysTaroUploaderItem) => {
-    const _list = this.store.value.filter((it) => !(it.id === item.id || it.uuid === item.uuid));
-    this.updatedValue([..._list]);
-    this.onChange?.([..._list]);
-  };
+  chooseImageOption?: Taro.chooseImage.Option;
+  /**选择消息文件选项*/
+  chooseMessageFileOption?: Taro.chooseMessageFile.Option;
+  /**选择媒体文件选项*/
+  chooseMediaOption?: Taro.chooseMedia.Option;
 }
-
-const useFairysTaroUploaderBaseInstance = () => {
-  const ref = useRef<FairysTaroUploaderBaseInstance>();
-  if (!ref.current) {
-    ref.current = new FairysTaroUploaderBaseInstance();
-  }
-  return ref.current;
-};
 
 export interface FairysTaroUploaderItemBaseProps {
   /**上传项*/
@@ -231,17 +99,17 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
     ) : null;
 
   return (
-    <View className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm">
+    <View className="juhuitaro__w-[100px] juhuitaro__h-[100px] juhuitaro__relative juhuitaro__box-border juhuitaro__rounded-sm">
       <Image
         mode="aspectFill"
         src={previewUrl}
-        className="fairystaroform__w-full fairystaroform__h-full fairystaroform__rounded-sm "
+        className="juhuitaro__w-full juhuitaro__h-full juhuitaro__rounded-sm "
         onClick={() => uploaderBaseInstance.onPreviewImage(item)}
       />
       {status === 'uploading' || status === 'error' ? (
-        <View className="fairystaroform__absolute fairystaroform__top-0 fairystaroform__left-0 fairystaroform__w-full fairystaroform__h-full fairystaroform__bg-black/50 fairystaroform__rounded-sm fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2 ">
+        <View className="juhuitaro__absolute juhuitaro__top-0 juhuitaro__left-0 juhuitaro__w-full juhuitaro__h-full juhuitaro__bg-black/50 juhuitaro__rounded-sm juhuitaro__flex juhuitaro__flex-col juhuitaro__items-center juhuitaro__justify-center juhuitaro__gap-2 ">
           {icon}
-          {message && <View className="fairystaroform__text-white">{message}</View>}
+          {message && <View className="juhuitaro__text-white">{message}</View>}
         </View>
       ) : (
         <Fragment />
@@ -249,9 +117,39 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
       {isOnlyPreview ? (
         <Fragment />
       ) : (
-        <View className="fairystaroform__absolute fairystaroform__right-[-8px] fairystaroform__top-[-8px]">
+        <View className="juhuitaro__absolute juhuitaro__right-[-8px] juhuitaro__top-[-8px]">
           <Close2
-            className="fairystaroform__w-[20px] fairystaroform__h-[20px]"
+            className="juhuitaro__w-[20px] juhuitaro__h-[20px] juhuitaro__text-gray-600!"
+            onClick={() => uploaderBaseInstance.onDeleteItem(item)}
+          />
+        </View>
+      )}
+    </View>
+  );
+};
+
+/**文件渲染*/
+export const FairysTaroUploaderFileListItemBase = (props: FairysTaroUploaderItemBaseProps) => {
+  const { item, uploaderBaseInstance, isOnlyPreview } = props;
+  const status = item.status;
+  /**图标*/
+  const icon = status === 'uploading' ? <Loading className="nut-icon-loading" color="#fff" /> : null;
+
+  return (
+    <View className="juhuitaro__w-full juhuitaro__relative juhuitaro__box-border juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-2">
+      <View className="juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-2">
+        <Link />
+        {icon}
+      </View>
+      <View className="juhuitaro__flex-1" onClick={() => uploaderBaseInstance.onPreviewImage(item)}>
+        {item.name || item.id}
+      </View>
+      {isOnlyPreview ? (
+        <Fragment />
+      ) : (
+        <View>
+          <Close2
+            className="juhuitaro__w-[20px] juhuitaro__h-[20px] juhuitaro__text-gray-600!"
             onClick={() => uploaderBaseInstance.onDeleteItem(item)}
           />
         </View>
@@ -273,11 +171,15 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
     isOnlyPreview,
     uploadLabel,
     uploadIcon = <Photograph size="20px" color="#808080" />,
+    multiple = false,
+    uploadType = 'chooseImage',
   } = props;
   const uploaderBaseInstance = useFairysTaroUploaderBaseInstance();
   uploaderBaseInstance.previewImageOption = previewImageOption;
   uploaderBaseInstance.chooseImageOption = chooseImageOption;
   uploaderBaseInstance.maxCount = maxCount;
+  uploaderBaseInstance.multiple = multiple;
+  uploaderBaseInstance.uploadType = uploadType;
   uploaderBaseInstance.onChange = onChange;
   uploaderBaseInstance.uploadFile = uploadFile;
   uploaderBaseInstance.loadPreviewItem = loadPreviewItem;
@@ -299,10 +201,29 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
     }
     return fileList.length < maxCount;
   }, [fileList.length, maxCount, isOnlyPreview]);
+  // 渲染分成两部分进行渲染，图片和视频 进行正常渲染，如果是其他的列表渲染，名称如果有则渲染名称，如果没有则渲染id
+
+  const renderData = useMemo(() => {
+    const imageAndVideoList = [];
+    const otherList = [];
+    for (let index = 0; index < fileList.length; index++) {
+      const item = fileList[index];
+      const previewType = `${item.previewType}`.toLowerCase();
+      if (/^(image|video)/.test(previewType || '')) {
+        imageAndVideoList.push(item);
+      } else {
+        otherList.push(item);
+      }
+    }
+    return {
+      imageAndVideoList,
+      otherList,
+    };
+  }, [fileList]);
 
   return (
-    <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-4 fairystaroform__box-border fairystaroform__flex-wrap">
-      {(fileList || []).map((item) => {
+    <View className="juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-4 juhuitaro__box-border juhuitaro__flex-wrap">
+      {(renderData.imageAndVideoList || []).map((item) => {
         return (
           <FairysTaroUploaderItemBase
             uploaderBaseInstance={uploaderBaseInstance}
@@ -313,12 +234,12 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
       })}
       {isShowUploadButton ? (
         <View
-          className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm fairystaroform__bg-[#f2f3f5] fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2"
+          className="juhuitaro__w-[100px] juhuitaro__h-[100px] juhuitaro__relative juhuitaro__box-border juhuitaro__rounded-sm juhuitaro__bg-[#f2f3f5] juhuitaro__flex juhuitaro__flex-col juhuitaro__items-center juhuitaro__justify-center juhuitaro__gap-2"
           onClick={uploaderBaseInstance.onClickUploaderButton}
         >
           {uploadIcon}
           {uploadLabel ? (
-            <View className="fairystaroform__text-center fairystaroform__text-gray-600">{uploadLabel}</View>
+            <View className="juhuitaro__text-center juhuitaro__text-gray-600">{uploadLabel}</View>
           ) : (
             <Fragment />
           )}
@@ -326,6 +247,15 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
       ) : (
         <Fragment />
       )}
+      {(renderData.otherList || []).map((item) => {
+        return (
+          <FairysTaroUploaderFileListItemBase
+            uploaderBaseInstance={uploaderBaseInstance}
+            key={item.uuid || item.id}
+            item={item}
+          />
+        );
+      })}
     </View>
   );
 };

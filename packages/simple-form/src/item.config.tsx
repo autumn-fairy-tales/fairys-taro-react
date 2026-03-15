@@ -13,6 +13,7 @@ import { FairysTaroCheckboxGroupBase, FairysTaroCheckboxGroupProps } from '@fair
 import { FairysTaroDatePickerBase, FairysTaroDatePickerProps } from '@fairys/taro-tools-simple-form-ui';
 import { FairysTaroPickerBase, FairysTaroPickerProps } from '@fairys/taro-tools-simple-form-ui';
 import { FairysTaroPopupSearchBase, FairysTaroPopupSearchProps } from '@fairys/taro-tools-simple-form-ui';
+import { FairysTaroUploaderBase, FairysTaroUploaderBaseProps } from '@fairys/taro-tools-simple-form-ui';
 
 import {
   Input,
@@ -108,6 +109,8 @@ export interface FormItemTypeConfing {
   textarea: TextAreaProps;
   /**上传组件*/
   uploader: UploaderProps;
+  /**上传组件*/
+  fairysUploader: FairysTaroUploaderBaseProps;
 }
 
 /**
@@ -182,6 +185,8 @@ const create_itemConfig = (configList: InputConfigType[]) => {
         } else if (type === 'fairysPopupSearch') {
           const title = attrs.title || (typeof item.label === 'string' ? item.label : '') || '请选择';
           newItem.children = <FairysTaroPopupSearchBase {...attrs} title={title} />;
+        } else if (type === 'fairysUploader') {
+          newItem.children = <FairysTaroUploaderBase {...attrs} />;
         }
         if (isEmpty) {
           return <View key={index} className="fairys-taro-simple-form-item-empty" />;
