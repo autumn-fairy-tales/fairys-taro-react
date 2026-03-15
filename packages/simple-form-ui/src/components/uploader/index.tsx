@@ -99,17 +99,17 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
     ) : null;
 
   return (
-    <View className="juhuitaro__w-[100px] juhuitaro__h-[100px] juhuitaro__relative juhuitaro__box-border juhuitaro__rounded-sm">
+    <View className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm">
       <Image
         mode="aspectFill"
         src={previewUrl}
-        className="juhuitaro__w-full juhuitaro__h-full juhuitaro__rounded-sm "
+        className="fairystaroform__w-full fairystaroform__h-full fairystaroform__rounded-sm "
         onClick={() => uploaderBaseInstance.onPreviewImage(item)}
       />
       {status === 'uploading' || status === 'error' ? (
-        <View className="juhuitaro__absolute juhuitaro__top-0 juhuitaro__left-0 juhuitaro__w-full juhuitaro__h-full juhuitaro__bg-black/50 juhuitaro__rounded-sm juhuitaro__flex juhuitaro__flex-col juhuitaro__items-center juhuitaro__justify-center juhuitaro__gap-2 ">
+        <View className="fairystaroform__absolute fairystaroform__top-0 fairystaroform__left-0 fairystaroform__w-full fairystaroform__h-full fairystaroform__bg-black/50 fairystaroform__rounded-sm fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2 ">
           {icon}
-          {message && <View className="juhuitaro__text-white">{message}</View>}
+          {message && <View className="fairystaroform__text-white">{message}</View>}
         </View>
       ) : (
         <Fragment />
@@ -117,9 +117,9 @@ export const FairysTaroUploaderItemBase = (props: FairysTaroUploaderItemBaseProp
       {isOnlyPreview ? (
         <Fragment />
       ) : (
-        <View className="juhuitaro__absolute juhuitaro__right-[-8px] juhuitaro__top-[-8px]">
+        <View className="fairystaroform__absolute fairystaroform__right-[-8px] fairystaroform__top-[-8px]">
           <Close2
-            className="juhuitaro__w-[20px] juhuitaro__h-[20px] juhuitaro__text-gray-600!"
+            className="fairystaroform__w-[20px] fairystaroform__h-[20px] fairystaroform__text-gray-600!"
             onClick={() => uploaderBaseInstance.onDeleteItem(item)}
           />
         </View>
@@ -136,12 +136,12 @@ export const FairysTaroUploaderFileListItemBase = (props: FairysTaroUploaderItem
   const icon = status === 'uploading' ? <Loading className="nut-icon-loading" color="#fff" /> : null;
 
   return (
-    <View className="juhuitaro__w-full juhuitaro__relative juhuitaro__box-border juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-2">
-      <View className="juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-2">
+    <View className="fairystaroform__w-full fairystaroform__relative fairystaroform__box-border fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
+      <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-2">
         <Link />
         {icon}
       </View>
-      <View className="juhuitaro__flex-1" onClick={() => uploaderBaseInstance.onPreviewImage(item)}>
+      <View className="fairystaroform__flex-1" onClick={() => uploaderBaseInstance.onPreviewImage(item)}>
         {item.name || item.id}
       </View>
       {isOnlyPreview ? (
@@ -149,7 +149,7 @@ export const FairysTaroUploaderFileListItemBase = (props: FairysTaroUploaderItem
       ) : (
         <View>
           <Close2
-            className="juhuitaro__w-[20px] juhuitaro__h-[20px] juhuitaro__text-gray-600!"
+            className="fairystaroform__w-[20px] fairystaroform__h-[20px] fairystaroform__text-gray-600!"
             onClick={() => uploaderBaseInstance.onDeleteItem(item)}
           />
         </View>
@@ -222,7 +222,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
   }, [fileList]);
 
   return (
-    <View className="juhuitaro__flex juhuitaro__flex-row juhuitaro__items-center juhuitaro__gap-4 juhuitaro__box-border juhuitaro__flex-wrap">
+    <View className="fairystaroform__flex fairystaroform__flex-row fairystaroform__items-center fairystaroform__gap-4 fairystaroform__box-border fairystaroform__flex-wrap">
       {(renderData.imageAndVideoList || []).map((item) => {
         return (
           <FairysTaroUploaderItemBase
@@ -234,12 +234,12 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
       })}
       {isShowUploadButton ? (
         <View
-          className="juhuitaro__w-[100px] juhuitaro__h-[100px] juhuitaro__relative juhuitaro__box-border juhuitaro__rounded-sm juhuitaro__bg-[#f2f3f5] juhuitaro__flex juhuitaro__flex-col juhuitaro__items-center juhuitaro__justify-center juhuitaro__gap-2"
+          className="fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm fairystaroform__bg-[#f2f3f5] fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2"
           onClick={uploaderBaseInstance.onClickUploaderButton}
         >
           {uploadIcon}
           {uploadLabel ? (
-            <View className="juhuitaro__text-center juhuitaro__text-gray-600">{uploadLabel}</View>
+            <View className="fairystaroform__text-center fairystaroform__text-gray-600">{uploadLabel}</View>
           ) : (
             <Fragment />
           )}
