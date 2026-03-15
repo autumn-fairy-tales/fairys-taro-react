@@ -231,6 +231,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
             uploaderBaseInstance={uploaderBaseInstance}
             key={item.uuid || item.id}
             item={item}
+            isOnlyPreview={isOnlyPreview}
           />
         );
       })}
@@ -255,6 +256,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
             uploaderBaseInstance={uploaderBaseInstance}
             key={item.uuid || item.id}
             item={item}
+            isOnlyPreview={isOnlyPreview}
           />
         );
       })}
