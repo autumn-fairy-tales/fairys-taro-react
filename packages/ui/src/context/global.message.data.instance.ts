@@ -7,6 +7,7 @@ import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
 import { globalSettingDataInstance } from './global.setting.data.instance';
 import Taro from '@tarojs/taro';
+import { authDataInstance } from './auth.data.instance';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
@@ -94,6 +95,9 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
 
   /**跳转登录页面*/
   toLoginPage = () => {
+    // 清除登录凭证（token）、权限列表、菜单权限列表、用户信息
+    authDataInstance.clear();
+
     if (this.onBeforetToLoginPage) {
       const f = this.onBeforetToLoginPage();
       if (f === false) {
