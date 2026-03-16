@@ -101,9 +101,6 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
         return;
       }
     }
-    // 当前路由
-    const currentPath = Taro.getCurrentInstance().router?.path || '';
-
     const loginPageRoute = globalSettingDataInstance.store.loginPageRoute || '';
     const isLoginPage = navigate.isCurrentPage(loginPageRoute || '');
     const _loginPageRoute = `${loginPageRoute || ''}`.replace(/^\//, '');
@@ -112,7 +109,7 @@ export class GlobalMessageDataInstance extends ProxyInstanceObjectBase<GlobalMes
       return;
     }
     // 跳转登录页面
-    navigate.navigateTo({ url: `/${_loginPageRoute}?redirect=${currentPath}` });
+    Taro.navigateTo({ url: `/${_loginPageRoute}` });
   };
 }
 /**
