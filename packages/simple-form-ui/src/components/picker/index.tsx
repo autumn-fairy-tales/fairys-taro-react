@@ -60,14 +60,10 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
 
   const _renderValue = useMemo(() => {
     if (isSingle) {
-      if (labelInValue) {
-        return (_values as PickerOption)?.label || '';
-      }
+      return (_values as PickerOption)?.label || '';
     }
     if (Array.isArray(_values)) {
-      if (labelInValue) {
-        return _values.map((item) => item.label).join(' / ');
-      }
+      return _values.map((item) => item.label).join(' / ');
     }
     return undefined;
   }, [_values]);
