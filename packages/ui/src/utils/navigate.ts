@@ -3,10 +3,16 @@ import { globalSettingDataInstance } from 'context/global.setting.data.instance'
 import { authDataInstance } from 'context/auth.data.instance';
 
 class NavigateInstance {
+  /**格式化路由，去掉查询参数*/
+  formateUrl = (url?: string) => {
+    return `${url}`.split('?')?.[0] || '';
+  };
+
   /**判断是否已登录(方法需要在项目入口文件中进行挂载,如果不挂载,默认使用 authDataInstance.hasMenuPermission 判断是否有菜单权限)*/
   public isAuth: (url: string) => Promise<boolean> | boolean;
+
   private _isAuth = async (url?: string) => {
-    const _url = `${url}`.split('?')?.[0];
+    const _url = this.formateUrl(url);
     let isAuthTo = true;
     // 判断是否跳转忽略权限校验的路由
     const isIgnoreAuthRoutes = globalSettingDataInstance.isIgnoreAuthRoutes(_url);
@@ -18,7 +24,6 @@ class NavigateInstance {
     if (useAuthHasMenuPermission && typeof isAuthFunction !== 'function' && isEnableAuth) {
       isAuthFunction = authDataInstance.hasMenuPermission;
     }
-
     if (_url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes && isEnableAuth) {
       isAuthTo = await isAuthFunction(_url);
     }
@@ -35,8 +40,8 @@ class NavigateInstance {
    */
   isCurrentPage = (route: string) => {
     /**处理路由前缀*/
-    const _route = route.replace(/^\//, '');
-    const currentPath = (Taro.getCurrentInstance().router?.path || '').replace(/^\//, '');
+    const _route = this.formateUrl(route.replace(/^\//, ''));
+    const currentPath = this.formateUrl((Taro.getCurrentInstance().router?.path || '').replace(/^\//, ''));
     return currentPath === _route;
   };
 
