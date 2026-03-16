@@ -18,9 +18,16 @@ import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroPopupSearchProps<T = any>
   extends Partial<TaroPopupProps>,
-    FairysTaroPopupSearchBaseInstanceMount<T> {
+    Omit<FairysTaroPopupSearchBaseInstanceMount<T>, 'value'> {
   placeholder?: string;
   disabled?: boolean;
+  /**
+   * 是否将 label 包含在 value 中
+   * 默认值为 true
+   * 如果为false，则仅在传递options时有效
+   */
+  labelInValue?: boolean;
+  value?: T | (T | string | number)[] | string | number | undefined;
 }
 
 function RenderList<T = any>() {
@@ -113,6 +120,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     /**第一次成功加载后，根据 options 参数处理*/
     isFirstLoadAfterOptions = false,
     disabled,
+    labelInValue = true,
     ...rest
   } = props;
 
@@ -142,7 +150,21 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.showSearch = showSearch;
   instance.maxTagCount = maxTagCount;
   instance.options = options;
-  instance.value = value;
+
+  /**对value值进行处理*/
+  const _lastValue = useMemo(() => {
+    if (Array.isArray(options) && options.length && labelInValue === false) {
+      if (mode === 'single') {
+        const findItem = options.find((item) => item?.[rowKey] === value);
+        return findItem;
+      } else if (mode === 'multiple' && Array.isArray(value)) {
+        return value.map((item) => options.find((i) => i?.[rowKey] === item)).filter(Boolean);
+      }
+    }
+    return value;
+  }, [value, labelInValue, options, mode]) as FairysTaroPopupSearchBaseInstanceMount<T>['value'];
+
+  instance.value = _lastValue;
 
   const operationStatus = state.operationStatus;
   const visible = state.visible;
@@ -151,22 +173,22 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
 
   const renderTextValue = useMemo(() => {
     if (instance.renderText) {
-      return instance.renderText(value, instance);
+      return instance.renderText(_lastValue, instance);
     }
     if (instance.mode === 'multiple') {
-      if (Array.isArray(value)) {
-        if (value.length > maxTagCount) {
-          return `${value
+      if (Array.isArray(_lastValue)) {
+        if (_lastValue.length > maxTagCount) {
+          return `${_lastValue
             .slice(0, maxTagCount)
             .map((item) => item[instance.displayField])
             .join(',')}...`;
         }
-        return value.map((item) => item[instance.displayField]).join(',');
+        return _lastValue.map((item) => item[instance.displayField]).join(',');
       }
       return '';
     }
-    return value?.[instance.displayField];
-  }, [value, mode, maxTagCount]);
+    return _lastValue?.[instance.displayField];
+  }, [_lastValue, mode, maxTagCount]);
 
   return (
     <View className={`fairys-taro-popup-search ${className || ''}`} style={style}>
