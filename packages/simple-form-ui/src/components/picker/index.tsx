@@ -5,11 +5,12 @@ import { FairysTaroTextClearBase } from 'components/clear';
 
 export interface FairysTaroPickerProps extends Omit<Partial<TaroPickerProps>, 'value' | 'onChange'> {
   placeholder?: string;
-  value?: PickerOptions | PickerOption;
-  onChange?: (value: PickerOptions | PickerOption) => void;
+  value?: PickerOptions | PickerOption | string | number | undefined | (string | number)[];
+  onChange?: (value: FairysTaroPickerProps['value']) => void;
   bodyClassName?: string;
   bodyStyle?: React.CSSProperties;
   disabled?: boolean;
+  labelInValue?: boolean;
 }
 
 export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
@@ -23,36 +24,67 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
     onChange,
     options,
     disabled,
+    labelInValue = true,
     ...rest
   } = props;
   const [visible, setVisible] = useState(false);
-
   // 根据 options 长度进行判断是否为单层级, 单层的value存储对象，多层的存储数组
   const isSingle = (options || []).length <= 1;
 
+  // 获取数据
+  const _values = useMemo(() => {
+    if (labelInValue) {
+      return value;
+    } else {
+      if (isSingle) {
+        const list = options?.[0] || [];
+        const findItem = list.find((item) => item?.value === value);
+        return findItem;
+      } else {
+        if (Array.isArray(value)) {
+          let _values: PickerOption[] = [];
+          for (let index = 0; index < value.length; index++) {
+            const key = value[index] as unknown as string | number;
+            const findItem = (options[index] || []).find((item) => item?.value === key);
+            if (findItem) {
+              _values.push(findItem);
+            }
+          }
+          return _values;
+        } else {
+          return undefined;
+        }
+      }
+    }
+  }, [value, options, labelInValue, isSingle]);
+
   const _renderValue = useMemo(() => {
     if (isSingle) {
-      return (value as PickerOption)?.label || '';
+      if (labelInValue) {
+        return (_values as PickerOption)?.label || '';
+      }
     }
-    if (Array.isArray(value)) {
-      return value.map((item) => item.label).join(' / ');
+    if (Array.isArray(_values)) {
+      if (labelInValue) {
+        return _values.map((item) => item.label).join(' / ');
+      }
     }
     return undefined;
-  }, [value]);
+  }, [_values]);
 
   const _value = useMemo(() => {
     if (isSingle) {
-      const _value = (value as PickerOption)?.value || '';
+      const _value = (_values as PickerOption)?.value || '';
       if (typeof _value === 'number') {
         return [_value];
       }
       return [_value].filter(Boolean);
     }
-    if (Array.isArray(value)) {
-      return value.map((item) => item.value);
+    if (Array.isArray(_values)) {
+      return _values.map((item) => item?.value);
     }
     return undefined;
-  }, [value]);
+  }, [_values]);
 
   return (
     <View className={`fairys-taro-picker ${className || ''}`} style={style}>
@@ -76,9 +108,17 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
         onConfirm={(selectedOptions) => {
           setVisible(false);
           if (isSingle) {
-            onChange?.(selectedOptions?.[0]);
+            if (labelInValue) {
+              onChange?.(selectedOptions?.[0]);
+            } else {
+              onChange?.(selectedOptions?.[0]?.value);
+            }
           } else {
-            onChange?.(selectedOptions);
+            if (labelInValue) {
+              onChange?.(selectedOptions);
+            } else {
+              onChange?.(selectedOptions.map((item) => item?.value));
+            }
           }
         }}
       />
