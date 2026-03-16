@@ -6,9 +6,10 @@ class NavigateInstance {
   /**判断是否已登录(方法需要在项目入口文件中进行挂载,如果不挂载,默认使用 authDataInstance.hasMenuPermission 判断是否有菜单权限)*/
   public isAuth: (url: string) => Promise<boolean> | boolean;
   private _isAuth = async (url?: string) => {
+    const _url = `${url}`.split('?')?.[0];
     let isAuthTo = true;
     // 判断是否跳转忽略权限校验的路由
-    const isIgnoreAuthRoutes = globalSettingDataInstance.isIgnoreAuthRoutes(url);
+    const isIgnoreAuthRoutes = globalSettingDataInstance.isIgnoreAuthRoutes(_url);
     // 判断是否使用 authDataInstance中的hasMenuPermission 判断是否有菜单权限
     const useAuthHasMenuPermission = globalSettingDataInstance.store.useAuthHasMenuPermission;
     // 判断是否开启权限校验
@@ -18,12 +19,12 @@ class NavigateInstance {
       isAuthFunction = authDataInstance.hasMenuPermission;
     }
 
-    if (url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes && isEnableAuth) {
-      isAuthTo = await isAuthFunction(url);
+    if (_url && typeof isAuthFunction === 'function' && !isIgnoreAuthRoutes && isEnableAuth) {
+      isAuthTo = await isAuthFunction(_url);
     }
     if (isAuthTo === false) {
       // 无权访问页面
-      Taro.showToast({ title: `${url} 无权访问`, icon: 'none' });
+      Taro.showToast({ title: `${_url} 无权访问`, icon: 'none' });
       return false;
     }
     return true;
