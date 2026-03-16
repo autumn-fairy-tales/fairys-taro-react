@@ -138,7 +138,7 @@ export class PageInfoDataInstance<
 
   /**保存数据*/
   main_saveInfo = async () => {
-    if (this.requestSaveInfoConfig?.onSaveInfo) {
+    if (!this.requestSaveInfoConfig?.onSaveInfo) {
       console.error('未配置 requestSaveInfoConfig.onSaveInfo 请求方法');
       return;
     }
