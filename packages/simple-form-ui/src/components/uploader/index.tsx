@@ -29,6 +29,8 @@ export interface FairysTaroUploaderItem {
   uploadResult?: any;
   /**文件大小*/
   size?: number;
+  /**是否新上传*/
+  isNewUpload?: boolean;
 }
 
 export interface FairysTaroUploaderBaseProps {

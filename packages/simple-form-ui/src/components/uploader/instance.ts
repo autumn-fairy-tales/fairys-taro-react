@@ -134,6 +134,7 @@ export class FairysTaroUploaderBaseInstance {
           it.path,
         ) as FairysTaroUploaderItem['previewType'],
         size: it.size,
+        isNewUpload: true,
       };
     });
     this.onValuesChange(tempFiles);
@@ -156,6 +157,7 @@ export class FairysTaroUploaderBaseInstance {
           it.tempFilePath,
         ) as FairysTaroUploaderItem['previewType'],
         size: it.size,
+        isNewUpload: true,
       };
     });
     this.onValuesChange(tempFiles);
@@ -177,6 +179,7 @@ export class FairysTaroUploaderBaseInstance {
           it.path,
         ) as FairysTaroUploaderItem['previewType'],
         size: it.size,
+        isNewUpload: true,
       };
     });
     this.onValuesChange(tempFiles);
