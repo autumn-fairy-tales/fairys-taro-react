@@ -235,6 +235,8 @@ export interface PageInfoDataInstanceContextProviderProps<
   title?: string;
   /**页面一加载是否请求详情接口*/
   isMountRequestInfo?: boolean;
+  /**是否使用 useDidShow*/
+  isDidShowRequestInfo?: boolean;
   /**自定义hooks,挂载参数和设置完初始值后执行*/
   useHooks?: (instance: M) => void;
 }
@@ -254,6 +256,7 @@ export function PageInfoDataInstanceContextProvider<
     title,
     isMountRequestInfo,
     useHooks,
+    isDidShowRequestInfo,
   } = props;
   const pageInfoInstance = usePageInfoDataInstance(instance);
   pageInfoInstance.requestInfoConfig = requestInfoConfig;
@@ -276,6 +279,11 @@ export function PageInfoDataInstanceContextProvider<
     }
   }, []);
 
+  useDidShow(() => {
+    if (isDidShowRequestInfo) {
+      pageInfoInstance.main_getInfo();
+    }
+  });
   return (
     <PageInfoDataInstanceContext.Provider value={pageInfoInstance}>{children}</PageInfoDataInstanceContext.Provider>
   );

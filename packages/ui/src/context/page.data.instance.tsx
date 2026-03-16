@@ -494,6 +494,8 @@ export interface PageDataInstanceContextProviderProps<
   valueFields?: M['valueFields'];
   /**是否是第一次加载*/
   isMountLoad?: boolean;
+  /**是否使用 useDidShow*/
+  isDidShowLoad?: boolean;
   /**页面标题*/
   title?: string;
   /**成功状态码
@@ -535,6 +537,7 @@ export function PageDataInstanceContextProvider<
     responseSuccessCode,
     responseListField,
     responseTotalField,
+    isDidShowLoad,
   } = props;
 
   const pageInstance = usePageDataInstance(instance);
@@ -562,6 +565,12 @@ export function PageDataInstanceContextProvider<
       pageInstance.main_onSearch();
     }
   }, []);
+
+  useDidShow(() => {
+    if (isDidShowLoad) {
+      pageInstance.main_onSearch();
+    }
+  });
 
   useDidShow(() => {
     if (title) {
