@@ -321,6 +321,11 @@ export class RequestInstance {
       return this.request({
         ...options,
         method: 'GET',
+        header: {
+          accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json;charset=utf-8',
+          ...(options.header || {}),
+        },
       });
     } catch (error) {
       throw error;
@@ -333,6 +338,11 @@ export class RequestInstance {
       return this.request({
         ...options,
         method: 'POST',
+        header: {
+          accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json;charset=utf-8',
+          ...(options.header || {}),
+        },
       });
     } catch (error) {
       throw error;

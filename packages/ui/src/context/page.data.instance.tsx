@@ -83,6 +83,14 @@ export class PageDataInstance<
   codeFields?: string[] = [];
   /**那些字段取值对象的 value 值 */
   valueFields?: string[] = [];
+  /**成功状态码*/
+  responseSuccessCode?: number = 200;
+  /**对象中取值字段*/
+  responseListField?: string = '';
+  /**总页数字段
+   * @default "total"
+   */
+  responseTotalField?: string = 'total';
   // ======================================挂载方法或参数======================================
   /**是否滚动加载分页*/
   is_scroll_page = true;
@@ -256,12 +264,22 @@ export class PageDataInstance<
       const result = await this.getList?.(newParams, this);
       this.updatedPageLoading(false);
       this.store.loading.loadMore = false;
-      if (result && result.code === globalSettingDataInstance.store.requestSuccessCode) {
+      const successCode =
+        typeof this.responseSuccessCode === 'number'
+          ? this.responseSuccessCode
+          : globalSettingDataInstance.store.requestSuccessCode;
+      if (result && result.code === successCode) {
         let saveData = {};
         if (this.onAfter) {
           saveData = this.onAfter(result, this);
         } else {
-          const dataList = result?.data?.list || result?.data?.rows || result?.data?.records || [];
+          const responseTotalField = typeof this.responseTotalField === 'string' ? this.responseTotalField : 'total';
+          let dataList = [];
+          if (typeof this.responseListField === 'string') {
+            dataList = result?.data?.[this.responseListField] || [];
+          } else {
+            dataList = result?.data?.list || result?.data?.rows || result?.data?.records || [];
+          }
           /**如果是第一页则直接返回数据，否则进行拼接数据*/
           let newDataList = [];
           if (this.store[pageField] === 1) {
@@ -271,13 +289,13 @@ export class PageDataInstance<
           }
           saveData = {
             [dataListField]: newDataList,
-            [totalField]: result?.data?.total || 0,
+            [totalField]: result?.data?.[responseTotalField] || 0,
           };
-          // 第一页清理
-          if (this.store[pageField] === 1 || !this.is_scroll_page) {
-            saveData[selectedRowsField] = ref([]);
-            saveData[selectedRowKeysField] = ref([]);
-          }
+        }
+        // 第一页清理
+        if (this.store[pageField] === 1 || !this.is_scroll_page) {
+          saveData[selectedRowsField] = ref([]);
+          saveData[selectedRowKeysField] = ref([]);
         }
         if (this.onExtraData) {
           const _temps = this.onExtraData(result, this);
@@ -478,6 +496,16 @@ export interface PageDataInstanceContextProviderProps<
   isMountLoad?: boolean;
   /**页面标题*/
   title?: string;
+  /**成功状态码
+   * @default 200
+   */
+  responseSuccessCode?: number;
+  /**对象中取值字段*/
+  responseListField?: string;
+  /**总页数字段
+   * @default "total"
+   */
+  responseTotalField?: string;
 }
 
 /**页面级数据状态管理上下文提供者*/
@@ -504,6 +532,9 @@ export function PageDataInstanceContextProvider<
     valueFields,
     isMountLoad,
     title,
+    responseSuccessCode,
+    responseListField,
+    responseTotalField,
   } = props;
 
   const pageInstance = usePageDataInstance(instance);
@@ -517,6 +548,9 @@ export function PageDataInstanceContextProvider<
   instance.codeFields = codeFields;
   instance.valueFields = valueFields;
   instance.defaultQuery = defaultQuery;
+  instance.responseSuccessCode = responseSuccessCode;
+  instance.responseListField = responseListField;
+  instance.responseTotalField = responseTotalField;
 
   useMemo(
     () => pageInstance.ctor({ initialValues, is_scroll_page, defaultTabKey, tabItems, defaultPageSize }),
