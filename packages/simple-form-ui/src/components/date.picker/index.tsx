@@ -18,6 +18,7 @@ export interface FairysTaroDatePickerProps extends Omit<Partial<DatePickerProps>
    */
   value?: string | Date;
   onChange?: (value?: string) => void;
+  disabled?: boolean;
 }
 
 const getDate = (selectedValue: (string | number)[], type: DatePickerProps['type']) => {
@@ -128,7 +129,7 @@ const renderDate = (date: string | undefined | Date, type: DatePickerProps['type
 };
 
 export const FairysTaroDatePickerBase = (props: FairysTaroDatePickerProps) => {
-  const { placeholder = '请选择', value, className, style, onChange, type = 'date', ...rest } = props;
+  const { placeholder = '请选择', value, className, style, onChange, type = 'date', disabled, ...rest } = props;
   const [visible, setVisible] = useState(false);
 
   const render = useMemo(() => {
@@ -142,6 +143,7 @@ export const FairysTaroDatePickerBase = (props: FairysTaroDatePickerProps) => {
         isValue={!!render.renderStr}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined)}
+        disabled={disabled}
       >
         {render.renderStr || placeholder}
       </FairysTaroTextClearBase>

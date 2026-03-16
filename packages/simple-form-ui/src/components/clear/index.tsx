@@ -21,15 +21,17 @@ export interface SVG_IconProps {
   warpStyle?: React.CSSProperties;
   onTextClick?: (event: ITouchEvent) => void;
   onClearClick?: (event: React.MouseEvent) => void;
+  disabled?: boolean;
 }
 
 export const FairysTaroTextClearBase = (props: SVG_IconProps) => {
-  const { isValue = true, children, warpClassName, warpStyle, onTextClick, onClearClick, ...rest } = props;
+  const { isValue = true, children, warpClassName, warpStyle, onTextClick, onClearClick, disabled, ...rest } = props;
 
   const clsx_text = useMemo(() => {
     return clsx('fairys-taro-text fairystaroform__flex-1', {
       'fairys-taro-text-placeholder fairystaroform__text-gray-600 fairystaroform__font-normal': !isValue,
       'fairys-taro-text-value fairystaroform__text-black': isValue,
+      'fairys-taro-text-disabled': disabled,
     });
   }, [isValue]);
 
@@ -43,7 +45,7 @@ export const FairysTaroTextClearBase = (props: SVG_IconProps) => {
       <Text onClick={onTextClick} className={clsx_text}>
         {children}
       </Text>
-      {isValue ? <Close2 color="#c2c4cc" onClick={onClearClick} {...rest} /> : <Fragment />}
+      {isValue && !disabled ? <Close2 color="#c2c4cc" onClick={onClearClick} {...rest} /> : <Fragment />}
     </View>
   );
 };

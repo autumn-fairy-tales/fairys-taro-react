@@ -9,6 +9,7 @@ export interface FairysTaroPickerProps extends Omit<Partial<TaroPickerProps>, 'v
   onChange?: (value: PickerOptions | PickerOption) => void;
   bodyClassName?: string;
   bodyStyle?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
@@ -21,6 +22,7 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
     value,
     onChange,
     options,
+    disabled,
     ...rest
   } = props;
   const [visible, setVisible] = useState(false);
@@ -59,6 +61,7 @@ export const FairysTaroPickerBase = (props: FairysTaroPickerProps) => {
         isValue={!!_renderValue}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined)}
+        disabled={disabled}
       >
         {_renderValue || placeholder}
       </FairysTaroTextClearBase>

@@ -11,6 +11,7 @@ export interface FairysTaroCascaderProps
   onChange?: (value: (string | number | CascaderOption)[], pathNodes: CascaderOption[]) => void;
   bodyClassName?: string;
   bodyStyle?: React.CSSProperties;
+  disabled?: boolean;
 }
 
 export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
@@ -25,6 +26,7 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
     optionKey,
     bodyClassName,
     bodyStyle,
+    disabled,
     ...rest
   } = props;
   const [visible, setVisible] = useState(false);
@@ -98,6 +100,7 @@ export const FairysTaroCascaderBase = (props: FairysTaroCascaderProps) => {
         isValue={!!render}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined, undefined)}
+        disabled={disabled}
       >
         {render || placeholder}
       </FairysTaroTextClearBase>

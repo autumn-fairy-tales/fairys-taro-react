@@ -20,6 +20,7 @@ export interface FairysTaroPopupSearchProps<T = any>
   extends Partial<TaroPopupProps>,
     FairysTaroPopupSearchBaseInstanceMount<T> {
   placeholder?: string;
+  disabled?: boolean;
 }
 
 function RenderList<T = any>() {
@@ -111,6 +112,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
     isUseOptionsChecked = true,
     /**第一次成功加载后，根据 options 参数处理*/
     isFirstLoadAfterOptions = false,
+    disabled,
     ...rest
   } = props;
 
@@ -173,6 +175,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
         isValue={!!renderTextValue}
         onTextClick={() => instance.updateState({ visible: true })}
         onClearClick={() => onChange?.(undefined)}
+        disabled={disabled}
       >
         {renderTextValue || placeholder}
       </FairysTaroTextClearBase>

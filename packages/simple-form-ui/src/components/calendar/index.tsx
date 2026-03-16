@@ -9,10 +9,11 @@ export interface FairysTaroCalendarProps extends Partial<CalendarProps> {
   className?: string;
   style?: ViewProps['style'];
   onChange?: (value: string, date: string | string[]) => void;
+  disabled?: boolean;
 }
 
 export const FairysTaroCalendarBase = (props: FairysTaroCalendarProps) => {
-  const { placeholder = '请选择', value, className, style, onChange, ...rest } = props;
+  const { placeholder = '请选择', value, className, style, onChange, disabled, ...rest } = props;
   const [visible, setVisible] = useState(false);
 
   return (
@@ -22,6 +23,7 @@ export const FairysTaroCalendarBase = (props: FairysTaroCalendarProps) => {
         isValue={!!value}
         onTextClick={() => setVisible(true)}
         onClearClick={() => onChange?.(undefined, undefined)}
+        disabled={disabled}
       >
         {value || placeholder}
       </FairysTaroTextClearBase>

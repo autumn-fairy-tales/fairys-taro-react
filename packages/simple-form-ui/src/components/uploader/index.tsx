@@ -237,7 +237,7 @@ export const FairysTaroUploaderBase = (props: FairysTaroUploaderBaseProps) => {
           />
         );
       })}
-      {isShowUploadButton ? (
+      {isShowUploadButton && !isOnlyPreview ? (
         <View
           className="fairys-taro-uploader-button fairystaroform__w-[100px] fairystaroform__h-[100px] fairystaroform__relative fairystaroform__box-border fairystaroform__rounded-sm fairystaroform__bg-[#f2f3f5] fairystaroform__flex fairystaroform__flex-col fairystaroform__items-center fairystaroform__justify-center fairystaroform__gap-2"
           onClick={uploaderBaseInstance.onClickUploaderButton}
