@@ -21,12 +21,7 @@ export interface FairysTaroPopupSearchProps<T = any>
     Omit<FairysTaroPopupSearchBaseInstanceMount<T>, 'value'> {
   placeholder?: string;
   disabled?: boolean;
-  /**
-   * 是否将 label 包含在 value 中
-   * 默认值为 true
-   * 如果为false，则仅在传递options时有效
-   */
-  labelInValue?: boolean;
+
   value?: T | (T | string | number)[] | string | number | undefined;
 }
 
@@ -150,6 +145,7 @@ export function FairysTaroPopupSearchBase<T = any>(props: FairysTaroPopupSearchP
   instance.showSearch = showSearch;
   instance.maxTagCount = maxTagCount;
   instance.options = options;
+  instance.labelInValue = labelInValue;
 
   /**对value值进行处理*/
   const _lastValue = useMemo(() => {

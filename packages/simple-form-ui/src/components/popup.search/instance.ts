@@ -5,7 +5,7 @@ import type { TableColumnProps, TaroTableProps } from '@nutui/nutui-react-taro';
 
 export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   /**选中项改变时触发*/
-  onChange?: (value: T[] | T | undefined) => void;
+  onChange?: (value: (T | string | number)[] | T | string | number | undefined) => void;
   // 1. 直接传递值 ，2. 请求接口获取值
   onLoadData?: (params: any, instance: FairysTaroPopupSearchBaseInstanceMount<T>) => Promise<T[]>;
   /**其他请求参数*/
@@ -24,6 +24,12 @@ export class FairysTaroPopupSearchBaseInstanceMount<T = any> {
   isFirstLoadAfterOptions?: boolean;
   /**选择模式*/
   mode?: 'multiple' | 'single' = 'single';
+  /**
+   * 是否将 label 包含在 value 中
+   * 默认值为 true
+   * 如果为false，则仅在传递options时有效
+   */
+  labelInValue?: boolean = true;
   /**列表项的唯一键值*/
   rowKey?: string = 'value';
   /**提示框 显示字段*/
@@ -274,7 +280,11 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
     if (this.mode === 'multiple') {
       const dataList = (this.state._tempValue || []) as T[];
       this.updateState({ value: dataList, _tempValue: dataList, allChecked: false });
-      this.onChange?.(dataList);
+      if (this.labelInValue) {
+        this.onChange?.(dataList);
+      } else {
+        this.onChange?.(dataList.map((item) => item[this.rowKey]));
+      }
       this.onClose();
     }
   };
@@ -336,7 +346,11 @@ export class FairysTaroPopupSearchBaseInstance<T = any> extends FairysTaroPopupS
       }
     } else {
       this.updateState({ value: data, _tempValue: data });
-      this.onChange?.(data);
+      if (this.labelInValue) {
+        this.onChange?.(data);
+      } else {
+        this.onChange?.(data[this.rowKey]);
+      }
       this.onClose();
     }
   };
