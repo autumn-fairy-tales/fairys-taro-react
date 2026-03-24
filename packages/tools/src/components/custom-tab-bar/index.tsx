@@ -1,5 +1,5 @@
 import { proxy, useSnapshot, ref } from 'valtio';
-import { CoverImage, CoverView, View, Text } from '@tarojs/components';
+import { CoverImage, CoverView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { Fragment, memo, useMemo } from 'react';
 import clsx from 'clsx';
@@ -43,12 +43,16 @@ export interface FairysTaroCustomTabBarItemItem {
   selectedIcon?: string;
   /**自定义底部导航栏项选中图标样式*/
   selectedIconStyle?: React.CSSProperties;
+  /**自定义底部导航栏项图标样式*/
+  iconStyle?: React.CSSProperties;
   /**自定义底部导航栏项选中图标类名*/
   selectedIconClassName?: string;
   /**自定义底部导航栏项选中文本颜色*/
   selectedTextColor?: string;
   /**自定义底部导航栏项选中文本样式*/
   selectedTextStyle?: React.CSSProperties;
+  /**自定义底部导航栏项文本样式*/
+  textStyle?: React.CSSProperties;
   /**自定义底部导航栏项选中文本类名*/
   selectedTextClassName?: string;
 }
@@ -69,34 +73,35 @@ const FairysTaroCustomTabBarItemBase = (props: FairysTaroCustomTabBarItemProps) 
     () =>
       clsx('fairys_taro_custom_tab_bar_item_img', item.selectedIconClassName, {
         fairys_taro_custom_tab_bar_item_img_selected: isSelected,
-        'fairystaro__opacity-100': isSelected,
-        'fairystaro__opacity-60': !isSelected,
+        // 'fairystaro__opacity-100': isSelected,
+        // 'fairystaro__opacity-60': !isSelected,
       }),
     [item.selectedIconClassName, isSelected],
   );
+  const imgStyle = useMemo(() => {
+    return {
+      opacity: isSelected ? 1 : 0.6,
+    };
+  }, [isSelected]);
 
   const textClassName = useMemo(
     () =>
       clsx('fairys_taro_custom_tab_bar_item_text', item.selectedTextClassName, {
         fairys_taro_custom_tab_bar_item_text_selected: isSelected,
-        'fairystaro__text-black': isSelected,
-        'fairystaro__text-gray-400': !isSelected,
+        // 'fairystaro__text-black': isSelected,
+        // 'fairystaro__text-gray-400': !isSelected,
       }),
     [item.selectedTextClassName, isSelected],
   );
 
   const textStyle = useMemo(() => {
     if (isSelected && item.selectedTextStyle) {
-      return {
-        color: item.selectedTextColor,
-      };
+      return { color: item.selectedTextColor };
     }
     if (!isSelected && item.color) {
-      return {
-        color: item.color,
-      };
+      return { color: item.color };
     }
-    return {};
+    return { color: isSelected ? '#000' : 'rgb(156 163 175)' };
   }, [isSelected, item.selectedTextColor, item.color]);
 
   return (
@@ -110,7 +115,7 @@ const FairysTaroCustomTabBarItemBase = (props: FairysTaroCustomTabBarItemProps) 
         <CoverImage
           src={isSelected ? item.selectedIcon || item.icon : item.icon}
           className={imgClassName}
-          style={item.selectedIconStyle}
+          style={{ ...imgStyle, ...((isSelected ? item.selectedIconStyle : item.iconStyle) || {}) }}
         />
       ) : (
         <Fragment />
@@ -118,7 +123,7 @@ const FairysTaroCustomTabBarItemBase = (props: FairysTaroCustomTabBarItemProps) 
       <CoverView
         className={textClassName}
         style={{
-          ...(item?.selectedTextStyle || {}),
+          ...((isSelected ? item.selectedTextStyle : item.textStyle) || {}),
           ...textStyle,
         }}
       >
@@ -141,18 +146,27 @@ const FairysTaroCustomTabBarBase = () => {
     return render;
   }, [items]);
 
-  const className = useMemo(
-    () =>
-      clsx(
-        'fairys_taro_custom_tab_bar',
-        'fairystaro__fixed fairystaro__bottom-0 fairystaro__left-0 fairystaro__right-0 fairystaro__h-[60px]',
-      ),
-    [],
+  return (
+    <CoverView className="fairys_taro_custom_tab_bar">
+      <CoverView className="fairys_taro_custom_tab_bar-border"></CoverView>
+      {_itemsRender}
+    </CoverView>
   );
-
-  return <View className={className}>{_itemsRender}</View>;
 };
 
 export const FairysTaroCustomTabBar = memo(() => {
   return useMemo(() => <FairysTaroCustomTabBarBase />, []);
 });
+
+/**
+ * 页面高度问题
+ */
+export const useFairysTaroCustomTabBarPageStyle = () => {
+  return useMemo(() => {
+    const height = Taro.getSystemInfoSync().windowHeight;
+    return {
+      height: height - 60,
+      overflowY: 'auto',
+    };
+  }, []);
+};
