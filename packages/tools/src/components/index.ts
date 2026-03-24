@@ -4,3 +4,4 @@ export * from './Mesage';
 export * from './Toast';
 export * from './connectToastMessage';
 export * from './MainPage';
+export * from './custom-tab-bar';
