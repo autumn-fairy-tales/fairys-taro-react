@@ -12,14 +12,21 @@ export const fairysTaroCustomTabBarState = proxy({
   selected: '',
   items: ref([]) as FairysTaroCustomTabBarItemItem[],
   isUpdatedItems: false,
+  /**未选中颜色*/
+  color: 'rgb(156 163 175)',
+  /**选中颜色*/
+  selectedColor: '#000',
+  /**切换标签*/
   onSwitchTab: (url: string) => {
     fairysTaroCustomTabBarState.selected = url;
     Taro.switchTab({ url });
   },
+  /**更新自定义底部导航栏项*/
   onUpdatedItems: (items: FairysTaroCustomTabBarItemItem[]) => {
     fairysTaroCustomTabBarState.items = ref(items);
     fairysTaroCustomTabBarState.isUpdatedItems = true;
   },
+  /**设置自定义底部导航栏渲染*/
   onSetTabBarRender: (_tabBarRender: React.ReactNode) => {
     fairysTaroCustomTabBarRender = _tabBarRender;
     fairysTaroCustomTabBarState.isUpdatedItems = false;
@@ -31,8 +38,6 @@ export interface FairysTaroCustomTabBarItemItem {
   text: string;
   /**自定义底部导航栏项 URL*/
   url: string;
-  /**自定义底部导航栏项颜色*/
-  color?: string;
   /**自定义底部导航栏项图标*/
   icon?: string;
   /**自定义底部导航栏项样式*/
@@ -47,8 +52,6 @@ export interface FairysTaroCustomTabBarItemItem {
   iconStyle?: React.CSSProperties;
   /**自定义底部导航栏项选中图标类名*/
   selectedIconClassName?: string;
-  /**自定义底部导航栏项选中文本颜色*/
-  selectedTextColor?: string;
   /**自定义底部导航栏项选中文本样式*/
   selectedTextStyle?: React.CSSProperties;
   /**自定义底部导航栏项文本样式*/
@@ -66,7 +69,7 @@ export interface FairysTaroCustomTabBarItemProps {
 
 const FairysTaroCustomTabBarItemBase = (props: FairysTaroCustomTabBarItemProps) => {
   const { item } = props;
-  const { selected } = useSnapshot(fairysTaroCustomTabBarState);
+  const { selected, color, selectedColor } = useSnapshot(fairysTaroCustomTabBarState);
   const isSelected = selected === item.url;
   const className = useMemo(() => clsx('fairys_taro_custom_tab_bar_item', item.className), [item.className]);
   const imgClassName = useMemo(
@@ -95,14 +98,8 @@ const FairysTaroCustomTabBarItemBase = (props: FairysTaroCustomTabBarItemProps) 
   );
 
   const textStyle = useMemo(() => {
-    if (isSelected && item.selectedTextStyle) {
-      return { color: item.selectedTextColor };
-    }
-    if (!isSelected && item.color) {
-      return { color: item.color };
-    }
-    return { color: isSelected ? '#000' : 'rgb(156 163 175)' };
-  }, [isSelected, item.selectedTextColor, item.color]);
+    return { color: isSelected ? selectedColor : color };
+  }, [isSelected, color, selectedColor]);
 
   return (
     <CoverView

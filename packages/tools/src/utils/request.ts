@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 import { globalSettingDataInstance } from 'context/global.setting.data.instance';
 import { globalMessageDataInstance } from 'context/global.message.data.instance';
+import { globalDataInstance } from 'context/global.data.instance';
 
 const codeMessage = {
   400: '发出的请求错误',
@@ -56,7 +57,7 @@ const requestResponseHandle = (
       // 权限问题 ，重新登录
       msg = '请重新登录';
       /**重新跳转登录页面*/
-      globalMessageDataInstance.toLoginPage();
+      globalDataInstance.toLoginPage();
     } else if (![globalSettingDataInstance.store.requestSuccessCode, requestSuccessCode, 1, 200].includes(code)) {
       // 提示内容
       // @ts-ignore
@@ -244,7 +245,7 @@ export class RequestInstance {
           }
         }
         options?.fail?.({ errMsg: '未登录' });
-        globalMessageDataInstance.toLoginPage();
+        globalDataInstance.toLoginPage();
         return undefined;
       }
     }
