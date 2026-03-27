@@ -20,7 +20,7 @@ export interface GlobalDataInstanceState {
 export declare class GlobalDataInstance extends ProxyInstanceObjectBase<GlobalDataInstanceState> {
     store: GlobalDataInstanceState;
     /**
-     * 跳转登录页面前执行
+     * 跳转登录页面前执行(这个函数为前端页面挂载)
      */
     onBeforetToLoginPage?: () => boolean | void;
     /**跳转 redirect 路由*/
