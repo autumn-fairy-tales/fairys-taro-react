@@ -1,13 +1,9 @@
 import { proxy, ref, useSnapshot } from 'valtio';
 import type { TaroToastProps } from '@nutui/nutui-react-taro';
-import navigate from 'utils/navigate';
 import { createUseId } from 'utils/useId';
 import React from 'react';
 import type { FairysTaroMessageItemProps } from 'components/Mesage';
 import { ProxyInstanceObjectBase } from 'utils/valtio/instance';
-import { globalSettingDataInstance } from './global.setting.data.instance';
-import Taro from '@tarojs/taro';
-import { authDataInstance } from './auth.data.instance';
 
 export interface MessageDataType extends FairysTaroMessageItemProps {
   /**用于唯一标识提示框(默认自动生成)*/
